@@ -14,7 +14,6 @@ class SplashScreen : AppCompatActivity() {
     private val splashRunnable = Runnable {
         val intent = Intent(this@SplashScreen, LoginActivity::class.java)
         startActivity(intent)
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         finish()
     }
 
