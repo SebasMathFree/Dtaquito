@@ -7,19 +7,26 @@ import MyCookieJar
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.dtaquito.ProfileActivity
 import com.example.dtaquito.R
 import com.example.dtaquito.auth.CookieInterceptor
 import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.register.RegisterActivity
-//import com.example.dtaquito.SportActivity
-//import com.example.dtaquito.SuscriptionActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +47,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
     private lateinit var loginBtn: Button
-    private lateinit var registerBtn: Button
+    private lateinit var signUpBtn: TextView
+    private lateinit var forgotPass: TextView
     private lateinit var service: PlaceHolder
     private lateinit var cookieJar: MyCookieJar
     private var userId: Int = -1
@@ -49,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-
         cookieJar = MyCookieJar()
 
         val retrofit = createRetrofit(this)
@@ -58,12 +65,40 @@ class LoginActivity : AppCompatActivity() {
         emailInput = findViewById(R.id.email_input)
         passwordInput = findViewById(R.id.password_input)
         loginBtn = findViewById(R.id.login_btn)
-        registerBtn = findViewById(R.id.register_btn)
+        signUpBtn = findViewById(R.id.newUser)
+        forgotPass = findViewById(R.id.forgotPassword)
 
-        registerBtn.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+        //Crear hipervinculo de registro
+        val signUpSpannable = SpannableString(signUpBtn.text)
+        val signUpClickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(intent)
+            }
         }
+        // Color y subrayado del texto
+        val colorSpan = ForegroundColorSpan(ContextCompat.getColor(this,R.color.green))
+        val underlineSpan = UnderlineSpan()
+
+        signUpSpannable.setSpan(signUpClickableSpan, 10, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        signUpSpannable.setSpan(colorSpan, 10, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        signUpSpannable.setSpan(underlineSpan, 10, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        signUpBtn.text = signUpSpannable
+        signUpBtn.movementMethod = LinkMovementMethod.getInstance()
+
+        //Crear hipervinculo de olvido de contraseña
+        val forgotPassSpannable = SpannableString(forgotPass.text)
+        val forgotPassClickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val intent = Intent(this@LoginActivity, ProfileActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        forgotPassSpannable.setSpan(forgotPassClickableSpan,0,16,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        forgotPass.text = forgotPassSpannable
+        forgotPass.movementMethod = LinkMovementMethod.getInstance()
+
 
         loginBtn.setOnClickListener {
             val email = emailInput.text.toString().trim()

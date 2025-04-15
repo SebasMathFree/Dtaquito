@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#201E1E"
     tools:context=".GameRoomActivity">
 
     <TextView
@@ -16,7 +17,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/righteous"
-        android:text="SALAS DE JUEGO"
+        android:text="Game Rooms"
         android:textAlignment="center"
         android:textColor="#065B28"
         android:textSize="55sp"
@@ -32,7 +33,7 @@
         android:background="@drawable/button_rounded"
         android:fontFamily="@font/righteous"
         android:padding="10dp"
-        android:text="CREAR SALA"
+        android:text="Create room"
         android:textColor="@color/white"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#4CAF50"
+        android:background="#325D32"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

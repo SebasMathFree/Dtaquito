@@ -3,7 +3,6 @@
         android:id="@+id/navigation_home"
         android:icon="@drawable/soccer"
         android:title="GameRooms" />
-
     <item
         android:id="@+id/navigation_sportspaces"
         android:icon="@drawable/place"

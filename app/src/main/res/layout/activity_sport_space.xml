@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#201E1E"
     tools:context=".SportSpaceActivity">
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/righteous"
-        android:text="Espacios deportivos"
+        android:text="Sport Spaces"
         android:textAlignment="center"
         android:textColor="#065B28"
         android:textSize="50sp"
@@ -33,7 +33,7 @@
         android:background="@drawable/button_rounded"
         android:fontFamily="@font/righteous"
         android:padding="10dp"
-        android:text="Añadir mi espacio deportivo"
+        android:text="Add sport space"
         android:textColor="@color/white"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#4CAF50"
+        android:background="#325D32"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

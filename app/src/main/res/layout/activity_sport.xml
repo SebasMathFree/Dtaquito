@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#201E1E"
     tools:context=".SportActivity">
 
 
@@ -17,83 +17,48 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/righteous"
-        android:text="@string/qu_deporte_deseas_jugar"
+        android:text="What sport do you want to play?"
         android:textAlignment="center"
         android:textColor="#065B28"
-        android:textSize="50sp"
+        android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/soccer_img"
-        android:layout_width="224dp"
-        android:layout_height="224dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="50dp"
-        android:background="@mipmap/futbol"
-        android:contentDescription="@string/soccer"
-        android:onClick="soccer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <ImageButton
         android:id="@+id/pool_img"
         android:layout_width="224dp"
         android:layout_height="224dp"
-        android:layout_marginTop="112dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginTop="20dp"
         android:background="@mipmap/billar"
         android:contentDescription="@string/pool"
         android:onClick="pool"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/soccer_img" />
-
-
-    <ImageView
-        android:id="@+id/gradient"
-        android:layout_width="112dp"
-        android:layout_height="112dp"
-        app:layout_constraintBottom_toBottomOf="@+id/pool_img"
-        app:layout_constraintEnd_toEndOf="@+id/soccer_img"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/pool_img"
-        app:layout_constraintTop_toTopOf="@+id/pool_img"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/gradient" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/soccer_img" />
 
     <ImageButton
-        android:id="@+id/pool_icon"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="117dp"
-        android:background="@mipmap/billar_icon"
-        android:contentDescription="@string/pool"
-        android:onClick="pool"
-        app:layout_constraintBottom_toBottomOf="@+id/pool_img"
-        app:layout_constraintEnd_toEndOf="@+id/gradient"
-        app:srcCompat="@mipmap/billar_icon" />
-
-    <ImageButton
-        android:id="@+id/soccer_icon"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="5dp"
-        android:background="@mipmap/futbol_icon"
+        android:id="@+id/soccer_img"
+        android:layout_width="224dp"
+        android:layout_height="224dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@mipmap/futbol"
         android:contentDescription="@string/soccer"
         android:onClick="soccer"
-        app:layout_constraintStart_toStartOf="@+id/pool_img"
-        app:layout_constraintTop_toTopOf="@+id/pool_img"
-        app:srcCompat="@mipmap/futbol_icon" />
+        app:layout_constraintBottom_toTopOf="@+id/pool_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#4CAF50"
+        android:background="#325D32"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

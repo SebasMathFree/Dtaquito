@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#201E1E"
     tools:context=".ProfileActivity">
 
     <TextView
@@ -98,37 +98,41 @@
 
     <LinearLayout
         android:id="@+id/greenBtns"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/credit_input">
 
         <Button
             android:id="@+id/update_btn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:background="@drawable/button_rounded"
             android:fontFamily="@font/righteous"
             android:padding="8dp"
-            android:text="@string/editar_perfil"
+            android:text="Edit Profile"
             android:textColor="@color/white" />
 
         <Button
             android:id="@+id/add_credit"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:background="@drawable/button_rounded"
             android:fontFamily="@font/righteous"
             android:padding="8dp"
-            android:text="Añadir Credito"
+            android:text="Add Credits"
             android:textColor="@color/white"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="228dp"
+            tools:layout_editor_absoluteY="536dp" />
+
     </LinearLayout>
 
         <Button
@@ -139,7 +143,7 @@
             android:background="@drawable/logout"
             android:fontFamily="@font/righteous"
             android:padding="8dp"
-            android:text="@string/cerrar_cesi_n"
+            android:text="Log out"
             android:textColor="@color/black"
             android:textSize="10sp"
             app:layout_constraintTop_toBottomOf="@+id/greenBtns"
@@ -150,7 +154,7 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#4CAF50"
+        android:background="#325D32"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

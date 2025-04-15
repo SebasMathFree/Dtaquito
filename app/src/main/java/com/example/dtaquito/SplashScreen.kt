@@ -2,12 +2,22 @@ package com.example.dtaquito
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager.LayoutParams.*
+import android.os.Handler
+import android.os.Looper
+import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dtaquito.login.LoginActivity
 
 class SplashScreen : AppCompatActivity() {
+    private val handler = Handler(Looper.getMainLooper())
+    private val splashRunnable = Runnable {
+        val intent = Intent(this@SplashScreen, LoginActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        finish()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -16,15 +26,17 @@ class SplashScreen : AppCompatActivity() {
             FLAG_FULLSCREEN
         )
         setContentView(R.layout.activity_splash_screen)
-        android.os.Handler().postDelayed({
-            val intent = Intent(this@SplashScreen, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        },
-        SPLASH_TIMER.toLong()
-        )
 
+        // Inicia el retraso para abrir la LoginActivity
+        handler.postDelayed(splashRunnable, SPLASH_TIMER.toLong())
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Cancela el Runnable si la actividad se destruye
+        handler.removeCallbacks(splashRunnable)
+    }
+
     companion object {
         private const val SPLASH_TIMER = 2000
     }
