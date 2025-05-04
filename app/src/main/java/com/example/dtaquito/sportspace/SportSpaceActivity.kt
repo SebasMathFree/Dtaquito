@@ -14,6 +14,7 @@ import com.example.dtaquito.R
 import com.example.dtaquito.auth.CookieInterceptor
 import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.player.PlayerBase
+import environment.Environment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -29,9 +30,6 @@ class SportSpaceActivity : PlayerBase() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SportSpaceAdapter
 
-    companion object {
-        private const val BASE_URL = "http://10.0.2.2:8080/"
-    }
 
     // Ciclo de vida
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,7 +129,7 @@ class SportSpaceActivity : PlayerBase() {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Environment.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

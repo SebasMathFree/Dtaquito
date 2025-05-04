@@ -29,6 +29,7 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.LinearSnapHelper
+import environment.Environment
 
 class SuscriptionActivity : PlayerBase() {
 
@@ -37,7 +38,6 @@ class SuscriptionActivity : PlayerBase() {
     private val cookieJar = MyCookieJar()
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:8080/"
         private const val JWT_COOKIE_NAME = "JWT_TOKEN"
     }
 
@@ -66,7 +66,7 @@ class SuscriptionActivity : PlayerBase() {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Environment.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

@@ -16,6 +16,7 @@ import com.example.dtaquito.sports.SportActivity
 import com.example.dtaquito.sportspace.SportSpaceActivity
 import com.example.dtaquito.suscription.SuscriptionActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import environment.Environment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
@@ -96,7 +97,7 @@ open class PlayerBase : AppCompatActivity() {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/")
+            .baseUrl(Environment.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

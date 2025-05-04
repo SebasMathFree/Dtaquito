@@ -16,6 +16,7 @@ import com.example.dtaquito.auth.CookieInterceptor
 import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.login.LoginActivity
 import com.example.dtaquito.player.PlayerBase
+import environment.Environment
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -40,9 +41,6 @@ class ProfileActivity : PlayerBase() {
     private var initialEmail: String = ""
     private var initialPassword: String = ""
 
-    companion object {
-        private const val BASE_URL = "http://10.0.2.2:8080/"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +79,7 @@ class ProfileActivity : PlayerBase() {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Environment.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

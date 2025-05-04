@@ -27,6 +27,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import environment.Environment
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -71,7 +72,7 @@ class RegisterActivity : AppCompatActivity() {
     // Configuración de Retrofit
     private fun setupRetrofit() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/")
+            .baseUrl(Environment.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         service = retrofit.create(PlaceHolder::class.java)
@@ -112,10 +113,12 @@ class RegisterActivity : AppCompatActivity() {
                     // No se seleccionó ninguna opción válida
                     isRoleSelected = false
                     selectedRole = ""
+
                 } else {
                     // Se seleccionó una opción válida
                     isRoleSelected = true
                     selectedRole = items[position]
+                    selectedRolePosition = position
                 }
             }
 
@@ -145,7 +148,7 @@ class RegisterActivity : AppCompatActivity() {
                 name = name,
                 email = email,
                 password = password,
-                role = selectedRole
+                role = selectedRole.uppercase()
             )
             registerUser(registerRequest)
         }
