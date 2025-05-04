@@ -26,10 +26,10 @@
             android:name=".MainGameRoomActivity"
             android:exported="false" />
         <activity
-            android:name=".SportSpaceActivity"
+            android:name=".sportspace.SportSpaceActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateSportSpaceActivity"
+            android:name=".sportspace.CreateSportSpaceActivity"
             android:exported="false" />
         <activity
             android:name=".CreateRoomActivity"
@@ -52,7 +52,7 @@
             android:name=".register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".SportActivity"
+            android:name=".sports.SportActivity"
             android:exported="false" />
         <activity
             android:name=".GameRoomActivity"

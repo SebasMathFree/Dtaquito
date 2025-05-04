@@ -8,7 +8,6 @@ import Beans.auth.register.RegisterRequest
 import Beans.chat.MessageRecieve
 import Beans.playerList.PlayerList
 import Beans.sportspaces.SportSpace
-import Beans.sportspaces.SportSpace2
 import Beans.subscription.Subscriptions
 import Beans.userProfile.UserProfile
 import okhttp3.ResponseBody
@@ -50,6 +49,9 @@ interface PlaceHolder {
 
     @GET("api/v1/sport-spaces/{id}")
     fun getSportSpaceById(@Path("id") id: Int): Call<SportSpace>
+
+    @GET("/api/v1/sport-spaces/my-space")
+    fun getSportSpacesByUserId(): Call<List<SportSpace>>
 
     @GET("api/v1/rooms/all")
     fun getAllRooms(): Call<List<GameRoom>>
@@ -105,7 +107,7 @@ interface PlaceHolder {
     ): Call<Void>
 
     @POST("api/v1/sport-spaces")
-    fun createSportSpace(@Body sportSpace: SportSpace2): Call<SportSpace2>
+    fun createSportSpace(@Body sportSpace: SportSpace): Call<SportSpace>
 
 
 

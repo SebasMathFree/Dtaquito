@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#201E1E"
-    tools:context=".SportActivity">
+    tools:context=".sports.SportActivity">
 
 
     <TextView

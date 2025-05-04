@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="8dp"
-    app:cardCornerRadius="15dp"
-    android:layout_margin="15dp"
-    app:cardBackgroundColor="#BF4CAC2A"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="30dp"
+    app:cardBackgroundColor="#BF4CAC2A">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/imgSportSpace"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,53 +27,50 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtDistrict"
-                android:layout_width="wrap_content"
+                android:id="@+id/name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="bold"
                 android:padding="5dp"
-                android:text="District" />
-
-            <TextView
-                android:id="@+id/txtDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="Description" />
-
-            <TextView
-                android:id="@+id/txtSportType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="Sport Type" />
-
-            <TextView
-                android:id="@+id/txtAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="Amount" />
-
-            <TextView
-                android:id="@+id/idSport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="ID" />
-
-            <TextView
-                android:id="@+id/txtStartTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="Start Time" />
+                android:textSize="20sp"
+                android:text="Name" />
 
             <TextView
                 android:id="@+id/txtGameMode"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="bold"
                 android:padding="5dp"
+                android:textSize="20sp"
                 android:text="GameMode" />
+
+            <TextView
+                android:id="@+id/txtDistrict"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:textSize="20sp"
+                android:text="District" />
+
+            <TextView
+                android:id="@+id/txtPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:textSize="20sp"
+                android:text="Price" />
+
+
+
+
+
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
