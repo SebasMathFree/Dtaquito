@@ -1,7 +1,8 @@
-//package com.example.dtaquito
+//package com.example.dtaquito.sportspace
 //
 //import Beans.sportspaces.SportSpace2
 //import Interface.PlaceHolder
+//import android.content.Context
 //import android.content.Intent
 //import android.os.Bundle
 //import android.util.Log
@@ -12,7 +13,11 @@
 //import android.widget.EditText
 //import android.widget.Spinner
 //import androidx.activity.enableEdgeToEdge
-//import com.example.dtaquito.auth.TokenManager
+//import com.example.dtaquito.R
+//import com.example.dtaquito.auth.CookieInterceptor
+//import com.example.dtaquito.auth.SaveCookieInterceptor
+//import com.example.dtaquito.player.PlayerBase
+//import com.example.dtaquito.time.TimePickerFragment
 //import okhttp3.Interceptor
 //import okhttp3.OkHttpClient
 //import okhttp3.Request
@@ -23,7 +28,13 @@
 //class CreateSportSpaceActivity : PlayerBase() {
 //
 //    lateinit var service: PlaceHolder
-//    lateinit var tokenManager: TokenManager
+//    private var userId: Int = 0
+//
+//    companion object {
+//        private const val BASE_URL = "http://10.0.2.2:8080/"
+//        private const val JWT_COOKIE_NAME = "JWT_TOKEN"
+//    }
+//
 //
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -31,9 +42,12 @@
 //        setContentView(R.layout.activity_create_sport_space)
 //        setupBottomNavigation(R.id.navigation_sportspaces_prop)
 //
-//        tokenManager = TokenManager(this)
-//        val retrofit = createRetrofit()
-//        service = retrofit.create(PlaceHolder::class.java)
+//        service = createRetrofitService(this)
+//
+//        //Obtenemos el ID del usuario desde el perfil
+//        fillUserProfile { roleType ->
+//            userId = getUserIdFromProfile() // Metodo para obtener el ID del usuario
+//        }
 //
 //        val spinnerSport = findViewById<Spinner>(R.id.sport_input)
 //        val spinnerLocations = findViewById<Spinner>(R.id.location_input)
@@ -49,52 +63,62 @@
 //        endTimeInput.setOnClickListener { showTimePickerDialog(endTimeInput) }
 //
 //        val createSportSpaceButton = findViewById<Button>(R.id.create_space_btn)
-//        createSportSpaceButton.setOnClickListener{
+//        createSportSpaceButton.setOnClickListener {
 //            val name = nameInput.text.toString()
 //            val description = descriptionInput.text.toString()
-//            val startTime = startTimeInput.text.toString()
-//            val endTime = endTimeInput.text.toString()
+//            val openTime = startTimeInput.text.toString()
+//            val closeTime = endTimeInput.text.toString()
 //            val sportType = spinnerSport.selectedItem.toString()
 //            val district = spinnerLocations.selectedItem.toString()
-//            val gamemode = spinnerFormat.selectedItem.toString()
+//            val address = findViewById<EditText>(R.id.address_input).text.toString()
 //            val price = findViewById<EditText>(R.id.price_input).text.toString().toDoubleOrNull() ?: 0.0
-//            val numberOfPlayers = when (gamemode) {
-//                "BILLAR_3" -> 3
-//                "FUTBOL_5" -> 10
-//                "FUTBOL_7" -> 14
-//                "FUTBOL_8" -> 16
-//                "FUTBOL_11" -> 22
-//                else -> 1
-//            }
-//            val amount = (price / 2 / numberOfPlayers).toInt()
+//            val gamemode = spinnerFormat.selectedItem.toString()
 //            val sportId = when (sportType) {
-//                "Futbol" -> 1
-//                "Billar" -> 2
+//                "FUTBOL" -> 1
+//                "BILLAR" -> 2
 //                else -> 0
 //            }
-//            val userid = tokenManager.getUserId()
-//            val imageUrl = findViewById<EditText>(R.id.img_url).text.toString() // Retrieve the image URL
+//            val districtId = when (district) {
+//                "San_Miguel" -> 1
+//                "San_Borja" -> 2
+//                "San_Isidro" -> 3
+//                "Surco" -> 4
+//                "Magdalena" -> 5
+//                "Pueblo_Libre" -> 6
+//                "Miraflores" -> 7
+//                "Barranco" -> 8
+//                "La_Molina" -> 9
+//                "Jesus_Maria" -> 10
+//                "Lince" -> 11
+//                "Cercado_de_Lima" -> 12
+//                "Chorrillos" -> 13
+//                else -> 0
+//            }
+//            val gamemodeId = when (gamemode) {
+//                "FUTBOL_11" -> 1
+//                "FUTBOL_7" -> 2
+//                "FUTBOL_8" -> 3
+//                "FUTBOL_5" -> 4
+//                "BILLAR_3" -> 5
+//                else -> 0
+//            }
+//            val image = findViewById<EditText>(R.id.img_url).text.toString()
 //
-//            val sportSpace = SportSpace2(
-//                name = name,
-//                sportId = sportId,
-//                imageUrl = imageUrl,
-//                price = price,
-//                district = district,
-//                description = description,
-//                userId = userid,
-//                startTime = startTime,
-//                endTime = endTime,
-//                rating = 0, // Set rating as needed
-//                gamemode = gamemode,
-//                amount = amount
+//            val sportSpace = hashMapOf(
+//                "name" to name,
+//                "sportId" to sportId,
+//                "image" to image,
+//                "price" to price,
+//                "districtId" to districtId,
+//                "address" to address,
+//                "description" to description,
+//                "openTime" to openTime,
+//                "closeTime" to closeTime,
+//                "gamemodeId" to gamemodeId
 //            )
 //
-//            service.createSportSpace(sportSpace).enqueue(object : retrofit2.Callback<SportSpace2> {
-//                override fun onResponse(
-//                    call: retrofit2.Call<SportSpace2>,
-//                    response: retrofit2.Response<SportSpace2>
-//                ) {
+//            service.createSportSpace(sportSpace).enqueue(object : retrofit2.Callback<Void> {
+//                override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
 //                    if (response.isSuccessful) {
 //                        Log.d("CreateSportSpaceActivity", "Sport space created successfully")
 //                        val intent = Intent(this@CreateSportSpaceActivity, SportSpaceActivity::class.java)
@@ -105,7 +129,7 @@
 //                    }
 //                }
 //
-//                override fun onFailure(call: retrofit2.Call<SportSpace2>, t: Throwable) {
+//                override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
 //                    Log.e("CreateSportSpaceActivity", "Error: ${t.message}")
 //                }
 //            })
@@ -231,27 +255,20 @@
 //        editText.setText(time)
 //    }
 //
-//    private fun createRetrofit(): Retrofit {
-//        val logging = HttpLoggingInterceptor()
-//        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-//
-//        val urlLoggingInterceptor = Interceptor { chain ->
-//            val request: Request = chain.request()
-//            Log.d("URLInterceptor", "Request URL: ${request.url}")
-//            chain.proceed(request)
-//        }
-//
+//    private fun createRetrofitService(context: Context): PlaceHolder {
+//        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 //        val client = OkHttpClient.Builder()
 //            .addInterceptor(logging)
-//            .addInterceptor(urlLoggingInterceptor)
-//            .addInterceptor(AuthInterceptor(tokenManager))
+//            .addInterceptor(SaveCookieInterceptor(context))
+//            .addInterceptor(CookieInterceptor(context))
 //            .build()
 //
 //        return Retrofit.Builder()
-//            .baseUrl("https://dtaquito-backend.azurewebsites.net/")
+//            .baseUrl(BASE_URL)
 //            .addConverterFactory(GsonConverterFactory.create())
 //            .client(client)
 //            .build()
+//            .create(PlaceHolder::class.java)
 //    }
 //
 //
