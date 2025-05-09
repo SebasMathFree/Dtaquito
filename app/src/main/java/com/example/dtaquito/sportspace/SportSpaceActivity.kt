@@ -3,6 +3,7 @@ package com.example.dtaquito.sportspace
 import Beans.sportspaces.SportSpace
 import Interface.PlaceHolder
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,7 +15,6 @@ import com.example.dtaquito.R
 import com.example.dtaquito.auth.CookieInterceptor
 import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.player.PlayerBase
-import environment.Environment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -30,6 +30,9 @@ class SportSpaceActivity : PlayerBase() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SportSpaceAdapter
 
+    companion object {
+        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
+    }
 
     // Ciclo de vida
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +65,7 @@ class SportSpaceActivity : PlayerBase() {
                 createSportSpaceBtn.visibility = View.VISIBLE
                 setupBottomNavigation(R.id.navigation_sportspaces_prop)
                 createSportSpaceBtn.setOnClickListener {
-                    //startActivity(Intent(this, CreateSportSpaceActivity::class.java))
+                    startActivity(Intent(this, CreateSportSpaceActivity::class.java))
                 }
             } else {
                 createSportSpaceBtn.visibility = View.GONE
@@ -129,7 +132,7 @@ class SportSpaceActivity : PlayerBase() {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(Environment.BASE_URL)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

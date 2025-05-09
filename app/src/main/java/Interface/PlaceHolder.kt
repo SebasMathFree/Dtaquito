@@ -10,14 +10,18 @@ import Beans.playerList.PlayerList
 import Beans.sportspaces.SportSpace
 import Beans.subscription.Subscriptions
 import Beans.userProfile.UserProfile
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -106,8 +110,21 @@ interface PlaceHolder {
         @Body chatMessage: MessageRecieve
     ): Call<Void>
 
-    @POST("api/v1/sport-spaces")
-    fun createSportSpace(@Body sportSpace: SportSpace): Call<SportSpace>
+    @Multipart
+    @POST("api/v1/sport-spaces/create")
+    fun createSportSpace(
+        @Part("name") name: RequestBody,
+        @Part("sportId") sportId: RequestBody,
+        @Part image: MultipartBody.Part,
+        @Part("price") price: RequestBody,
+        @Part("address") address: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("openTime") openTime: RequestBody,
+        @Part("closeTime") closeTime: RequestBody,
+        @Part("gamemodeId") gamemodeId: RequestBody,
+        @Part("latitude") latitude: RequestBody,
+        @Part("longitude") longitude: RequestBody
+    ): Call<ResponseBody>
 
 
 

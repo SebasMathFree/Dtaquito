@@ -13,7 +13,6 @@ import com.example.dtaquito.R
 class SportSpacesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val sportSpaceName: TextView = view.findViewById(R.id.name)
-    private val sportSpaceDistrict: TextView = view.findViewById(R.id.txtDistrict)
     private val sportSpaceImage: ImageView = view.findViewById(R.id.imgSportSpace)
     private val sportSpaceGameMode: TextView = view.findViewById(R.id.txtGameMode)
     private val sportSpacePrice: TextView = view.findViewById(R.id.txtPrice)
@@ -22,12 +21,10 @@ class SportSpacesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val typeface = ResourcesCompat.getFont(itemView.context, R.font.righteous)
 
         sportSpaceName.typeface = typeface
-        sportSpaceDistrict.typeface = typeface
         sportSpaceGameMode.typeface = typeface
         sportSpacePrice.typeface = typeface
 
         sportSpaceName.text = "Nombre: ${sportSpace.name}"
-        sportSpaceDistrict.text = "Distrito: ${sportSpace.districtType.replace("_", " ")}"
         sportSpaceGameMode.text = "Modo de juego: ${sportSpace.gamemodeType.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }}"
         sportSpacePrice.text = "Precio: S/. ${sportSpace.price.toInt()}"
         decodeAndSetImage(sportSpace.image, sportSpaceImage)
