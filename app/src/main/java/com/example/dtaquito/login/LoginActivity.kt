@@ -37,6 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import environment.Environment
 
 class LoginActivity : AppCompatActivity() {
 
@@ -51,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
     private var userId: Int = -1
 
     companion object {
-        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
         private const val SHARED_PREFS = "user_prefs"
         private const val JWT_TOKEN_KEY = "jwt_token"
         private const val ROLE_TYPE_KEY = "role_type"
@@ -208,7 +208,7 @@ class LoginActivity : AppCompatActivity() {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Environment.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
