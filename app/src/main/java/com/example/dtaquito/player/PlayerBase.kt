@@ -4,7 +4,6 @@ import Beans.userProfile.UserProfile
 import Interface.PlaceHolder
 import android.content.Context
 import android.content.Intent
-import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,6 @@ import com.example.dtaquito.suscription.SuscriptionActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -96,7 +94,7 @@ open class PlayerBase : AppCompatActivity() {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/")
+            .baseUrl("https://dtaquito-backend.azurewebsites.net/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

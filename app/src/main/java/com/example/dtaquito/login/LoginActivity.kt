@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
     private var userId: Int = -1
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:8080/"
+        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
         private const val SHARED_PREFS = "user_prefs"
         private const val JWT_TOKEN_KEY = "jwt_token"
         private const val ROLE_TYPE_KEY = "role_type"

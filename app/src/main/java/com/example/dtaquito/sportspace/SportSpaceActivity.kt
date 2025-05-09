@@ -3,6 +3,7 @@ package com.example.dtaquito.sportspace
 import Beans.sportspaces.SportSpace
 import Interface.PlaceHolder
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -30,7 +31,7 @@ class SportSpaceActivity : PlayerBase() {
     private lateinit var adapter: SportSpaceAdapter
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:8080/"
+        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
     }
 
     // Ciclo de vida
@@ -64,7 +65,7 @@ class SportSpaceActivity : PlayerBase() {
                 createSportSpaceBtn.visibility = View.VISIBLE
                 setupBottomNavigation(R.id.navigation_sportspaces_prop)
                 createSportSpaceBtn.setOnClickListener {
-                    //startActivity(Intent(this, CreateSportSpaceActivity::class.java))
+                    startActivity(Intent(this, CreateSportSpaceActivity::class.java))
                 }
             } else {
                 createSportSpaceBtn.visibility = View.GONE

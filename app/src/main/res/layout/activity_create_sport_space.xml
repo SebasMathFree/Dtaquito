@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#201E1E"
     tools:context=".sportspace.CreateSportSpaceActivity">
 
     <TextView
@@ -13,183 +14,228 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/righteous"
-        android:text="CREAR MI ESPACIO DEPORTIVO"
+        android:text="Creating my Sport Space"
         android:textAlignment="center"
         android:textColor="#065B28"
-        android:textSize="30sp"
+        android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/sport_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Spinner
-        android:id="@+id/location_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sport_input" />
-
-    <EditText
-        android:id="@+id/name_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        android:ems="10"
-        android:fontFamily="@font/righteous"
-        android:hint="Nombre"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location_input" />
-
-    <EditText
-        android:id="@+id/description_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        android:ems="10"
-        android:fontFamily="@font/righteous"
-        android:hint="@string/descripci_n"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_input" />
-
-    <Spinner
-        android:id="@+id/format_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_input" />
-
-    <EditText
-        android:id="@+id/start_time_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        android:clickable="false"
-        android:ems="10"
-        android:focusable="false"
-        android:fontFamily="@font/righteous"
-        android:hint="Hora de apertura"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/format_input" />
-
-    <EditText
-        android:id="@+id/end_time_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        android:clickable="false"
-        android:ems="10"
-        android:focusable="false"
-        android:fontFamily="@font/righteous"
-        android:hint="Hora de cierre"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/start_time_input" />
-
-    <EditText
-        android:id="@+id/img_url"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        android:ems="10"
-        android:fontFamily="@font/righteous"
-        android:hint="URL Imagen"
-        android:inputType="textEmailAddress"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/end_time_input" />
-
-
-    <EditText
-        android:id="@+id/price_input"
-        android:layout_width="178dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_text"
-        android:ems="10"
-        android:fontFamily="@font/righteous"
-        android:hint="Precio"
-        android:inputType="textEmailAddress"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.221"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_url" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
-    <Button
-        android:id="@+id/create_space_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_rounded"
-        android:fontFamily="@font/righteous"
-        android:text="@string/crear"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/price_input"
-        app:layout_constraintTop_toBottomOf="@+id/img_url" />
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/name_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:ems="10"
+                android:fontFamily="@font/righteous"
+                android:hint="Name"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+
+            <Spinner
+                android:id="@+id/sport_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:spinnerMode="dropdown" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/img_url_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/input_text"
+                app:hintEnabled="false"
+                android:layout_marginBottom="15dp"
+                app:endIconDrawable="@drawable/place"
+                app:endIconMode="custom">
+
+                <TextView
+                    android:id="@+id/img_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:fontFamily="@font/righteous"
+                    android:hint="Upload Image"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#4D4D4D" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:scaleType="centerCrop" />
+
+            <EditText
+                android:id="@+id/price_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:ems="10"
+                android:fontFamily="@font/righteous"
+                android:hint="Price"
+                android:inputType="textEmailAddress"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="15dp">
+
+                <org.maplibre.android.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/zoom_in_button"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/button_rounded"
+                        android:text="+"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/zoom_out_button"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/button_rounded"
+                        android:text="-"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/address_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:fontFamily="@font/righteous"
+                android:hint="Address"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+
+            <EditText
+                android:id="@+id/description_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:ems="10"
+                android:fontFamily="@font/righteous"
+                android:hint="Description"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+
+            <EditText
+                android:id="@+id/end_time_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:fontFamily="@font/righteous"
+                android:hint="Closing Time"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+
+            <EditText
+                android:id="@+id/start_time_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:fontFamily="@font/righteous"
+                android:hint="Opening Time"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+
+            <Spinner
+                android:id="@+id/format_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:spinnerMode="dropdown" />
+
+            <Button
+                android:id="@+id/create_space_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_rounded"
+                android:fontFamily="@font/righteous"
+                android:text="@string/crear"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

@@ -2,7 +2,6 @@ package com.example.dtaquito.suscription
 
 import Beans.subscription.Subscriptions
 import Interface.PlaceHolder
-import MyCookieJar
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -18,7 +17,6 @@ import com.example.dtaquito.R
 import com.example.dtaquito.auth.CookieInterceptor
 import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.player.PlayerBase
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -34,10 +32,9 @@ class SuscriptionActivity : PlayerBase() {
 
     private lateinit var service: PlaceHolder
     private lateinit var currentSubscriptionView: TextView
-    private val cookieJar = MyCookieJar()
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:8080/"
+        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
         private const val JWT_COOKIE_NAME = "JWT_TOKEN"
     }
 
