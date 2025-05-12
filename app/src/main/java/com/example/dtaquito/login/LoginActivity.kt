@@ -39,6 +39,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import environment.Environment
+import androidx.core.content.edit
 
 class LoginActivity : AppCompatActivity() {
 
@@ -181,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun saveToSharedPreferences(key: String, value: String) {
         val sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
-        sharedPreferences.edit().putString(key, value).apply()
+        sharedPreferences.edit { putString(key, value) }
     }
 
     private fun redirectToMainActivity(roleType: String) {

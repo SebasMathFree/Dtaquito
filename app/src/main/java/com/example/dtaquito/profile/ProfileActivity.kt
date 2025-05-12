@@ -7,7 +7,6 @@ import Beans.userProfile.UserProfile
 import Interface.PlaceHolder
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -183,15 +182,6 @@ class ProfileActivity : PlayerBase() {
 //                showToast("Error: ${t.message}")
 //            }
 //        })
-    }
-
-    private fun extractApprovalUrl(responseBody: String): String? {
-        return try {
-            JSONObject(responseBody).getString("approval_url")
-        } catch (e: Exception) {
-            Log.e("ProfileActivity", "Error parsing approval URL: ${e.message}")
-            null
-        }
     }
 
     private fun logout() {
