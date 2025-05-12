@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import com.example.dtaquito.R
 import com.example.dtaquito.auth.CookieInterceptor
 import com.example.dtaquito.auth.SaveCookieInterceptor
+import com.example.dtaquito.forgotPassword.ForgotPasswordActivity
 import com.example.dtaquito.profile.ProfileActivity
 import com.example.dtaquito.register.RegisterActivity
 import kotlinx.coroutines.CoroutineScope
@@ -115,10 +116,11 @@ class LoginActivity : AppCompatActivity() {
         val forgotPassSpannable = SpannableString(forgotPass.text)
         val forgotPassClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val intent = Intent(this@LoginActivity, ProfileActivity::class.java)
+                val intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
                 startActivity(intent)
             }
         }
+
         forgotPassSpannable.setSpan(forgotPassClickableSpan, 0, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         forgotPass.text = forgotPassSpannable
         forgotPass.movementMethod = LinkMovementMethod.getInstance()

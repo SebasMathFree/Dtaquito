@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="52dp"
                 android:fontFamily="@font/righteous"
-                android:text="@string/nombre_de_la_sala"
+                android:text="Game Room Name"
                 android:textAlignment="center"
                 android:textColor="#065B28"
                 android:textSize="50sp"

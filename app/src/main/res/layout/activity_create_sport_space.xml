@@ -231,7 +231,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/button_rounded"
                 android:fontFamily="@font/righteous"
-                android:text="@string/crear"
+                android:text="Create"
                 android:textColor="@color/white" />
 
         </LinearLayout>
