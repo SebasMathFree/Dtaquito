@@ -1,29 +1,9 @@
 <resources>
     <string name="app_name">Dtaquito</string>
-    <string name="logueate">¡Logueate!</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="reg_strate">!Regístrate!</string>
-    <string name="elige_tu_rol">Elige tu rol</string>
-    <string name="name">Name</string>
-    <string name="paypal_email">Paypal Email</string>
-    <string name="qu_deporte_deseas_jugar">¿QUÉ DEPORTE DESEAS JUGAR?</string>
-    <string name="soccer">Futbol</string>
+    <string name="enter_valid_email">Por favor, ingresa un correo válido</string>
+    <string name="email_sent_success">Correo enviado con éxito</string>
+    <string name="email_send_error">Error al enviar el correo</string>
+    <string name="network_error">Error de red: %1$s</string>
+    <string name="soccer">Fútbol</string>
     <string name="pool">Billar</string>
-    <string name="perfil">PERFIL</string>
-    <string name="cerrar_cesi_n">CERRAR SESIÓN</string>
-    <string name="editar_perfil">Editar Perfil</string>
-    <string name="nombre_de_la_sala">Nombre de la sala</string>
-    <string name="formato">Formato</string>
-    <string name="hora">Hora</string>
-    <string name="crear_mi_sala_de_juego">CREAR MI SALA DE JUEGO</string>
-    <string name="descripci_n">Descripción</string>
-    <string name="tel_fono">Teléfono</string>
-    <string name="crear">Crear</string>
-    <string name="title_activity_home">Home</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
 </resources>

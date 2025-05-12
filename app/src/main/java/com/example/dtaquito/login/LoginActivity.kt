@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import com.example.dtaquito.R
 import com.example.dtaquito.auth.CookieInterceptor
 import com.example.dtaquito.auth.SaveCookieInterceptor
+import com.example.dtaquito.forgotPassword.ForgotPasswordActivity
 import com.example.dtaquito.profile.ProfileActivity
 import com.example.dtaquito.register.RegisterActivity
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +39,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import environment.Environment
+import androidx.core.content.edit
 
 class LoginActivity : AppCompatActivity() {
 
@@ -115,10 +117,11 @@ class LoginActivity : AppCompatActivity() {
         val forgotPassSpannable = SpannableString(forgotPass.text)
         val forgotPassClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val intent = Intent(this@LoginActivity, ProfileActivity::class.java)
+                val intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
                 startActivity(intent)
             }
         }
+
         forgotPassSpannable.setSpan(forgotPassClickableSpan, 0, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         forgotPass.text = forgotPassSpannable
         forgotPass.movementMethod = LinkMovementMethod.getInstance()
@@ -179,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun saveToSharedPreferences(key: String, value: String) {
         val sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
-        sharedPreferences.edit().putString(key, value).apply()
+        sharedPreferences.edit { putString(key, value) }
     }
 
     private fun redirectToMainActivity(roleType: String) {

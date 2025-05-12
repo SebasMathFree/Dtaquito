@@ -1,10 +1,12 @@
 package com.example.dtaquito.profile
 
+import Beans.update.UpdateEmailRequest
+import Beans.update.UpdateNameRequest
+import Beans.update.UpdatePasswordRequest
 import Beans.userProfile.UserProfile
 import Interface.PlaceHolder
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,7 +21,6 @@ import com.example.dtaquito.player.PlayerBase
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONObject
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
@@ -141,17 +142,17 @@ class ProfileActivity : PlayerBase() {
     }
 
     private fun updateName(newName: String) {
-        val nameRequest = mapOf("name" to newName)
+        val nameRequest = UpdateNameRequest(newName)
         service.updateName(nameRequest).enqueue(createUpdateCallback("Name updated successfully"))
     }
 
     private fun updateEmail(newEmail: String) {
-        val emailRequest = mapOf("newEmail" to newEmail)
+        val emailRequest = UpdateEmailRequest(newEmail)
         service.updateEmail(emailRequest).enqueue(createUpdateCallback("Email updated successfully"))
     }
 
     private fun updatePassword(newPassword: String) {
-        val passwordRequest = mapOf("newPassword" to newPassword)
+        val passwordRequest = UpdatePasswordRequest(newPassword)
         service.updatePassword(passwordRequest).enqueue(createUpdateCallback("Password updated successfully"))
     }
 
@@ -162,33 +163,24 @@ class ProfileActivity : PlayerBase() {
             return
         }
 
-        service.createDeposit(creditAmount.toInt()).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    response.body()?.string()?.let { responseBody ->
-                        val approvalUrl = extractApprovalUrl(responseBody)
-                        approvalUrl?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
-                            ?: showToast("Approval URL not found.")
-                    } ?: showToast("Response body is null.")
-                } else {
-                    showToast("Failed to add credit")
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e("ProfileActivity", "Error: ${t.message}")
-                showToast("Error: ${t.message}")
-            }
-        })
-    }
-
-    private fun extractApprovalUrl(responseBody: String): String? {
-        return try {
-            JSONObject(responseBody).getString("approval_url")
-        } catch (e: Exception) {
-            Log.e("ProfileActivity", "Error parsing approval URL: ${e.message}")
-            null
-        }
+//        service.createDeposit(creditAmount.toInt()).enqueue(object : Callback<ResponseBody> {
+//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                if (response.isSuccessful) {
+//                    response.body()?.string()?.let { responseBody ->
+//                        val approvalUrl = extractApprovalUrl(responseBody)
+//                        approvalUrl?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
+//                            ?: showToast("Approval URL not found.")
+//                    } ?: showToast("Response body is null.")
+//                } else {
+//                    showToast("Failed to add credit")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                Log.e("ProfileActivity", "Error: ${t.message}")
+//                showToast("Error: ${t.message}")
+//            }
+//        })
     }
 
     private fun logout() {
