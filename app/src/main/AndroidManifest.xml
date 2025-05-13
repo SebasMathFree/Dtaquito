@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission
-        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,36 +22,13 @@
         android:theme="@style/Theme.Dtaquito"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".forgotPassword.ForgotPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ChatRoomActivity"
-            android:exported="false" />
-        <activity
-            android:name=".suscription.SuscriptionActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainGameRoomActivity"
-            android:exported="false" />
-        <activity
-            android:name=".sportspace.SportSpaceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".sportspace.CreateSportSpaceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CreateRoomActivity"
-            android:exported="false" />
-        <activity
-            android:name=".profile.ProfileActivity"
-            android:exported="false" />
+
+        <!-- Actividades principales -->
         <activity
             android:name=".splash.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -61,12 +38,45 @@
         <activity
             android:name=".register.RegisterActivity"
             android:exported="false" />
+
+        <!-- Actividades de perfil y suscripción -->
         <activity
-            android:name=".sports.SportActivity"
+            android:name=".profile.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".suscription.SubscriptionActivity"
+            android:exported="false" />
+
+        <!-- Actividades de salas -->
+        <activity
+            android:name=".ChatRoomActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateRoomActivity"
             android:exported="false" />
         <activity
             android:name=".GameRoomActivity"
             android:exported="false" />
+        <activity
+            android:name=".MainGameRoomActivity"
+            android:exported="false" />
+
+        <!-- Actividades de deportes -->
+        <activity
+            android:name=".sports.SportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sportspace.SportSpaceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sportspace.CreateSportSpaceActivity"
+            android:exported="false" />
+
+        <!-- Actividades de recuperación de contraseña -->
+        <activity
+            android:name=".forgotPassword.ForgotPasswordActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

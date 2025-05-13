@@ -3,7 +3,6 @@ package com.example.dtaquito.sportspace
 import Interface.PlaceHolder
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -13,56 +12,64 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.provider.Settings
+import android.util.TypedValue
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
-import android.widget.*
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.ScrollView
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.dtaquito.BuildConfig
 import com.example.dtaquito.R
-import com.example.dtaquito.auth.CookieInterceptor
-import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.player.PlayerBase
 import com.example.dtaquito.time.TimePickerFragment
+import com.example.dtaquito.utils.showToast
 import com.google.android.material.textfield.TextInputLayout
+import network.RetrofitClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
 import org.maplibre.android.MapLibre
 import org.maplibre.android.WellKnownTileServer
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
-import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.MapView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.IOException
+import androidx.core.graphics.toColorInt
+import androidx.core.net.toUri
 
 class CreateSportSpaceActivity : PlayerBase() {
 
     companion object {
-        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
         private const val SELECT_SPORT = "Choose a sport:"
         private const val SELECT_FORMAT = "Choose a format:"
         private const val STORAGE_PERMISSION_CODE = 1001
     }
 
-    private lateinit var service: PlaceHolder
     private lateinit var imageView: ImageView
     private lateinit var imgUrlEditText: TextView
     private lateinit var mapView: MapView
+    private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
     private var selectedLatitude: Double = 0.0
     private var selectedLongitude: Double = 0.0
 
@@ -72,9 +79,9 @@ class CreateSportSpaceActivity : PlayerBase() {
         MapLibre.getInstance(this, BuildConfig.LOCATIONIQ_API_KEY, WellKnownTileServer.MapTiler)
         enableEdgeToEdge()
         setContentView(R.layout.activity_create_sport_space)
+        setupBottomNavigation(R.id.navigation_sportspaces_prop)
         initializeMap(savedInstanceState)
         initializeUI()
-        service = createRetrofitService(this)
     }
 
     // Inicialización de la interfaz de usuario
@@ -126,7 +133,7 @@ class CreateSportSpaceActivity : PlayerBase() {
                 val limaLatLng = LatLng(-12.0464, -77.0428)
                 mapLibreMap.cameraPosition = CameraPosition.Builder()
                     .target(limaLatLng)
-                    .zoom(8.0)
+                    .zoom(10.0)
                     .build()
                 setupMapClickListener(mapLibreMap)
             }
@@ -209,7 +216,7 @@ class CreateSportSpaceActivity : PlayerBase() {
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: okhttp3.Call, e: IOException) {
                 runOnUiThread {
-                    Toast.makeText(this@CreateSportSpaceActivity, "Error al obtener la dirección", Toast.LENGTH_SHORT).show()
+                    showToast("Error al obtener la dirección")
                 }
             }
 
@@ -226,7 +233,7 @@ class CreateSportSpaceActivity : PlayerBase() {
                     }
                 } else {
                     runOnUiThread {
-                        Toast.makeText(this@CreateSportSpaceActivity, "No se pudo obtener la dirección", Toast.LENGTH_SHORT).show()
+                        showToast("No se pudo obtener la dirección")
                     }
                 }
             }
@@ -246,7 +253,27 @@ class CreateSportSpaceActivity : PlayerBase() {
     }
 
     private fun setupSpinner(spinner: Spinner, items: List<String>, onItemSelected: (String) -> Unit) {
-        val adapter = ArrayAdapter(this, R.layout.spinner_items, items)
+        val adapter = object : ArrayAdapter<String>(this, R.layout.spinner_items, items) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val textView = view as TextView
+                textView.setTextColor(
+                    if (position == 0) "#4D4D4D".toColorInt()
+                    else "#FFFFFF".toColorInt()
+                )
+                return view
+            }
+
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                val textView = view as TextView
+                textView.setTextColor(
+                    if (position == 0) "#4D4D4D".toColorInt()
+                    else "#FFFFFF".toColorInt()
+                )
+                return view
+            }
+        }
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -273,7 +300,7 @@ class CreateSportSpaceActivity : PlayerBase() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.data = Uri.parse("package:$packageName")
+                intent.data = "package:$packageName".toUri()
                 startActivity(intent)
             } else {
                 openGallery()
@@ -297,7 +324,7 @@ class CreateSportSpaceActivity : PlayerBase() {
         if (requestCode == STORAGE_PERMISSION_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             openGallery()
         } else {
-            Toast.makeText(this, "Permiso denegado", Toast.LENGTH_SHORT).show()
+            showToast("Permiso denegado")
         }
     }
 
@@ -313,30 +340,25 @@ class CreateSportSpaceActivity : PlayerBase() {
             val selectedImageUri = result.data?.data
             if (selectedImageUri != null) {
                 imageView.setImageURI(selectedImageUri) // Muestra la imagen seleccionada
-                val filePath = getRealPathFromURI(selectedImageUri) // Obtén la ruta absoluta
-                if (filePath != null) {
-                    imgUrlEditText.text = filePath // Muestra la ruta en el EditText
+                val fileName = getFileName(selectedImageUri) // Obtén el nombre del archivo
+                if (fileName != null) {
+                    imgUrlEditText.text = fileName // Muestra la ruta en el EditText
                     imgUrlEditText.hint = "" // Cambia el hint al nombre del archivo
+                    val heightInPixels = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        300f,
+                        resources.displayMetrics
+                    ).toInt()
+                    imageView.layoutParams.height = heightInPixels // Cambia la altura de la imagen
+                    imageView.visibility= View.VISIBLE // Muestra la imagen
+                    imageView.requestLayout()
                 } else {
-                    Toast.makeText(this, "No se pudo obtener la ruta del archivo", Toast.LENGTH_SHORT).show()
+                    showToast("No se pudo obtener la ruta del archivo")
                 }
             } else {
-                Toast.makeText(this, "No se pudo cargar la imagen", Toast.LENGTH_SHORT).show()
+                showToast("No se pudo cargar la imagen")
             }
         }
-    }
-
-    // Metodo para obtener la ruta absoluta desde la URI
-    private fun getRealPathFromURI(uri: Uri): String? {
-        var filePath: String? = null
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
-            if (cursor.moveToFirst()) {
-                val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                filePath = cursor.getString(columnIndex)
-            }
-        }
-        return filePath
     }
 
     // Obtiene el nombre del archivo desde la URI
@@ -369,19 +391,19 @@ class CreateSportSpaceActivity : PlayerBase() {
         val sportId = if (sportType == "Soccer") 1 else 2
         val gamemodeId = if (gamemode == "Soccer 11") 1 else 5
 
-        val namePart = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
-        val descriptionPart = RequestBody.create("text/plain".toMediaTypeOrNull(), description)
-        val openTimePart = RequestBody.create("text/plain".toMediaTypeOrNull(), openTime)
-        val closeTimePart = RequestBody.create("text/plain".toMediaTypeOrNull(), closeTime)
-        val sportIdPart = RequestBody.create("text/plain".toMediaTypeOrNull(), sportId.toString())
-        val addressPart = RequestBody.create("text/plain".toMediaTypeOrNull(), address)
-        val pricePart = RequestBody.create("text/plain".toMediaTypeOrNull(), price.toString())
-        val gamemodeIdPart = RequestBody.create("text/plain".toMediaTypeOrNull(), gamemodeId.toString())
-        val latitudePart = RequestBody.create("text/plain".toMediaTypeOrNull(), latitude.toString())
-        val longitudePart = RequestBody.create("text/plain".toMediaTypeOrNull(), longitude.toString())
+        val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
+        val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
+        val openTimePart = openTime.toRequestBody("text/plain".toMediaTypeOrNull())
+        val closeTimePart = closeTime.toRequestBody("text/plain".toMediaTypeOrNull())
+        val sportIdPart = sportId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val addressPart = address.toRequestBody("text/plain".toMediaTypeOrNull())
+        val pricePart = price.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val gamemodeIdPart = gamemodeId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val latitudePart = latitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val longitudePart = longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         val file = File(imagePath)
-        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val imagePart = MultipartBody.Part.createFormData("image", file.name, requestFile)
 
         service.createSportSpace(
@@ -390,34 +412,17 @@ class CreateSportSpaceActivity : PlayerBase() {
         ).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@CreateSportSpaceActivity, "Sport space created successfully", Toast.LENGTH_SHORT).show()
+                    showToast("Sport space created successfully")
                     finish()
                 } else {
-                    Toast.makeText(this@CreateSportSpaceActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    showToast("Error: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(this@CreateSportSpaceActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                showToast("Network error: ${t.message}")
             }
         })
-    }
-
-    // Configuración de Retrofit
-    private fun createRetrofitService(context: Context): PlaceHolder {
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .addInterceptor(SaveCookieInterceptor(context))
-            .addInterceptor(CookieInterceptor(context))
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(PlaceHolder::class.java)
     }
 
     // Métodos del ciclo de vida del MapView

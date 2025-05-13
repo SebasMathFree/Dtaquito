@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
 
-class SuscriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class SubscriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val title: TextView = itemView.findViewById(R.id.subscription_title)
     private val price: TextView = itemView.findViewById(R.id.subscription_price)
     private val details: TextView = itemView.findViewById(R.id.subscription_details)

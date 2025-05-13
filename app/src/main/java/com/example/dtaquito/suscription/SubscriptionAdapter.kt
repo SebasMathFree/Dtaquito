@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
 
-class SuscriptionAdapter(
+class SubscriptionAdapter(
     private val subscriptions: List<Subscriptions>,
     private val currentPlanType: String
-) : RecyclerView.Adapter<SuscriptionViewHolder>() {
+) : RecyclerView.Adapter<SubscriptionViewHolder>() {
 
     private var onItemClickListener: ((Subscriptions) -> Unit)? = null
 
@@ -17,12 +17,12 @@ class SuscriptionAdapter(
         onItemClickListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuscriptionViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubscriptionViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_suscription, parent, false)
-        return SuscriptionViewHolder(view)
+        return SubscriptionViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SuscriptionViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SubscriptionViewHolder, position: Int) {
         holder.renderSubscription(subscriptions[position], currentPlanType, onItemClickListener)
     }
 

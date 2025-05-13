@@ -2,37 +2,29 @@ package com.example.dtaquito.sportspace
 
 import Beans.sportspaces.SportSpace
 import Interface.PlaceHolder
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
-import com.example.dtaquito.auth.CookieInterceptor
-import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.player.PlayerBase
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.dtaquito.utils.showToast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import network.RetrofitClient
 
 class SportSpaceActivity : PlayerBase() {
 
     // Variables
-    private lateinit var service: PlaceHolder
+    private val service = RetrofitClient.instance.create(PlaceHolder::class.java)
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SportSpaceAdapter
-
-    companion object {
-        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
-    }
 
     // Ciclo de vida
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,15 +32,9 @@ class SportSpaceActivity : PlayerBase() {
         setContentView(R.layout.activity_sport_space)
         setupBottomNavigation(R.id.navigation_sportspaces_prop)
 
-        initializeService()
         setupRecyclerView()
         fetchUserRoleAndLoadSportSpaces()
         setupCreateSportSpaceButton()
-    }
-
-    // Inicialización
-    private fun initializeService() {
-        service = createRetrofitService(this)
     }
 
     private fun setupRecyclerView() {
@@ -60,49 +46,61 @@ class SportSpaceActivity : PlayerBase() {
     private fun setupCreateSportSpaceButton() {
         val createSportSpaceBtn = findViewById<Button>(R.id.create_sport_space_btn)
 
-        fillUserProfile { userRoleType ->
-            if (userRoleType == "OWNER") {
-                createSportSpaceBtn.visibility = View.VISIBLE
-                setupBottomNavigation(R.id.navigation_sportspaces_prop)
-                createSportSpaceBtn.setOnClickListener {
-                    startActivity(Intent(this, CreateSportSpaceActivity::class.java))
+        lifecycleScope.launch {
+            try {
+                val userRoleType = withContext(Dispatchers.IO) { fillUserProfile() }
+                if (userRoleType == "OWNER") {
+                    createSportSpaceBtn.visibility = View.VISIBLE
+                    setupBottomNavigation(R.id.navigation_sportspaces_prop)
+                    createSportSpaceBtn.setOnClickListener {
+                        startActivity(Intent(this@SportSpaceActivity, CreateSportSpaceActivity::class.java))
+                    }
+                } else {
+                    createSportSpaceBtn.visibility = View.GONE
+                    setupBottomNavigation(R.id.navigation_sportspaces)
                 }
-            } else {
-                createSportSpaceBtn.visibility = View.GONE
-                setupBottomNavigation(R.id.navigation_sportspaces)
+            } catch (e: Exception) {
+                showToast("Error: ${e.message}")
             }
         }
     }
 
-    // Carga de datos
     private fun fetchUserRoleAndLoadSportSpaces() {
-        fillUserProfile { role ->
-            Log.d("SportSpaceActivity", "User role: $role")
-            fetchSportSpaces(role)
+        lifecycleScope.launch {
+            try {
+                val role = withContext(Dispatchers.IO) { fillUserProfile() }
+                Log.d("SportSpaceActivity", "User role: $role")
+                fetchSportSpaces(role)
+            } catch (e: Exception) {
+                showToast("Error: ${e.message}")
+            }
         }
     }
 
     private fun fetchSportSpaces(userRole: String) {
-        val call = if (userRole == "OWNER") {
-            service.getSportSpacesByUserId()
-        } else {
-            service.getAllSportSpaces()
-        }
-
-        call.enqueue(object : Callback<List<SportSpace>> {
-            override fun onResponse(call: Call<List<SportSpace>>, response: Response<List<SportSpace>>) {
-                if (response.isSuccessful) {
-                    handleSuccessfulResponse(response.body())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = if (userRole == "OWNER") {
+                    service.getSportSpacesByUserId().execute()
                 } else {
-                    handleErrorResponse(response.code())
+                    service.getAllSportSpaces().execute()
+                }
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        handleSuccessfulResponse(response.body())
+                    } else {
+                        handleErrorResponse(response.code())
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    showToast("Error: ${e.message}")
                 }
             }
-
-            override fun onFailure(call: Call<List<SportSpace>>, t: Throwable) {
-                showToast("Error: ${t.message}")
-            }
-        })
+        }
     }
+
 
     // Manejo de respuestas
     private fun handleSuccessfulResponse(sportSpaces: List<SportSpace>?) {
@@ -122,24 +120,4 @@ class SportSpaceActivity : PlayerBase() {
         }
     }
 
-    // Utilidades
-    private fun createRetrofitService(context: Context): PlaceHolder {
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .addInterceptor(SaveCookieInterceptor(context))
-            .addInterceptor(CookieInterceptor(context))
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(PlaceHolder::class.java)
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
 }

@@ -1,10 +1,7 @@
 package com.example.dtaquito.login
 
 import Beans.auth.login.LoginRequest
-import Beans.auth.login.LoginResponse
 import Interface.PlaceHolder
-import MyCookieJar
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -18,28 +15,20 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.dtaquito.R
-import com.example.dtaquito.auth.CookieInterceptor
-import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.forgotPassword.ForgotPasswordActivity
 import com.example.dtaquito.profile.ProfileActivity
 import com.example.dtaquito.register.RegisterActivity
+import com.example.dtaquito.utils.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import environment.Environment
-import androidx.core.content.edit
+import network.RetrofitClient
 
 class LoginActivity : AppCompatActivity() {
 
@@ -49,9 +38,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginBtn: Button
     private lateinit var signUpBtn: TextView
     private lateinit var forgotPass: TextView
-    private lateinit var service: PlaceHolder
-    private lateinit var cookieJar: MyCookieJar
     private var userId: Int = -1
+    private val service = RetrofitClient.instance.create(PlaceHolder::class.java)
 
     companion object {
         private const val SHARED_PREFS = "user_prefs"
@@ -63,9 +51,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-
-        cookieJar = MyCookieJar()
-        service = createRetrofitService(this)
 
         initializeUI()
         setupHyperlinks()
@@ -130,31 +115,35 @@ class LoginActivity : AppCompatActivity() {
     // Lógica de inicio de sesión
     private fun loginUser(email: String, password: String) {
         val loginRequest = LoginRequest(email, password)
-        service.loginUser(loginRequest).enqueue(object : Callback<LoginResponse> {
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        userId = it.id
-                        getUserInfo()
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = service.loginUser(loginRequest)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        response.body()?.let { user ->
+                            userId = user.id
+                            getUserInfo()
+                        }
+                        showToast("Inicio de sesión exitoso.")
+                    } else {
+                        showToast("Usuario o contraseña incorrectos.")
+                        Log.e("LoginActivity", "Fallo login, código: ${response.code()}")
                     }
-                    showToast("Inicio de sesión exitoso.")
-                } else {
-                    showToast("Usuario o contraseña incorrectos.")
-                    Log.e("LoginActivity", "Fallo login, código: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.e("LoginActivity", "Error en login", e)
+                    showToast("Error en la red.")
                 }
             }
-
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Log.e("LoginActivity", "Error en login", t)
-            }
-        })
+        }
     }
 
     // Obtener información del usuario
     private fun getUserInfo() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = service.getUserId().execute()
+                val response = service.getUserId()
                 if (response.isSuccessful) {
                     response.body()?.let { user ->
                         val jwtToken = response.headers()["Set-Cookie"]?.let { extractJwtToken(it) }
@@ -182,7 +171,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun saveToSharedPreferences(key: String, value: String) {
         val sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
-        sharedPreferences.edit { putString(key, value) }
+        sharedPreferences.edit().apply {
+            putString(key, value)
+            apply()
+        }
     }
 
     private fun redirectToMainActivity(roleType: String) {
@@ -197,25 +189,5 @@ class LoginActivity : AppCompatActivity() {
     private fun navigateToRegister() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    // Configuración de Retrofit
-    private fun createRetrofitService(context: Context): PlaceHolder {
-        val client = OkHttpClient.Builder()
-            .addInterceptor(SaveCookieInterceptor(context))
-            .addInterceptor(CookieInterceptor(context))
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Environment.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-
-        return retrofit.create(PlaceHolder::class.java)
     }
 }

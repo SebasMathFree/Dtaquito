@@ -2,41 +2,37 @@ package com.example.dtaquito.suscription
 
 import Beans.subscription.Subscriptions
 import Interface.PlaceHolder
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
-import com.example.dtaquito.auth.CookieInterceptor
-import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.player.PlayerBase
-import okhttp3.OkHttpClient
+import network.RetrofitClient
 import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
-import androidx.core.graphics.toColorInt
-import androidx.recyclerview.widget.LinearSnapHelper
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import androidx.core.net.toUri
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SuscriptionActivity : PlayerBase() {
+class SubscriptionActivity : PlayerBase() {
 
-    private lateinit var service: PlaceHolder
+    private val service = RetrofitClient.instance.create(PlaceHolder::class.java)
     private lateinit var currentSubscriptionView: TextView
-
-    companion object {
-        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
-        private const val JWT_COOKIE_NAME = "JWT_TOKEN"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +40,6 @@ class SuscriptionActivity : PlayerBase() {
         setupBottomNavigation(R.id.navigation_suscriptions)
 
         initializeViews()
-        service = createRetrofitService(this)
 
         val subscriptions = createSubscriptionList()
         fetchCurrentSubscription(subscriptions)
@@ -52,22 +47,6 @@ class SuscriptionActivity : PlayerBase() {
 
     private fun initializeViews() {
         currentSubscriptionView = findViewById(R.id.currentSuscription)
-    }
-
-    private fun createRetrofitService(context: Context): PlaceHolder {
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .addInterceptor(SaveCookieInterceptor(context))
-            .addInterceptor(CookieInterceptor(context))
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(PlaceHolder::class.java)
     }
 
     private fun createSubscriptionList(): List<Subscriptions> {
@@ -97,28 +76,31 @@ class SuscriptionActivity : PlayerBase() {
     }
 
     private fun fetchCurrentSubscription(subscriptions: List<Subscriptions>) {
-        service.getCurrentSubscription().enqueue(object : Callback<Subscriptions> {
-            override fun onResponse(call: Call<Subscriptions>, response: Response<Subscriptions>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { subscription ->
-                        displayCurrentSubscription(subscription)
-                        setupRecyclerView(subscriptions, subscription.planType)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = service.getCurrentSubscription().execute()
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        response.body()?.let { subscription ->
+                            displayCurrentSubscription(subscription)
+                            setupRecyclerView(subscriptions, subscription.planType)
+                        }
+                    } else {
+                        showToast("No se pudo obtener la suscripción actual.")
                     }
-                } else {
-                    showToast("No se pudo obtener la suscripción actual.")
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.e("SuscriptionActivity", "Error: ${e.message}")
+                    showToast("Error al obtener la suscripción.")
                 }
             }
-
-            override fun onFailure(call: Call<Subscriptions>, t: Throwable) {
-                Log.e("SuscriptionActivity", "Error: ${t.message}")
-                showToast("Error al obtener la suscripción: ${t.message}")
-            }
-        })
+        }
     }
 
     private fun setupRecyclerView(subscriptions: List<Subscriptions>, currentPlanType: String) {
         val recyclerView: RecyclerView = findViewById(R.id.suscriptionPackages)
-        val adapter = SuscriptionAdapter(subscriptions, currentPlanType)
+        val adapter = SubscriptionAdapter(subscriptions, currentPlanType)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.setHasFixedSize(true)
@@ -133,7 +115,7 @@ class SuscriptionActivity : PlayerBase() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     response.body()?.string()?.let { extractApprovalUrl(it) }?.let { approvalUrl ->
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(approvalUrl)))
+                        startActivity(Intent(Intent.ACTION_VIEW, approvalUrl.toUri()))
                     } ?: showToast("No se encontró la URL de aprobación.")
                 } else {
                     showToast("No se pudo actualizar la suscripción.")

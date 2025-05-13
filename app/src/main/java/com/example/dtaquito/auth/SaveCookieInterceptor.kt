@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
+import androidx.core.content.edit
 
 class SaveCookieInterceptor(private val context: Context) : Interceptor {
 
@@ -25,15 +26,23 @@ class SaveCookieInterceptor(private val context: Context) : Interceptor {
                 for (cookie in cookies) {
                     if (cookie.contains(COOKIE_NAME)) {
                         val token = cookie.substringAfter("$COOKIE_NAME=").substringBefore(";")
-                        prefs.edit().putString(JWT_KEY, token).apply()
-                        Log.d("SaveCookieInterceptor", "$COOKIE_NAME guardado: $token")
+                        if (token.isNotEmpty()) {
+                            prefs.edit { putString(JWT_KEY, token) }
+                            Log.d("SaveCookieInterceptor", "$COOKIE_NAME guardado: $token")
+                        } else {
+                            Log.w("SaveCookieInterceptor", "Se encontró un $COOKIE_NAME vacío, no se guardará.")
+                        }
                     }
                 }
             } catch (e: Exception) {
-                Log.e("SaveCookieInterceptor", "Error al guardar el token JWT: ${e.message}")
+                Log.e("SaveCookieInterceptor", "Error al guardar el token JWT: ${e.message}", e)
             }
         } else {
-            Log.d("SaveCookieInterceptor", "No se encontraron cookies en la respuesta")
+            if (response.code == 401) { // Código HTTP 401: No autorizado
+                Log.d("SaveCookieInterceptor", "La autenticación es requerida, pero no se proporcionaron cookies.")
+            } else {
+                Log.d("SaveCookieInterceptor", "No se requiere autenticación para esta respuesta.")
+            }
         }
 
         return response
