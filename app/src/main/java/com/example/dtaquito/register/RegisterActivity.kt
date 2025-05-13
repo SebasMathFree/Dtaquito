@@ -1,7 +1,6 @@
 package com.example.dtaquito.register
 
 import Beans.auth.register.RegisterRequest
-import Beans.userProfile.UserProfile
 import Interface.PlaceHolder
 import android.content.Intent
 import android.graphics.Color
@@ -15,19 +14,24 @@ import android.text.style.UnderlineSpan
 import android.util.Patterns
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.lifecycleScope
 import com.example.dtaquito.R
 import com.example.dtaquito.login.LoginActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import environment.Environment
+import com.example.dtaquito.utils.showToast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import network.RetrofitClient
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -36,7 +40,7 @@ class RegisterActivity : AppCompatActivity() {
     private var selectedRolePosition = 0
     private lateinit var selectedRole: String
     private lateinit var signIn: TextView
-    private lateinit var service: PlaceHolder
+    private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +48,6 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         initializeUI()
-        setupRetrofit()
         setupSpinner()
         setupRegisterButton()
     }
@@ -69,14 +72,6 @@ class RegisterActivity : AppCompatActivity() {
         signIn.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    // Configuración de Retrofit
-    private fun setupRetrofit() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Environment.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        service = retrofit.create(PlaceHolder::class.java)
-    }
 
     // Configuración del Spinner
     private fun setupSpinner() {
@@ -177,20 +172,19 @@ class RegisterActivity : AppCompatActivity() {
 
     // Registro del usuario
     private fun registerUser(registerRequest: RegisterRequest) {
-        service.createUser(registerRequest).enqueue(object : Callback<UserProfile> {
-            override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) { service.createUser(registerRequest) }
                 if (response.isSuccessful) {
                     showToast("Usuario registrado correctamente.")
                     navigateToLogin()
                 } else {
                     showToast("Error al registrar usuario.")
                 }
-            }
-
-            override fun onFailure(call: Call<UserProfile>, t: Throwable) {
+            } catch (e: Exception) {
                 showToast("Error de red.")
             }
-        })
+        }
     }
 
     // Navegación a la pantalla de inicio de sesión
@@ -200,8 +194,4 @@ class RegisterActivity : AppCompatActivity() {
         finish()
     }
 
-    // Mostrar mensajes de Toast
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
 }

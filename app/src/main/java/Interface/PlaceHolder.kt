@@ -17,6 +17,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -32,17 +33,17 @@ interface PlaceHolder {
 
     // Autenticación
     @POST("api/v1/users/sign-up")
-    fun createUser(@Body registerRequest: RegisterRequest): Call<UserProfile>
+    suspend fun createUser(@Body registerRequest: RegisterRequest): Response<UserProfile>
 
     @POST("api/v1/authentication/sign-in")
-    fun loginUser(@Body loginRequest: LoginRequest): Call<LoginResponse>
+    suspend fun loginUser(@Body loginRequest: LoginRequest): Response<LoginResponse>
 
     @POST("api/v1/authentication/log-out")
     fun logOutUser(): Call<Void>
 
     // Usuario
     @GET("api/v1/users/me")
-    fun getUserId(): Call<UserProfile>
+    suspend fun getUserId(): Response<UserProfile>
 
     @PUT("api/v1/users/email")
     fun updateEmail(@Body emailRequest: UpdateEmailRequest): Call<ResponseBody>
@@ -119,6 +120,6 @@ interface PlaceHolder {
 
     // Contraseñas
     @POST("/api/v1/recover-password/forgot-password")
-    fun forgotPassword(@Body request: ForgotPasswordRequest): Call<ResponseBody>
+    suspend fun forgotPassword(@Body request: ForgotPasswordRequest): Response<ResponseBody>
 }
 

@@ -11,25 +11,23 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.dtaquito.R
 import com.example.dtaquito.databinding.ActivityForgotPasswordBinding
 import com.example.dtaquito.login.LoginActivity
-import environment.RetrofitClient
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.dtaquito.utils.showToast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import network.RetrofitClient
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityForgotPasswordBinding
-    private val service: PlaceHolder by lazy {
-        RetrofitClient.instance.create(PlaceHolder::class.java)
-    }
+    private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,29 +62,28 @@ class ForgotPasswordActivity : AppCompatActivity() {
     }
 
     private fun sendForgotPasswordRequest(email: String) {
-        binding.recoverBtn.isEnabled = false
-        binding.progressBar.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            binding.recoverBtn.isEnabled = false
+            binding.progressBar.visibility = View.VISIBLE
 
-        val request = ForgotPasswordRequest(email)
-        service.forgotPassword(request).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            val request = ForgotPasswordRequest(email)
+            try {
+                val response = withContext(Dispatchers.IO) { service.forgotPassword(request) }
                 binding.progressBar.visibility = View.GONE
                 binding.recoverBtn.isEnabled = true
 
                 if (response.isSuccessful) {
-                    Toast.makeText(this@ForgotPasswordActivity, getString(R.string.email_sent_success), Toast.LENGTH_SHORT).show()
+                    showToast(getString(R.string.email_sent_success))
                     navigateToLogin()
                 } else {
-                    Toast.makeText(this@ForgotPasswordActivity, getString(R.string.email_send_error), Toast.LENGTH_SHORT).show()
+                    showToast(getString(R.string.email_send_error))
                 }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            } catch (e: Exception) {
                 binding.progressBar.visibility = View.GONE
                 binding.recoverBtn.isEnabled = true
-                Toast.makeText(this@ForgotPasswordActivity, getString(R.string.network_error, t.message), Toast.LENGTH_SHORT).show()
+                showToast(getString(R.string.network_error, e.message))
             }
-        })
+        }
     }
 
     private fun navigateToLogin() {

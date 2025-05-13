@@ -73,35 +73,37 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/img_url_layout"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/input_text"
-                app:hintEnabled="false"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                app:endIconDrawable="@drawable/place"
-                app:endIconMode="custom">
-
-                <TextView
+                android:background="@drawable/input_text"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                app:endIconDrawable="@android:drawable/ic_dialog_map"
+                app:endIconMode="custom"
+                app:endIconTint="@color/white"
+                app:hintEnabled="false">
+                <EditText
                     android:id="@+id/img_url"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="48dp"
                     android:background="@null"
-                    android:clickable="true"
-                    android:focusable="false"
+                    android:ems="10"
                     android:fontFamily="@font/righteous"
-                    android:hint="Upload Image"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
+                    android:hint="Image"
                     android:textColor="#FFFFFF"
+                    android:focusable="false"
+                    android:clickable="false"
                     android:textColorHint="#4D4D4D" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/image_view"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/price_input"
@@ -154,17 +156,20 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <TextView
+            <EditText
                 android:id="@+id/address_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/input_text"
+                android:ems="10"
                 android:fontFamily="@font/righteous"
                 android:hint="Address"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:textColor="#FFFFFF"
+                android:focusable="false"
+                android:clickable="false"
                 android:textColorHint="#4D4D4D" />
 
             <EditText
@@ -242,7 +247,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#4CAF50"
+        android:background="#325D32"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

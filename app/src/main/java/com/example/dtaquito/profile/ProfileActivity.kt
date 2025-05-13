@@ -5,25 +5,28 @@ import Beans.update.UpdateNameRequest
 import Beans.update.UpdatePasswordRequest
 import Beans.userProfile.UserProfile
 import Interface.PlaceHolder
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
+import androidx.lifecycle.lifecycleScope
 import com.example.dtaquito.R
-import com.example.dtaquito.auth.CookieInterceptor
-import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.login.LoginActivity
 import com.example.dtaquito.player.PlayerBase
-import okhttp3.OkHttpClient
+import com.example.dtaquito.utils.showToast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import network.RetrofitClient
 import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.Locale
 
 class ProfileActivity : PlayerBase() {
 
@@ -34,16 +37,12 @@ class ProfileActivity : PlayerBase() {
     private lateinit var updateBtn: Button
     private lateinit var addCreditBtn: Button
     private lateinit var logoutBtn: Button
-    private lateinit var service: PlaceHolder
+    private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
 
     private var initialCreditAmount: Double = 0.0
     private var initialName: String = ""
     private var initialEmail: String = ""
     private var initialPassword: String = ""
-
-    companion object {
-        private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +52,7 @@ class ProfileActivity : PlayerBase() {
 
         initializeViews()
         setupListeners()
-        service = createRetrofitService(this)
-        fillUserProfile()
+        fetchUserProfile()
     }
 
     private fun initializeViews() {
@@ -73,39 +71,22 @@ class ProfileActivity : PlayerBase() {
         logoutBtn.setOnClickListener { logout() }
     }
 
-    private fun createRetrofitService(context: Context): PlaceHolder {
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .addInterceptor(SaveCookieInterceptor(context))
-            .addInterceptor(CookieInterceptor(context))
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(PlaceHolder::class.java)
-    }
-
-    private fun fillUserProfile() {
-        service.getUserId().enqueue(object : Callback<UserProfile> {
-            override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
+    private fun fetchUserProfile() {
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) { service.getUserId() }
                 if (response.isSuccessful) {
                     response.body()?.let { user ->
                         populateUserFields(user)
                     } ?: showToast("User not found")
                 } else {
-                    showToast("Failed to fetch user data")
+                    showToast("Failed to fetch user data: ${response.code()}")
                 }
+            } catch (e: Exception) {
+                Log.e("ProfileActivity", "Error: ${e.message}", e)
+                showToast("Error: ${e.message}")
             }
-
-            override fun onFailure(call: Call<UserProfile>, t: Throwable) {
-                Log.e("ProfileActivity", "Error: ${t.message}", t)
-                showToast("Error: ${t.message}")
-            }
-        })
+        }
     }
 
     private fun populateUserFields(user: UserProfile) {
@@ -224,9 +205,5 @@ class ProfileActivity : PlayerBase() {
                 showToast("Error: ${t.message}")
             }
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
