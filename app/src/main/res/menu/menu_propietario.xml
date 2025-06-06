@@ -8,7 +8,12 @@
         android:icon="@drawable/place"
         android:title="Sport Spaces" />
     <item
+        android:id="@+id/navigation_tickets"
+        android:icon="@drawable/ticket"
+        android:title="Tickets" />
+    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/profile"
         android:title="Profile" />
+
 </menu>
