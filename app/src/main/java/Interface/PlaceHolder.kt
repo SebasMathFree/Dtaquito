@@ -9,6 +9,8 @@ import Beans.chat.MessageRecieve
 import Beans.rooms.GameRoom
 import Beans.sportspaces.SportSpace
 import Beans.subscription.Subscriptions
+import Beans.tickets.CreateTicketRequest
+import Beans.tickets.Tickets
 import Beans.update.UpdateEmailRequest
 import Beans.update.UpdateNameRequest
 import Beans.update.UpdatePasswordRequest
@@ -121,5 +123,12 @@ interface PlaceHolder {
     // Contraseñas
     @POST("/api/v1/recover-password/forgot-password")
     suspend fun forgotPassword(@Body request: ForgotPasswordRequest): Response<ResponseBody>
+
+
+    @POST("/api/v1/bank-transfer/create")
+    suspend fun createBankTransfer(@Body ticket: CreateTicketRequest): Response<Void>
+
+    @GET("api/v1/bank-transfer/owner")
+    suspend fun getBankTransfers(): List<Tickets>
 }
 

@@ -39,7 +39,7 @@ class ProfileActivity : PlayerBase() {
     private lateinit var logoutBtn: Button
     private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
 
-    private var initialCreditAmount: Double = 0.0
+    override var initialCreditAmount: Double = 0.0
     private var initialName: String = ""
     private var initialEmail: String = ""
     private var initialPassword: String = ""
@@ -50,6 +50,7 @@ class ProfileActivity : PlayerBase() {
         setContentView(R.layout.activity_profile)
         setupBottomNavigation(R.id.navigation_profile)
 
+        Log.d("ProfileActivity", "Inicializando vistas y listeners")
         initializeViews()
         setupListeners()
         fetchUserProfile()
@@ -63,23 +64,36 @@ class ProfileActivity : PlayerBase() {
         updateBtn = findViewById(R.id.update_btn)
         addCreditBtn = findViewById(R.id.add_credit)
         logoutBtn = findViewById(R.id.logout_btn)
+        Log.d("ProfileActivity", "Vistas inicializadas correctamente")
     }
 
     private fun setupListeners() {
-        updateBtn.setOnClickListener { handleProfileUpdate() }
-        addCreditBtn.setOnClickListener { addCredit() }
-        logoutBtn.setOnClickListener { logout() }
+        updateBtn.setOnClickListener {
+            Log.d("ProfileActivity", "Botón de actualización presionado")
+            handleProfileUpdate()
+        }
+        addCreditBtn.setOnClickListener {
+            Log.d("ProfileActivity", "Botón de añadir crédito presionado")
+            addCredit()
+        }
+        logoutBtn.setOnClickListener {
+            Log.d("ProfileActivity", "Botón de cerrar sesión presionado")
+            logout()
+        }
     }
 
     private fun fetchUserProfile() {
         lifecycleScope.launch {
             try {
+                Log.d("ProfileActivity", "Obteniendo perfil de usuario...")
                 val response = withContext(Dispatchers.IO) { service.getUserId() }
                 if (response.isSuccessful) {
                     response.body()?.let { user ->
+                        Log.d("ProfileActivity", "Perfil de usuario obtenido: $user")
                         populateUserFields(user)
                     } ?: showToast("User not found")
                 } else {
+                    Log.e("ProfileActivity", "Error al obtener perfil: ${response.code()}")
                     showToast("Failed to fetch user data: ${response.code()}")
                 }
             } catch (e: Exception) {
@@ -90,22 +104,22 @@ class ProfileActivity : PlayerBase() {
     }
 
     private fun populateUserFields(user: UserProfile) {
+        Log.d("ProfileActivity", "Poblando campos de usuario con datos: $user")
         initialName = user.name
         initialEmail = user.email
         initialPassword = ""
         nameInput.setText(user.name)
         emailInput.setText(user.email)
         passwordInput.setText("")
-
+        initialCreditAmount = user.credits
+        creditInput.setText(String.format(Locale.getDefault(), "%.2f", user.credits))
+        creditInput.visibility = View.VISIBLE
         if (user.roleType == "PLAYER") {
-            initialCreditAmount = user.credits
-            creditInput.setText(String.format(Locale.getDefault(), "%.2f", user.credits))
-            creditInput.visibility = View.VISIBLE
             addCreditBtn.visibility = View.VISIBLE
         } else {
-            creditInput.visibility = View.GONE
             addCreditBtn.visibility = View.GONE
         }
+        Log.d("ProfileActivity", "Campos de usuario poblados correctamente")
     }
 
     private fun handleProfileUpdate() {
@@ -113,63 +127,59 @@ class ProfileActivity : PlayerBase() {
         val currentEmail = emailInput.text.toString()
         val currentPassword = passwordInput.text.toString()
 
+        Log.d("ProfileActivity", "Actualizando perfil con datos: Name=$currentName, Email=$currentEmail, Password=$currentPassword")
+
         if (currentName != initialName) updateName(currentName)
         if (currentEmail != initialEmail) updateEmail(currentEmail)
         if (currentPassword.isNotEmpty() && currentPassword != initialPassword) updatePassword(currentPassword)
 
         if (currentName == initialName && currentEmail == initialEmail && currentPassword.isEmpty()) {
+            Log.d("ProfileActivity", "No se detectaron cambios en el perfil")
             showToast("No changes detected")
         }
     }
 
     private fun updateName(newName: String) {
+        Log.d("ProfileActivity", "Actualizando nombre a: $newName")
         val nameRequest = UpdateNameRequest(newName)
         service.updateName(nameRequest).enqueue(createUpdateCallback("Name updated successfully"))
     }
 
     private fun updateEmail(newEmail: String) {
+        Log.d("ProfileActivity", "Actualizando email a: $newEmail")
         val emailRequest = UpdateEmailRequest(newEmail)
         service.updateEmail(emailRequest).enqueue(createUpdateCallback("Email updated successfully"))
     }
 
     private fun updatePassword(newPassword: String) {
+        Log.d("ProfileActivity", "Actualizando contraseña")
         val passwordRequest = UpdatePasswordRequest(newPassword)
         service.updatePassword(passwordRequest).enqueue(createUpdateCallback("Password updated successfully"))
     }
 
     private fun addCredit() {
         val creditAmount = creditInput.text.toString().toDoubleOrNull()
+        Log.d("ProfileActivity", "Añadiendo crédito: $creditAmount")
         if (creditAmount == null || creditAmount <= 0.0) {
+            Log.e("ProfileActivity", "Cantidad de crédito inválida: $creditAmount")
             showToast("Please enter a valid credit amount")
             return
         }
-
-//        service.createDeposit(creditAmount.toInt()).enqueue(object : Callback<ResponseBody> {
-//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//                if (response.isSuccessful) {
-//                    response.body()?.string()?.let { responseBody ->
-//                        val approvalUrl = extractApprovalUrl(responseBody)
-//                        approvalUrl?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
-//                            ?: showToast("Approval URL not found.")
-//                    } ?: showToast("Response body is null.")
-//                } else {
-//                    showToast("Failed to add credit")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                Log.e("ProfileActivity", "Error: ${t.message}")
-//                showToast("Error: ${t.message}")
-//            }
-//        })
+        // Código para añadir crédito comentado
     }
 
     private fun logout() {
+        Log.d("ProfileActivity", "Cerrando sesión...")
         clearCookies()
         service.logOutUser().enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) redirectToLoginActivity()
-                else showToast("Error al cerrar sesión")
+                if (response.isSuccessful) {
+                    Log.d("ProfileActivity", "Sesión cerrada exitosamente")
+                    redirectToLoginActivity()
+                } else {
+                    Log.e("ProfileActivity", "Error al cerrar sesión: ${response.code()}")
+                    showToast("Error al cerrar sesión")
+                }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
@@ -180,6 +190,7 @@ class ProfileActivity : PlayerBase() {
     }
 
     private fun clearCookies() {
+        Log.d("ProfileActivity", "Eliminando cookies...")
         CookieManager.getInstance().removeAllCookies { isSuccess ->
             Log.d("ProfileActivity", "Cookies eliminadas: $isSuccess")
         }
@@ -187,6 +198,7 @@ class ProfileActivity : PlayerBase() {
     }
 
     private fun redirectToLoginActivity() {
+        Log.d("ProfileActivity", "Redirigiendo a LoginActivity")
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
@@ -196,8 +208,13 @@ class ProfileActivity : PlayerBase() {
     private fun createUpdateCallback(successMessage: String): Callback<ResponseBody> {
         return object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) showToast(successMessage)
-                else showToast("Failed to update")
+                if (response.isSuccessful) {
+                    Log.d("ProfileActivity", successMessage)
+                    showToast(successMessage)
+                } else {
+                    Log.e("ProfileActivity", "Error al actualizar: ${response.code()}")
+                    showToast("Failed to update")
+                }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
