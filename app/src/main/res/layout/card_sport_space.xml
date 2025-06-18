@@ -8,59 +8,51 @@
     app:cardElevation="10dp"
     app:cardCornerRadius="30dp"
     app:cardBackgroundColor="#BF4CAC2A">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
-
-        <ImageView
-            android:id="@+id/imgSportSpace"
+        <TextView
+            android:id="@+id/name"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_gravity="center"/>
-
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textSize="20sp"
+            android:text="Name" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/name"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/imgSportSpace"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"/>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:padding="5dp"
-                android:textSize="20sp"
-                android:text="Name" />
-
-            <TextView
-                android:id="@+id/txtGameMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:padding="5dp"
-                android:textSize="20sp"
-                android:text="GameMode" />
-
-            <TextView
-                android:id="@+id/txtPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:padding="5dp"
-                android:textSize="20sp"
-                android:text="Price" />
-
-
-
-
-
-
+                android:layout_gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txtGameMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:textSize="20sp"
+                    android:text="GameMode" />
+                <TextView
+                    android:id="@+id/txtPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Price"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

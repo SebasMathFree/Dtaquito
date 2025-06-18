@@ -1,8 +1,12 @@
 package network
 
+import Beans.chat.ChatMessage
 import MyCookieJar
 import android.content.Context
 import com.example.dtaquito.auth.SaveCookieInterceptor
+import com.example.dtaquito.chat.ChatMessageDeserializer
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,7 +15,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     private const val BASE_URL = "https://dtaquito-backend.azurewebsites.net/"
-    //private const val CHAT_URL = "ws://dtaquito-backend.azurewebsites.net/ws/chat"
+    internal const val CHAT_URL = "wss://dtaquito-backend.azurewebsites.net/ws/chat"
     private var appContext: Context? = null
 
     fun initialize(context: Context) {
@@ -29,11 +33,23 @@ object RetrofitClient {
             .build()
     }
 
+    private val gson: Gson by lazy {
+        GsonBuilder()
+            .registerTypeAdapter(
+                ChatMessage::class.java,
+                ChatMessageDeserializer()
+            )
+            .create()
+    }
+
     val instance: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(
+                // aquí le indicas que convierta con tu gson
+                GsonConverterFactory.create(gson)
+            )
             .build()
     }
 }

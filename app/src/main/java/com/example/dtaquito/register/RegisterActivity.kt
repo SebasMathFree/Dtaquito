@@ -52,24 +52,30 @@ class RegisterActivity : AppCompatActivity() {
         setupRegisterButton()
     }
 
-    // Inicialización de vistas y configuración de hipervínculo
     private fun initializeUI() {
         signIn = findViewById(R.id.signIn)
-        val signInSpannable = SpannableString(signIn.text)
-        val signInClickableSpan = object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                navigateToLogin()
+        val signInText = signIn.text.toString()
+        val signInClickable = getString(R.string.sign_in_clickable)
+        val signInStart = signInText.indexOf(signInClickable)
+        val signInEnd = signInStart + signInClickable.length
+
+        if (signInStart >= 0 && signInEnd <= signInText.length) {
+            val signInSpannable = SpannableString(signInText)
+            val signInClickableSpan = object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    navigateToLogin()
+                }
             }
+            val colorSpan = ForegroundColorSpan(ContextCompat.getColor(this, R.color.green))
+            val underlineSpan = UnderlineSpan()
+
+            signInSpannable.setSpan(signInClickableSpan, signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            signInSpannable.setSpan(colorSpan, signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            signInSpannable.setSpan(underlineSpan, signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            signIn.text = signInSpannable
+            signIn.movementMethod = LinkMovementMethod.getInstance()
         }
-        val colorSpan = ForegroundColorSpan(ContextCompat.getColor(this, R.color.green))
-        val underlineSpan = UnderlineSpan()
-
-        signInSpannable.setSpan(signInClickableSpan, 29, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        signInSpannable.setSpan(colorSpan, 29, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        signInSpannable.setSpan(underlineSpan, 29, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        signIn.text = signInSpannable
-        signIn.movementMethod = LinkMovementMethod.getInstance()
     }
 
 

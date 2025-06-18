@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
 
-class SportSpaceAdapter(val sportSpacesList: List<SportSpace>) : RecyclerView.Adapter<SportSpacesViewHolder>() {
+class SportSpaceAdapter(private val sportSpacesList: List<SportSpace>) : RecyclerView.Adapter<SportSpacesViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SportSpacesViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        return SportSpacesViewHolder(layoutInflater.inflate(R.layout.card_sport_space, parent, false))
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.card_sport_space, parent, false)
+        return SportSpacesViewHolder(view)
     }
 
     override fun getItemCount(): Int = sportSpacesList.size

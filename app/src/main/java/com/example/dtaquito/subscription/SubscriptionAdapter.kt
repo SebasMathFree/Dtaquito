@@ -1,19 +1,19 @@
 package com.example.dtaquito.subscription
 
-import Beans.subscription.Subscriptions
+import Beans.suscription.Suscriptions
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
 
 class SubscriptionAdapter(
-    private val subscriptions: List<Subscriptions>,
+    private val subscriptions: List<Suscriptions>,
     private val currentPlanType: String
 ) : RecyclerView.Adapter<SubscriptionViewHolder>() {
 
-    private var onItemClickListener: ((Subscriptions) -> Unit)? = null
+    private var onItemClickListener: ((Suscriptions) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Subscriptions) -> Unit) {
+    fun setOnItemClickListener(listener: (Suscriptions) -> Unit) {
         onItemClickListener = listener
     }
 

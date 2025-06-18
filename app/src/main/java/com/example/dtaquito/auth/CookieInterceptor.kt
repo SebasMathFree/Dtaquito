@@ -17,7 +17,6 @@ class CookieInterceptor(private val context: Context) : Interceptor {
             chain.request()
         }
 
-        // Log para verificar el token enviado
         if (token != null) {
             android.util.Log.d("CookieInterceptor", "Token enviado: Bearer $token")
         } else {

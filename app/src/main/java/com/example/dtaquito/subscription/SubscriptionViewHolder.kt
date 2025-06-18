@@ -1,6 +1,6 @@
 package com.example.dtaquito.subscription
 
-import Beans.subscription.Subscriptions
+import Beans.suscription.Suscriptions
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -22,10 +22,9 @@ class SubscriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         }
     }
 
-    fun renderSubscription(subscription: Subscriptions, currentPlanType: String, onItemClickListener: ((Subscriptions) -> Unit)?) {
+    fun renderSubscription(subscription: Suscriptions, currentPlanType: String, onItemClickListener: ((Suscriptions) -> Unit)?) {
         title.text = subscription.title
         price.text = subscription.price
-        price.setTypeface(null, android.graphics.Typeface.BOLD)
         details.text = subscription.details
         val cardView = itemView as androidx.cardview.widget.CardView
         cardView.setCardBackgroundColor(subscription.backgroundColor)
@@ -33,19 +32,19 @@ class SubscriptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         val mappedCurrentPlanType = mapPlanType(currentPlanType)
 
         if (subscription.planType == mappedCurrentPlanType) {
-            button.text = "Current Plan"
+            button.text = itemView.context.getString(R.string.current_plan)
             button.isEnabled = false
             button.visibility = View.VISIBLE
         } else {
-            button.text = "Update"
+            button.text = itemView.context.getString(R.string.update_plan)
             button.isEnabled = true
             button.setOnClickListener {
                 onItemClickListener?.invoke(subscription)
             }
 
             button.visibility = when (mappedCurrentPlanType) {
-                "silver" -> if (subscription.planType == "bronze") View.GONE else View.VISIBLE
-                "gold" -> if (subscription.planType == "bronze" || subscription.planType == "silver") View.GONE else View.VISIBLE
+                "silver" -> if (subscription.planType == "bronze") View.INVISIBLE else View.VISIBLE
+                "gold" -> if (subscription.planType == "bronze" || subscription.planType == "silver") View.INVISIBLE else View.VISIBLE
                 else -> View.VISIBLE
             }
         }

@@ -6,9 +6,13 @@ import Beans.auth.login.LoginResponse
 import Beans.auth.register.RegisterRequest
 import Beans.chat.ChatMessage
 import Beans.chat.MessageRecieve
+import Beans.playerList.Player
+import Beans.playerList.PlayerList
+import Beans.reservations.Reservation
+import Beans.reservations.ReservationRequest
 import Beans.rooms.GameRoom
 import Beans.sportspaces.SportSpace
-import Beans.subscription.Subscriptions
+import Beans.suscription.Suscriptions
 import Beans.tickets.CreateTicketRequest
 import Beans.tickets.Tickets
 import Beans.update.UpdateEmailRequest
@@ -21,6 +25,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -33,7 +38,6 @@ import retrofit2.http.Query
 
 interface PlaceHolder {
 
-    // Autenticación
     @POST("api/v1/users/sign-up")
     suspend fun createUser(@Body registerRequest: RegisterRequest): Response<UserProfile>
 
@@ -43,7 +47,6 @@ interface PlaceHolder {
     @POST("api/v1/authentication/log-out")
     fun logOutUser(): Call<Void>
 
-    // Usuario
     @GET("api/v1/users/me")
     suspend fun getUserId(): Response<UserProfile>
 
@@ -56,15 +59,8 @@ interface PlaceHolder {
     @PUT("api/v1/users/name")
     fun updateName(@Body nameRequest: UpdateNameRequest): Call<ResponseBody>
 
-    @PUT("api/v1/users/{id}")
-    fun updateUser(@Path("id") id: Int, @Body user: UserProfile): Call<UserProfile>
-
-    // Espacios deportivos
     @GET("api/v1/sport-spaces/all")
     fun getAllSportSpaces(): Call<List<SportSpace>>
-
-    @GET("api/v1/sport-spaces/{id}")
-    fun getSportSpaceById(@Path("id") id: Int): Call<SportSpace>
 
     @GET("api/v1/sport-spaces/my-space")
     fun getSportSpacesByUserId(): Call<List<SportSpace>>
@@ -85,7 +81,6 @@ interface PlaceHolder {
         @Part("longitude") longitude: RequestBody
     ): Call<ResponseBody>
 
-    // Habitaciones
     @GET("api/v1/rooms/all")
     fun getAllRooms(): Call<List<GameRoom>>
 
@@ -102,16 +97,41 @@ interface PlaceHolder {
         @Field("roomName") roomName: String
     ): Call<GameRoom>
 
-    // Suscripciones
+    //Reservations
+    @POST("/api/v1/reservations/create")
+    fun createReservation(
+        @Body reservationRequest: ReservationRequest
+    ): Call<ResponseBody>
+
+    @GET("/api/v1/reservations/my-reservations")
+    fun getMyReservations(): Call<List<Reservation>>
+
+    @POST("/api/v1/player-lists/join/{roomId}")
+    fun joinRoom(
+        @Path("roomId") roomId: Int
+    ): Call<Void>
+
+    @GET("/api/v1/player-lists/room/{roomId}")
+    fun getPlayerListByRoomId(@Path("roomId") roomId: Int): Call<List<Player>>
+
+    @GET("/api/v1/player-lists/{roomId}/user-room-status")
+    fun getUserRoomStatus(
+        @Path("roomId") roomId: Int
+    ): Call<PlayerList>
+
+    @DELETE("/api/v1/player-lists/leave/{roomId}")
+    fun leaveRoom(
+        @Path("roomId") roomId: Int
+    ): Call<Void>
+
     @GET("api/v1/subscriptions")
-    fun getCurrentSubscription(): Call<Subscriptions>
+    fun getCurrentSubscription(): Call<Suscriptions>
 
     @PUT("api/v1/subscriptions/upgrade")
     fun upgradeSubscription(@Query("newPlanType") newPlanType: String): Call<ResponseBody>
 
-    // Chat
-    @GET("api/v1/chat/rooms/{roomId}/messages")
-    fun getMessages(@Path("roomId") roomId: Int): Call<List<ChatMessage>>
+    @GET("/api/v1/chat/rooms/{chatRoomId}/messages")
+    fun getMessages(@Path("chatRoomId") chatRoomId: Int): Call<List<ChatMessage>>
 
     @POST("api/v1/chat/rooms/{roomId}/messages")
     fun sendMessage(
@@ -120,15 +140,23 @@ interface PlaceHolder {
         @Body chatMessage: MessageRecieve
     ): Call<Void>
 
-    // Contraseñas
     @POST("/api/v1/recover-password/forgot-password")
     suspend fun forgotPassword(@Body request: ForgotPasswordRequest): Response<ResponseBody>
-
 
     @POST("/api/v1/bank-transfer/create")
     suspend fun createBankTransfer(@Body ticket: CreateTicketRequest): Response<Void>
 
     @GET("api/v1/bank-transfer/owner")
     suspend fun getBankTransfers(): List<Tickets>
-}
+    //deposits
+    @POST("/api/v1/deposit/create-deposit")
+    fun createDeposit(
+        @Query("amount") amount: Int
+    ): Call<ResponseBody>
+    //qr
+    @GET("api/v1/reservations/generate-qr-session")
+    fun generateQrToken(@Query("reservationId") reservationId: Int): Call<Map<String, String>>
 
+    @GET("api/v1/reservations/verify-qr-image")
+    fun generateQrImage(@Query("token") token: String): Call<ResponseBody>
+}

@@ -14,14 +14,26 @@ class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val timestampTextView: TextView = itemView.findViewById(R.id.timestampTextView)
 
     fun bind(message: ChatMessage) {
-        userNameTextView.text = "${message.userName.uppercase()}:"
+        val userName = message.userName?.uppercase() ?: "USUARIO"
+        android.util.Log.d("ChatViewHolder", "userName recibido: ${message.userName}")
+        userNameTextView.text = "$userName:"
         messageTextView.text = message.content
         timestampTextView.text = formatDate(message.createdAt)
     }
-}
-fun formatDate(dateString: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-    val date = inputFormat.parse(dateString)
-    return outputFormat.format(date)
+    fun formatDate(dateString: String): String {
+        val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return try {
+            val inputFormat1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
+            val date = inputFormat1.parse(dateString)
+            outputFormat.format(date)
+        } catch (e: Exception) {
+            try {
+                val inputFormat2 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                val date = inputFormat2.parse(dateString)
+                outputFormat.format(date)
+            } catch (e: Exception) {
+                dateString
+            }
+        }
+    }
 }

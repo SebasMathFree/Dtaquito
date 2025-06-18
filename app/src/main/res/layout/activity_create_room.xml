@@ -6,129 +6,131 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    tools:context=".CreateRoomActivity">
+    android:background="#201E1E"
+    tools:context=".gameroom.CreateRoomFragment">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="30dp"
+    android:paddingEnd="30dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/righteous"
         android:text="Create Room"
         android:textAlignment="center"
         android:textColor="#065B28"
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="35sp" />
 
     <EditText
         android:id="@+id/room_name_input"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/input_text"
         android:ems="10"
         android:fontFamily="@font/righteous"
         android:hint="Game Room Name"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#4D4D4D" />
 
     <EditText
         android:id="@+id/sport_space_id"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/input_text"
         android:ems="10"
         android:fontFamily="@font/righteous"
         android:hint="ID del espacio deportivo"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/room_name_input" />
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#4D4D4D"/>
 
     <EditText
         android:id="@+id/date_input"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/input_text"
+        android:clickable="false"
         android:ems="10"
+        android:focusable="false"
         android:fontFamily="@font/righteous"
         android:hint="Fecha"
-        android:clickable="false"
-        android:focusable="false"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sport_space_id" />
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#4D4D4D" />
 
     <EditText
         android:id="@+id/time_input"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/input_text"
-        android:ems="10"
-        android:fontFamily="@font/righteous"
-        android:hint="Time"
         android:clickable="false"
+        android:ems="10"
         android:focusable="false"
-        android:padding="8dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_input" />
+        android:fontFamily="@font/righteous"
+        android:hint="Hora de inicio"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#4D4D4D"/>
 
+    <EditText
+        android:id="@+id/endTime_input"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/input_text"
+        android:clickable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:fontFamily="@font/righteous"
+        android:hint="Hora de fin"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#4D4D4D"/>
 
+    <Spinner
+        android:id="@+id/typeReservation_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/input_text"
+        android:paddingStart="15dp"
+        android:paddingEnd="20dp"
+        android:spinnerMode="dropdown"/>
     <Button
         android:id="@+id/create_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center"
         android:background="@drawable/button_rounded"
         android:fontFamily="@font/righteous"
         android:text="Create Room"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_input" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#4CAF50"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_player" />
-
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/typeReservation_spinner" />
+</LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

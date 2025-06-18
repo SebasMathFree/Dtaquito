@@ -1,19 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_suscriptions"
+        android:id="@+id/navigation_subscriptions"
         android:icon="@drawable/suscriptions"
-        android:title="Suscription" />
+        android:title="@string/subscriptions" />
     <item
         android:id="@+id/navigation_sportspaces_prop"
         android:icon="@drawable/place"
-        android:title="Sport Spaces" />
+        android:title="@string/sport_spaces" />
     <item
         android:id="@+id/navigation_tickets"
         android:icon="@drawable/ticket"
-        android:title="Tickets" />
+        android:title="@string/tickets" />
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/profile"
-        android:title="Profile" />
+        android:title="@string/profile" />
 
 </menu>

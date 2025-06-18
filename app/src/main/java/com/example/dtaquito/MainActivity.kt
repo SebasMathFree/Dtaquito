@@ -1,0 +1,125 @@
+package com.example.dtaquito
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.dtaquito.profile.ProfileFragment
+import com.example.dtaquito.sports.SportFragment
+import com.example.dtaquito.sportspace.SportSpaceFragment
+import com.example.dtaquito.subscription.SubscriptionFragment
+import com.example.dtaquito.tickets.TicketFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import network.RetrofitClient
+import Interface.PlaceHolder
+import android.content.Context
+import com.example.dtaquito.reservation.ReservationFragment
+import java.util.Locale
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var bottomNav: BottomNavigationView
+    private val service = RetrofitClient.instance.create(PlaceHolder::class.java)
+    var userRoleType: String = "PLAYER"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // Aplica el idioma guardado antes de setContentView
+        val prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val lang = prefs.getString("app_lang", "es") ?: "es"
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        super.onCreate(savedInstanceState)
+        CoroutineScope(Dispatchers.Main).launch {
+            userRoleType = getUserRoleType()
+            setContentView(R.layout.activity_main)
+            bottomNav = findViewById(R.id.bottom_navigation)
+            val menuRes = if (userRoleType == "PLAYER") R.menu.menu_player else R.menu.menu_propietario
+            bottomNav.menu.clear()
+            bottomNav.inflateMenu(menuRes)
+            bottomNav.selectedItemId = when(userRoleType){
+                "PLAYER" -> R.id.navigation_home
+                else -> R.id.navigation_subscriptions
+            }
+            setupNavigation()
+            val goToProfile = prefs.getBoolean("go_to_profile", false)
+            if (goToProfile) {
+                bottomNav.selectedItemId = R.id.navigation_profile
+                loadFragment(ProfileFragment())
+                prefs.edit().remove("go_to_profile").apply()
+            } else if (savedInstanceState == null && supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
+                if (userRoleType == "PLAYER") {
+                    loadFragment(SportFragment())
+                } else {
+                    loadFragment(SubscriptionFragment())
+                }
+            }
+        }
+    }
+
+    private fun setupNavigation() {
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> loadFragment(SportFragment())
+                R.id.navigation_sportspaces -> loadFragment(SportSpaceFragment())
+                R.id.navigation_reservations -> loadFragment(ReservationFragment())
+                R.id.navigation_profile -> loadFragment(ProfileFragment())
+                R.id.navigation_sportspaces_prop -> loadFragment(SportSpaceFragment())
+                R.id.navigation_subscriptions -> loadFragment(SubscriptionFragment())
+                R.id.navigation_tickets -> loadFragment(TicketFragment())
+                else -> false
+            }
+            true
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
+    }
+
+    private suspend fun getUserRoleType(): String {
+        val response = service.getUserId()
+        return if (response.isSuccessful) {
+            response.body()?.roleType ?: "PLAYER"
+        } else {
+            "PLAYER"
+        }
+    }
+
+    // --- Métodos para actualización instantánea de textos ---
+
+    fun updateAllFragmentsTexts() {
+        // Actualiza los textos de todos los fragments visibles
+        supportFragmentManager.fragments.forEach { fragment ->
+            when (fragment) {
+                is ProfileFragment -> fragment.updateTexts()
+            }
+        }
+        updateBottomNavTexts()
+    }
+
+    fun updateBottomNavTexts() {
+        val menu = bottomNav.menu
+        when (userRoleType) {
+            "PLAYER" -> {
+                menu.findItem(R.id.navigation_home)?.title = getString(R.string.gamerooms)
+                menu.findItem(R.id.navigation_sportspaces)?.title = getString(R.string.sport_spaces)
+                menu.findItem(R.id.navigation_profile)?.title = getString(R.string.profile)
+                // Agrega aquí los demás ítems si los tienes
+            }
+            else -> {
+                menu.findItem(R.id.navigation_subscriptions)?.title = getString(R.string.subscriptions)
+                menu.findItem(R.id.navigation_sportspaces_prop)?.title = getString(R.string.sport_spaces)
+                menu.findItem(R.id.navigation_tickets)?.title = getString(R.string.tickets)
+                menu.findItem(R.id.navigation_profile)?.title = getString(R.string.profile)
+                // Agrega aquí los demás ítems si los tienes
+            }
+        }
+    }
+}

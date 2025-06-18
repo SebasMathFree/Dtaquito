@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <TextView
             android:id="@+id/subscription_title"
@@ -32,7 +34,6 @@
             android:id="@+id/subscription_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:fontFamily="@font/righteous"
             android:text="Price"
             android:textAlignment="center"
@@ -46,7 +47,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/righteous"
             android:text="Details"
-            android:textAlignment="center"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
@@ -54,13 +55,15 @@
             android:id="@+id/subscribe_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/button_rounded"
             android:fontFamily="@font/righteous"
-            android:padding="10dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:text="Empieza Ahora"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="10sp"
             android:layout_gravity="center" />
 
     </LinearLayout>

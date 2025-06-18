@@ -19,7 +19,8 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val createdTextView: TextView = itemView.findViewById(R.id.createdTextView)
 
     fun bind(ticket: Tickets) {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+        val context = itemView.context
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZ", Locale.getDefault())
         val outputFormat = SimpleDateFormat("HH:mm dd/MM/yy", Locale.getDefault())
 
         val formattedDate = if (!ticket.createdAt.isNullOrEmpty()) {
@@ -32,13 +33,13 @@ class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         } else {
             "Sin fecha"
         }
-        fullNameTextView.text = "Nombre completo: ${ticket.fullName}"
-        bankNameTextView.text = "Banco: ${ticket.bankName}"
-        transferTypeTextView.text = "Tipo de transferencia: ${ticket.transferType}"
-        accountNumberTextView.text = "Número de cuenta: ${ticket.accountNumber}"
-        statusTextView.text = ticket.status.toString()
-        ticketNumberTextView.text = "Ticket #${ticket.ticketNumber}"
-        amountTextView.text = "Monto: ${ticket.amount}"
-        createdTextView.text = "Creado: $formattedDate"
+        fullNameTextView.text = context.getString(R.string.full_name_label, ticket.fullName)
+        bankNameTextView.text = context.getString(R.string.bank_name_label, ticket.bankName)
+        transferTypeTextView.text = context.getString(R.string.transfer_type_label, ticket.transferType)
+        accountNumberTextView.text = context.getString(R.string.account_number_label, ticket.accountNumber)
+        statusTextView.text = context.getString(R.string.status_label, ticket.status.toString())
+        ticketNumberTextView.text = context.getString(R.string.ticket_number, ticket.ticketNumber)
+        amountTextView.text = context.getString(R.string.amount_label, ticket.amount)
+        createdTextView.text = context.getString(R.string.created_label, formattedDate)
     }
 }

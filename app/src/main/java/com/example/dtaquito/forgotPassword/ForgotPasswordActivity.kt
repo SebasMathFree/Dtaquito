@@ -48,17 +48,26 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
         }
 
-        val signInSpannable = SpannableString(binding.signIn.text).apply {
-            setSpan(object : ClickableSpan() {
+        val signInText = binding.signIn.text.toString()
+        val signInClickable = getString(R.string.sign_in_clickable_forgot)
+        val signInStart = signInText.indexOf(signInClickable)
+        val signInEnd = signInStart + signInClickable.length
+
+        if (signInStart >= 0 && signInEnd <= signInText.length) {
+            val signInSpannable = SpannableString(signInText)
+            signInSpannable.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     navigateToLogin()
                 }
-            }, 36, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(ForegroundColorSpan(ContextCompat.getColor(this@ForgotPasswordActivity, R.color.green)), 36, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(UnderlineSpan(), 36, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }, signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            signInSpannable.setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(this, R.color.green)),
+                signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            signInSpannable.setSpan(UnderlineSpan(), signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.signIn.text = signInSpannable
+            binding.signIn.movementMethod = LinkMovementMethod.getInstance()
         }
-        binding.signIn.text = signInSpannable
-        binding.signIn.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun sendForgotPasswordRequest(email: String) {

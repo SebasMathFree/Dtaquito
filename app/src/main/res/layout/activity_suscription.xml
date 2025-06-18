@@ -7,17 +7,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#201E1E"
-    tools:context=".SuscriptionActivity">
+    tools:context="subscription.SubscriptionFragment">
 
     <TextView
-        android:id="@+id/currentSuscription"
+        android:id="@+id/currentSubscription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/righteous"
-        android:text="YOUR CURRENT SUBSCRIPTION IS:"
+        android:text="@string/current_subscription"
         android:textAlignment="center"
         android:textColor="#246505"
         android:textSize="30sp"
@@ -25,41 +25,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#325D32"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_player" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/righteous"
-        android:text="Get the perfect plan as a sport spaces owner"
+        android:text="@string/subscription_message"
+        android:layout_marginTop="20dp"
         android:textAlignment="center"
         android:textColor="#7F7F7F"
-        android:textSize="30sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentSuscription" />
+        app:layout_constraintTop_toBottomOf="@+id/currentSubscription" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/suscriptionPackages"
-        android:layout_width="409dp"
-        android:layout_height="354dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
         android:clipToPadding="false"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />

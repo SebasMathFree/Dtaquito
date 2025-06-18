@@ -1,167 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#201E1E"
-    tools:context=".ProfileActivity">
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/righteous"
-        android:text="Profile"
-        android:textColor="#065B28"
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="20dp"
-        android:contentDescription="Image Profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:srcCompat="@mipmap/profile_image" />
-
-    <EditText
-        android:id="@+id/name_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/input_text"
-        android:ems="10"
-        android:fontFamily="@font/righteous"
-        android:hint="Name"
-        android:inputType="textEmailAddress"
-        android:paddingStart="20dp"
-        android:textColorHint="#2E7D32"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
-
-    <EditText
-        android:id="@+id/email_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/input_text"
-        android:ems="10"
-        android:fontFamily="@font/righteous"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:paddingStart="20dp"
-        android:textColorHint="#2E7D32"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_input" />
-
-    <EditText
-        android:id="@+id/password_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/input_text"
-        android:ems="10"
-        android:fontFamily="@font/righteous"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:paddingStart="20dp"
-        android:textColorHint="#2E7D32"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_input" />
-
-    <EditText
-        android:id="@+id/credit_input"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/input_text"
-        android:ems="10"
-        android:enabled="false"
-        android:focusable="false"
-        android:fontFamily="@font/righteous"
-        android:hint="Credits"
-        android:paddingStart="20dp"
-        android:textColorHint="#2E7D32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_input" />
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".profile.ProfileFragment">
 
     <LinearLayout
-        android:id="@+id/greenBtns"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/credit_input">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/update_btn"
+        <TextView
+            android:id="@+id/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_rounded"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/righteous"
-            android:padding="8dp"
-            android:text="Edit Profile"
-            android:textColor="@color/white" />
+            android:text="@string/profile"
+            android:textColor="#065B28"
+            android:textSize="50sp" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"
+            android:contentDescription="Image Profile"
+            app:srcCompat="@mipmap/profile_image" />
+
+        <EditText
+            android:id="@+id/name_input"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/input_text"
+            android:ems="10"
+            android:fontFamily="@font/righteous"
+            android:hint="@string/name"
+            android:inputType="textEmailAddress"
+            android:paddingStart="20dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#4D4D4D" />
+
+        <EditText
+            android:id="@+id/email_input"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/input_text"
+            android:ems="10"
+            android:fontFamily="@font/righteous"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingStart="20dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#4D4D4D" />
+
+        <EditText
+            android:id="@+id/password_input"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/input_text"
+            android:ems="10"
+            android:fontFamily="@font/righteous"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingStart="20dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#4D4D4D" />
+
+        <EditText
+            android:id="@+id/credit_input"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/input_text"
+            android:ems="10"
+            android:enabled="false"
+            android:fontFamily="@font/righteous"
+            android:hint="@string/credits"
+            android:paddingStart="20dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#4D4D4D" />
+
+        <LinearLayout
+            android:id="@+id/greenBtns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp">
+
+            <Button
+                android:id="@+id/update_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_rounded"
+                android:fontFamily="@font/righteous"
+                android:padding="8dp"
+                android:text="@string/edit_profile"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/add_credit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_rounded"
+                android:fontFamily="@font/righteous"
+                android:padding="8dp"
+                android:text="@string/add_credits"
+                android:textColor="@color/white"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/logout_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/logout"
+                android:fontFamily="@font/righteous"
+                android:padding="8dp"
+                android:text="@string/log_out"
+                android:textColor="@color/black" />
+        </LinearLayout>
 
         <Button
-            android:id="@+id/add_credit"
+            android:id="@+id/btn_select_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginTop="20dp"
             android:background="@drawable/button_rounded"
             android:fontFamily="@font/righteous"
-            android:padding="8dp"
-            android:text="Add Credits"
+            android:text="@string/language"
             android:textColor="@color/white"
-            android:visibility="visible"
-            tools:layout_editor_absoluteX="228dp"
-            tools:layout_editor_absoluteY="536dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newUser" />
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/logout_btn"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/logout"
-        android:fontFamily="@font/righteous"
-        android:padding="8dp"
-        android:text="Log out"
-        android:textColor="@color/black"
-        android:textSize="10sp"
-        app:layout_constraintTop_toBottomOf="@+id/greenBtns"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#325D32"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_player" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

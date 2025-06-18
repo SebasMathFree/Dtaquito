@@ -6,5 +6,5 @@ data class UserProfile(
     val email: String,
     val password: String,
     val roleType: String,
-    val credits: Double = 0.0
+    val credits: Double = 0.0,
 )

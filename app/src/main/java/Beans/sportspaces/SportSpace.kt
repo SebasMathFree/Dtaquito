@@ -7,7 +7,7 @@ data class SportSpace(
     val name: String,
     val sportId: Int,
     val sportType: String,
-    val image: String,
+    val imageUrl: String,
     val price: Double,
     val address: String,
     val description: String,

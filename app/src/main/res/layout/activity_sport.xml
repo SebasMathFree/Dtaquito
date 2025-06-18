@@ -6,16 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#201E1E"
-    tools:context=".sports.SportActivity">
-
+    tools:context=".sports.SportFragment">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/righteous"
         android:text="What sport do you want to play?"
         android:textAlignment="center"
@@ -25,44 +22,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <ImageButton
-        android:id="@+id/pool_img"
-        android:layout_width="224dp"
-        android:layout_height="224dp"
-        android:layout_marginTop="20dp"
-        android:background="@mipmap/billar"
-        android:contentDescription="Pool"
-        android:onClick="pool"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/soccer_img" />
-
-    <ImageButton
-        android:id="@+id/soccer_img"
-        android:layout_width="224dp"
-        android:layout_height="224dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@mipmap/futbol"
-        android:contentDescription="Soccer"
-        android:onClick="soccer"
-        app:layout_constraintBottom_toTopOf="@+id/pool_img"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#325D32"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_player" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
+        <ImageButton
+            android:id="@+id/pool_img"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/billar"
+            android:contentDescription="Pool"
+            android:onClick="pool" />
 
+        <ImageButton
+            android:id="@+id/soccer_img"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@mipmap/futbol"
+            android:contentDescription="Soccer"
+            android:onClick="soccer" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

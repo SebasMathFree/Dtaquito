@@ -12,7 +12,6 @@ class MyCookieJar : CookieJar {
             cookieStore[host] = mutableListOf()
         }
 
-        // Reemplazar cookies existentes con las nuevas
         val existingCookies = cookieStore[host]!!
         for (cookie in cookies) {
             if (cookie.name != "ARRAffinity" && cookie.name != "ARRAffinitySameSite") {
