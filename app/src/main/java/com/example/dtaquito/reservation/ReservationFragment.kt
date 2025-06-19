@@ -72,13 +72,13 @@ class ReservationFragment : Fragment() {
                     adapter.updateReservations(reservations)
                 } else {
                     Log.e("ReservationData", "Error: ${response.code()} - ${response.message()}")
-                    Toast.makeText(context, "Error al cargar reservaciones", Toast.LENGTH_SHORT).show()
+                    if(isAdded) Toast.makeText(context, "Error al cargar reservaciones", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Reservation>>, t: Throwable) {
                 Log.e("ReservationData", "Error de conexión: ${t.message}", t)
-                Toast.makeText(context, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                if(isAdded) Toast.makeText(context, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
