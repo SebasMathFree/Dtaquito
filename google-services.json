@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "615058462533",
+    "project_id": "dtaquito-7b586",
+    "storage_bucket": "dtaquito-7b586.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615058462533:android:de5296f3977af2f093902c",
+        "android_client_info": {
+          "package_name": "com.example.dtaquito"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3emwcblEvLHuBL7uWAzgOa5LzaPWRWlY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

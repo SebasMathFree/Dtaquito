@@ -12,7 +12,8 @@ import androidx.room.RoomDatabase
         SportSpaceEntity::class,
         SuscriptionsEntity::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ticketDao(): TicketDao
