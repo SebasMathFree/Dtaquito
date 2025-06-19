@@ -2,7 +2,6 @@ package com.example.dtaquito.sportspace
 
 import Beans.sportspaces.SportSpace
 import Interface.PlaceHolder
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -49,7 +48,6 @@ class SportSpaceFragment : Fragment() {
 
     fun updateTexts() {
         view?.findViewById<Button>(R.id.create_sport_space_btn)?.text = getString(R.string.create)
-        recyclerView.adapter?.notifyDataSetChanged()
     }
 
     private fun setupCreateSportSpaceButton(view: View) {
@@ -122,7 +120,7 @@ class SportSpaceFragment : Fragment() {
             } else {
                 "bronze"
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             "bronze"
         }
     }

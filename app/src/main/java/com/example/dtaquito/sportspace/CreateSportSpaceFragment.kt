@@ -103,7 +103,6 @@ class CreateSportSpaceFragment : Fragment() {
 
         createSportSpaceButton.setOnClickListener {
             val price = priceInput.text.toString().toDoubleOrNull() ?: 0.0
-            val imagePath = imgUrlEditText.text.toString()
             createSportSpace(
                 nameInput.text.toString(),
                 descriptionInput.text.toString(),

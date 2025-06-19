@@ -91,6 +91,8 @@
     <string name="what_sport_do_you_want_to_play">What sport do you want to play?</string>
     <string name="create_ticket">Create Ticket</string>
     <string name="soccer_8">Soccer 8</string>
+    <string name="image_profile">Image Profile</string>
+    <string name="scan_qr">Scan QR</string>
 
 
 </resources>

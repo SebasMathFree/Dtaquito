@@ -62,7 +62,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="20dp"
-            android:contentDescription="Image Profile"
+            android:contentDescription="@string/image_profile"
             app:srcCompat="@mipmap/profile_image" />
 
         <EditText
@@ -129,6 +129,7 @@
             android:id="@+id/greenBtns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="?android:attr/buttonBarStyle"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:gravity="center"
@@ -146,7 +147,8 @@
                 android:fontFamily="@font/righteous"
                 android:padding="8dp"
                 android:text="@string/edit_profile"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                style="?android:attr/buttonBarStyle"/>
 
             <Button
                 android:id="@+id/add_credit"
@@ -159,7 +161,8 @@
                 android:padding="8dp"
                 android:text="@string/add_credits"
                 android:textColor="@color/white"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                style="?android:attr/buttonBarStyle"/>
 
             <Button
                 android:id="@+id/logout_btn"
@@ -170,7 +173,8 @@
                 android:fontFamily="@font/righteous"
                 android:padding="8dp"
                 android:text="@string/log_out"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                style="?android:attr/buttonBarStyle"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

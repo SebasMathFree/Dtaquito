@@ -2,8 +2,10 @@ package com.example.dtaquito
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.example.dtaquito.profile.ProfileFragment
+import com.example.dtaquito.reservation.ReservationFragment
 import com.example.dtaquito.sports.SportFragment
 import com.example.dtaquito.sportspace.SportSpaceFragment
 import com.example.dtaquito.subscription.SubscriptionFragment
@@ -12,12 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import network.RetrofitClient
-import Interface.PlaceHolder
-import android.content.Context
-import com.example.dtaquito.reservation.ReservationFragment
 import java.util.Locale
-import androidx.core.content.edit
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Aplica el idioma guardado antes de setContentView
-        val prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
         val lang = prefs.getString("app_lang", "es") ?: "es"
         val locale = Locale(lang)
         Locale.setDefault(locale)
@@ -35,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         resources.updateConfiguration(config, resources.displayMetrics)
         super.onCreate(savedInstanceState)
         CoroutineScope(Dispatchers.Main).launch {
-            userRoleType = getUserRoleType()
+            userRoleType = readUserRoleTypeFromPrefs()
             setContentView(R.layout.activity_main)
             bottomNav = findViewById(R.id.bottom_navigation)
             val menuRes = if (userRoleType == "PLAYER") R.menu.menu_player else R.menu.menu_propietario
@@ -90,8 +87,8 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    private suspend fun getUserRoleType(): String {
-        val prefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    private fun readUserRoleTypeFromPrefs(): String {
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         return prefs.getString("role_type", "PLAYER") ?: "PLAYER"
     }
 

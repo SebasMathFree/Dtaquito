@@ -9,7 +9,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -23,6 +22,8 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.dtaquito.R
@@ -38,9 +39,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
-import kotlin.apply
-import androidx.core.content.edit
-import androidx.core.net.toUri
 
 class ProfileFragment : Fragment() {
 
@@ -75,7 +73,7 @@ class ProfileFragment : Fragment() {
         selectLanguageBtn.setOnClickListener { showLanguageDialog() }
         view.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
-                val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
                 view.clearFocus()
                 view.performClick() // Añadido para accesibilidad

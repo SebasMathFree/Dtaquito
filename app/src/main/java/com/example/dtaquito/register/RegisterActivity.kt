@@ -192,7 +192,7 @@ class RegisterActivity : AppCompatActivity() {
                     showToast("Error al registrar usuario.")
                     registerBtn.isEnabled = true // Rehabilitar el botón en caso de error
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 showToast("Error de red.")
                 registerBtn.isEnabled = true // Rehabilitar el botón en caso de error
             }

@@ -1,14 +1,13 @@
 package com.example.dtaquito.splash
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager.LayoutParams.*
+import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.dtaquito.MainActivity
 import com.example.dtaquito.R
 import com.example.dtaquito.login.LoginActivity
-import com.example.dtaquito.MainActivity
 
 class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +19,7 @@ class SplashScreen : AppCompatActivity() {
         )
         setContentView(R.layout.activity_splash_screen)
 
-        val prefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val savedUserId = prefs.getInt("user_id", -1)
 
         android.os.Handler().postDelayed({

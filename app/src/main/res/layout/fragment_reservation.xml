@@ -9,27 +9,25 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="368dp"
-        android:layout_height="128dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:fontFamily="@font/righteous"
         android:text="@string/my_reservations"
         android:textAlignment="center"
         android:textColor="#065B28"
-        android:textSize="55sp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
-        android:layout_width="369dp"
-        android:layout_height="500dp"
-        android:layout_marginBottom="52dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

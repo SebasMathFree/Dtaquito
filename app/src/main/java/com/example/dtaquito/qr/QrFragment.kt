@@ -81,7 +81,7 @@ class QrFragment : Fragment() {
                         val errorBody = response.errorBody()?.string()
                         Log.e("QrFragment", "Error al obtener token: ${response.code()} - Error body: $errorBody")
 
-                        // En el método onResponse, donde se muestra el ícono de espera:
+                        // En el metodo onResponse, donde se muestra el ícono de espera:
                         // En la parte donde se muestra el ícono de espera:
                         try {
                             val errorJson = JSONObject(errorBody ?: "{}")
@@ -148,7 +148,7 @@ class QrFragment : Fragment() {
                                         val layoutParams = imgQr.layoutParams
                                         layoutParams.height = resources.getDimensionPixelSize(R.dimen.qr_image_height) // Usa una dimensión definida
                                         imgQr.layoutParams = layoutParams
-                                        imgQr.scaleType = ImageView.ScaleType.CENTER_CROP // Restaurar escala original
+                                        imgQr.scaleType = ImageView.ScaleType.FIT_CENTER // Restaurar escala original
 
                                         // Mostrar la imagen QR
                                         imgQr.setImageBitmap(bitmap)

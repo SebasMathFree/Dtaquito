@@ -91,4 +91,6 @@
     <string name="my_reservations">Mis Reservas</string>
     <string name="what_sport_do_you_want_to_play">¿Qué deporte deseas jugar?</string>
     <string name="create_ticket">Crear Ticket</string>
+    <string name="image_profile">Image Profile</string>
+    <string name="scan_qr">Escanear QR</string>
 </resources>

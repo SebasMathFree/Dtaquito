@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
         val lang = prefs.getString("app_lang", Locale.getDefault().language) ?: "es"
         setLocale(this, lang)
         setContentView(R.layout.activity_login)
@@ -102,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
     private fun hideKeyboard() {
         val view = this.currentFocus
         if (view != null) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
@@ -113,7 +113,7 @@ class LoginActivity : AppCompatActivity() {
         val config = Configuration(context.resources.configuration)
         config.setLocale(locale)
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
-        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val prefs = context.getSharedPreferences("settings", MODE_PRIVATE)
         prefs.edit { putString("app_lang", language) }
     }
 

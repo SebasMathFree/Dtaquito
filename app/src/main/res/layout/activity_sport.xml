@@ -17,7 +17,7 @@
         android:text="@string/what_sport_do_you_want_to_play"
         android:textAlignment="center"
         android:textColor="#065B28"
-        android:textSize="40sp"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +25,7 @@
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="vertical"
@@ -40,8 +40,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="20dp"
             android:background="@mipmap/billar"
-            android:contentDescription="Pool"
-            android:onClick="pool" />
+            android:contentDescription="@string/pool" />
 
         <ImageButton
             android:id="@+id/soccer_img"
@@ -50,7 +49,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:background="@mipmap/futbol"
-            android:contentDescription="Soccer"
-            android:onClick="soccer" />
+            android:contentDescription="@string/soccer"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
