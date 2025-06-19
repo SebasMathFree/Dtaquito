@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="Dtaquito.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-06-18T18:34:39.206060400Z">
+        <DropdownSelection timestamp="2025-06-18T23:27:56.270185200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\FREE\.android\avd\Pixel_3a_API_35.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=330081afcf2f539d" />
             </handle>
           </Target>
         </DropdownSelection>

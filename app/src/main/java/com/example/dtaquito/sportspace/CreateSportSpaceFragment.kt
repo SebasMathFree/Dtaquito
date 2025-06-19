@@ -8,17 +8,23 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.provider.Settings
 import android.util.TypedValue
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.example.dtaquito.BuildConfig
 import com.example.dtaquito.R
@@ -49,6 +55,7 @@ class CreateSportSpaceFragment : Fragment() {
 
     companion object {
         private const val STORAGE_PERMISSION_CODE = 1001
+        private const val LOCATION_PERMISSION_CODE = 2001
     }
 
     private lateinit var imageView: ImageView
@@ -57,6 +64,7 @@ class CreateSportSpaceFragment : Fragment() {
     private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
     private var selectedLatitude: Double = 0.0
     private var selectedLongitude: Double = 0.0
+    private var selectedImageUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +75,7 @@ class CreateSportSpaceFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        checkLocationPermission()
         imageView = view.findViewById(R.id.image_view)
         imgUrlEditText = view.findViewById(R.id.img_url)
         val imgUrlLayout = view.findViewById<TextInputLayout>(R.id.img_url_layout)
@@ -80,10 +89,14 @@ class CreateSportSpaceFragment : Fragment() {
         val addressInput = view.findViewById<TextView>(R.id.address_input)
         val priceInput = view.findViewById<EditText>(R.id.price_input)
         val createSportSpaceButton = view.findViewById<Button>(R.id.create_space_btn)
-
         mapView = view.findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
-        initializeMap()
+        val zoomInButton = view.findViewById<Button>(R.id.zoom_in_button)
+        val zoomOutButton = view.findViewById<Button>(R.id.zoom_out_button)
+        initializeMap(zoomInButton, zoomOutButton)
+
+        val scrollView = view.findViewById<ViewGroup>(R.id.scrollView)
+        setupMapTouchHandling(mapView, scrollView)
 
         setupSpinners(spinnerSport, spinnerFormat)
         setupTimePickers(startTimeInput, endTimeInput)
@@ -100,26 +113,56 @@ class CreateSportSpaceFragment : Fragment() {
                 addressInput.text.toString(),
                 price,
                 spinnerFormat.selectedItem.toString(),
-                imagePath,
                 selectedLatitude,
                 selectedLongitude
             )
         }
     }
 
-    private fun initializeMap() {
+    private fun checkLocationPermission() {
+        val fineLocation = android.Manifest.permission.ACCESS_FINE_LOCATION
+        val coarseLocation = android.Manifest.permission.ACCESS_COARSE_LOCATION
+        if (ContextCompat.checkSelfPermission(requireContext(), fineLocation) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(requireContext(), coarseLocation) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(fineLocation, coarseLocation), LOCATION_PERMISSION_CODE)
+        }
+    }
+
+    private fun setupMapTouchHandling(mapView: MapView, scrollView: ViewGroup) {
+        mapView.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> scrollView.requestDisallowInterceptTouchEvent(true)
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> scrollView.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
+    }
+
+    private fun initializeMap(zoomInButton: Button, zoomOutButton: Button) {
         mapView.getMapAsync { mapLibreMap ->
             mapLibreMap.setStyle("https://tiles.locationiq.com/v3/streets/vector.json?key=${BuildConfig.LOCATIONIQ_API_KEY}") {
                 val limaLatLng = LatLng(-12.0464, -77.0428)
                 mapLibreMap.cameraPosition = CameraPosition.Builder()
                     .target(limaLatLng)
-                    .zoom(10.0)
+                    .zoom(20.0)
                     .build()
                 setupMapClickListener(mapLibreMap)
             }
             mapLibreMap.uiSettings.isZoomGesturesEnabled = true
             mapLibreMap.uiSettings.isRotateGesturesEnabled = true
             mapLibreMap.uiSettings.isScrollGesturesEnabled = true
+
+            // Listeners para los botones de zoom
+            zoomInButton.setOnClickListener {
+                mapLibreMap.animateCamera(
+                    org.maplibre.android.camera.CameraUpdateFactory.zoomIn()
+                )
+            }
+            zoomOutButton.setOnClickListener {
+                mapLibreMap.animateCamera(
+                    org.maplibre.android.camera.CameraUpdateFactory.zoomOut()
+                )
+            }
         }
     }
 
@@ -179,6 +222,7 @@ class CreateSportSpaceFragment : Fragment() {
             getString(R.string.select_format),
             getString(R.string.soccer_5),
             getString(R.string.soccer_7),
+            getString(R.string.soccer_8),
             getString(R.string.soccer_11)
         )
         val formatsPool = listOf(
@@ -231,30 +275,44 @@ class CreateSportSpaceFragment : Fragment() {
         timePicker.show(parentFragmentManager, "timePicker")
     }
 
-    private fun checkStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!Environment.isExternalStorageManager()) {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.data = "package:${requireContext().packageName}".toUri()
-                startActivity(intent)
-            } else {
-                openGallery()
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(requireContext(), READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
-            } else {
-                openGallery()
-            }
-        }
-    }
+   private fun checkStoragePermission() {
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+           val permission = android.Manifest.permission.READ_MEDIA_IMAGES
+           if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+               if (shouldShowRequestPermissionRationale(permission)) {
+                   requireContext().showToast("Por favor, concede el permiso de fotos desde Ajustes")
+               } else {
+                   requestPermissions(arrayOf(permission), STORAGE_PERMISSION_CODE)
+               }
+           } else {
+               openGallery()
+           }
+       } else {
+           if (ContextCompat.checkSelfPermission(requireContext(), READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+               if (shouldShowRequestPermissionRationale(READ_EXTERNAL_STORAGE)) {
+                   requireContext().showToast("Por favor, concede el permiso desde Ajustes")
+               } else {
+                   requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+               }
+           } else {
+               openGallery()
+           }
+       }
+   }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == STORAGE_PERMISSION_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            openGallery()
-        } else {
-            requireContext().showToast("Permiso denegado")
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGallery()
+            } else {
+                val deniedPermission = permissions.getOrNull(0)
+                if (deniedPermission != null && !shouldShowRequestPermissionRationale(deniedPermission)) {
+                    requireContext().showToast("Permiso denegado permanentemente. Ve a Ajustes para habilitarlo.")
+                } else {
+                    requireContext().showToast("Permiso denegado")
+                }
+            }
         }
     }
 
@@ -265,10 +323,11 @@ class CreateSportSpaceFragment : Fragment() {
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val selectedImageUri = result.data?.data
-            if (selectedImageUri != null) {
-                imageView.setImageURI(selectedImageUri)
-                val fileName = getFileName(selectedImageUri)
+            val uri = result.data?.data
+            if (uri != null) {
+                selectedImageUri = uri
+                imageView.setImageURI(uri)
+                val fileName = getFileName(uri)
                 if (fileName != null) {
                     imgUrlEditText.text = fileName
                     imgUrlEditText.hint = ""
@@ -310,12 +369,18 @@ class CreateSportSpaceFragment : Fragment() {
         address: String,
         price: Double,
         gamemode: String,
-        imagePath: String,
         latitude: Double,
         longitude: Double
     ) {
         val sportId = if (sportType == getString(R.string.soccer)) 1 else 2
-        val gamemodeId = if (gamemode == getString(R.string.soccer_11)) 1 else 5
+        val gamemodeId = when (gamemode) {
+            getString(R.string.soccer_7) -> 2
+            getString(R.string.soccer_8) -> 3
+            getString(R.string.soccer_5) -> 4
+            getString(R.string.pool_3)   -> 5
+            getString(R.string.soccer_11) -> 1
+            else -> 0
+        }
 
         val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
         val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -328,9 +393,24 @@ class CreateSportSpaceFragment : Fragment() {
         val latitudePart = latitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val longitudePart = longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val file = File(imagePath)
-        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        val imagePart = MultipartBody.Part.createFormData("image", file.name, requestFile)
+        val tempFile = selectedImageUri?.let { uri ->
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val file = File.createTempFile("upload", ".jpg", requireContext().cacheDir)
+            inputStream?.use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file
+        }
+
+        if (tempFile == null) {
+            requireContext().showToast("No se pudo procesar la imagen")
+            return
+        }
+
+        val requestFile = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
+        val imagePart = MultipartBody.Part.createFormData("image", tempFile.name, requestFile)
 
         service.createSportSpace(
             namePart, sportIdPart, imagePart, pricePart, addressPart,

@@ -25,7 +25,7 @@
             android:fontFamily="@font/righteous"
             android:text="@string/tickets"
             android:textColor="#246505"
-            android:textSize="40sp"/>
+            android:textSize="28sp"/>
         <Button
             android:id="@+id/create_ticket_btn"
             android:layout_width="wrap_content"

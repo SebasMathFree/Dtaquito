@@ -65,39 +65,16 @@
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:spinnerMode="dropdown" />
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/img_url_layout"
+            <Spinner
+                android:id="@+id/format_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/input_text"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                app:endIconDrawable="@android:drawable/ic_dialog_map"
-                app:endIconMode="custom"
-                app:endIconTint="@color/white"
-                app:hintEnabled="false">
-                <EditText
-                    android:id="@+id/img_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@null"
-                    android:clickable="false"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:fontFamily="@font/righteous"
-                    android:hint="@string/image"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#4D4D4D" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <ImageView
-                android:id="@+id/image_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="15dp"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
+                android:spinnerMode="dropdown" />
+
             <EditText
                 android:id="@+id/price_input"
                 android:layout_width="match_parent"
@@ -108,6 +85,64 @@
                 android:fontFamily="@font/righteous"
                 android:hint="@string/price"
                 android:inputType="textEmailAddress"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+            <EditText
+                android:id="@+id/start_time_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:fontFamily="@font/righteous"
+                android:hint="@string/opening_time"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+            <EditText
+                android:id="@+id/end_time_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:fontFamily="@font/righteous"
+                android:hint="@string/closing_time"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+            <EditText
+                android:id="@+id/description_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:ems="10"
+                android:fontFamily="@font/righteous"
+                android:hint="@string/description"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#4D4D4D" />
+            <EditText
+                android:id="@+id/address_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_text"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:fontFamily="@font/righteous"
+                android:hint="@string/address"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:textColor="#FFFFFF"
@@ -143,73 +178,40 @@
                         android:textColor="@color/white" />
                 </LinearLayout>
             </FrameLayout>
-            <EditText
-                android:id="@+id/address_input"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/img_url_layout"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/input_text"
-                android:clickable="false"
-                android:ems="10"
-                android:focusable="false"
-                android:fontFamily="@font/righteous"
-                android:hint="@string/address"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#4D4D4D" />
-            <EditText
-                android:id="@+id/description_input"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/input_text"
-                android:ems="10"
-                android:fontFamily="@font/righteous"
-                android:hint="@string/description"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#4D4D4D" />
-            <EditText
-                android:id="@+id/end_time_input"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/input_text"
-                android:clickable="false"
-                android:ems="10"
-                android:focusable="false"
-                android:fontFamily="@font/righteous"
-                android:hint="@string/closing_time"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#4D4D4D" />
-            <EditText
-                android:id="@+id/start_time_input"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/input_text"
-                android:clickable="false"
-                android:ems="10"
-                android:focusable="false"
-                android:fontFamily="@font/righteous"
-                android:hint="@string/opening_time"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#4D4D4D" />
-            <Spinner
-                android:id="@+id/format_input"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/input_text"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:spinnerMode="dropdown" />
+                app:endIconDrawable="@android:drawable/ic_dialog_map"
+                app:endIconMode="custom"
+                app:endIconTint="@color/white"
+                app:hintEnabled="false">
+                <EditText
+                    android:id="@+id/img_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@null"
+                    android:clickable="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:fontFamily="@font/righteous"
+                    android:hint="@string/image"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#4D4D4D" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
             <Button
                 android:id="@+id/create_space_btn"
                 android:layout_width="wrap_content"

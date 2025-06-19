@@ -17,11 +17,11 @@ import Interface.PlaceHolder
 import android.content.Context
 import com.example.dtaquito.reservation.ReservationFragment
 import java.util.Locale
+import androidx.core.content.edit
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
-    private val service = RetrofitClient.instance.create(PlaceHolder::class.java)
     var userRoleType: String = "PLAYER"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             if (goToProfile) {
                 bottomNav.selectedItemId = R.id.navigation_profile
                 loadFragment(ProfileFragment())
-                prefs.edit().remove("go_to_profile").apply()
+                prefs.edit { remove("go_to_profile") }
             } else if (savedInstanceState == null && supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
                 if (userRoleType == "PLAYER") {
                     loadFragment(SportFragment())
@@ -78,18 +78,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFragment(fragment: Fragment) {
+        // Verifica si el fragmento ya está cargado
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null && currentFragment::class.java == fragment::class.java) {
+            // Si el fragmento ya está cargado, no hacemos nada
+            return
+        }
+        // Carga el fragmento en el contenedor
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
 
     private suspend fun getUserRoleType(): String {
-        val response = service.getUserId()
-        return if (response.isSuccessful) {
-            response.body()?.roleType ?: "PLAYER"
-        } else {
-            "PLAYER"
-        }
+        val prefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        return prefs.getString("role_type", "PLAYER") ?: "PLAYER"
     }
 
     // --- Métodos para actualización instantánea de textos ---

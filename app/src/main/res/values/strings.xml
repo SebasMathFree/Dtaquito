@@ -51,7 +51,6 @@
     <string name="sport_spaces">Sport Spaces</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="tickets">My Tickets</string>
-    <string name="add_sport_space">Add</string>
     <string name="game_mode_label">Game mode: %1$s</string>
     <string name="price_label">Price: S/. %1$d</string>
     <string name="ticket_number">Ticket #%1$s</string>
@@ -62,7 +61,6 @@
     <string name="amount_label">Amount: %1$d</string>
     <string name="created_label">Created at: %1$s</string>
     <string name="status_label">Status: %1$s</string>
-    <string name="create_ticket">Create</string>
     <string name="create_sport_space">Create my Sport Space</string>
     <string name="image">Image</string>
     <string name="price">Price</string>
@@ -71,8 +69,8 @@
     <string name="closing_time">Closing Time</string>
     <string name="opening_time">Opening Time</string>
     <string name="create">Create</string>
-    <string name="select_sport">Choose a sport:</string>
-    <string name="select_format">Choose a format:</string>
+    <string name="select_sport">Sport:</string>
+    <string name="select_format">Game mode:</string>
     <string name="soccer_5">Soccer 5</string>
     <string name="soccer_7">Soccer 7</string>
     <string name="soccer_11">Soccer 11</string>
@@ -87,6 +85,12 @@
     <string name="interbank">Interbank</string>
     <string name="bcp">BCP</string>
     <string name="bbva">BBVA</string>
+    <string name="spanish">Spanish</string>
+    <string name="english">English</string>
+    <string name="my_reservations">My Reservations</string>
+    <string name="what_sport_do_you_want_to_play">What sport do you want to play?</string>
+    <string name="create_ticket">Create Ticket</string>
+    <string name="soccer_8">Soccer 8</string>
 
 
 </resources>

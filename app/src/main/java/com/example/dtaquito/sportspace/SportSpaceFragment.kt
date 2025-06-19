@@ -48,7 +48,7 @@ class SportSpaceFragment : Fragment() {
     }
 
     fun updateTexts() {
-        view?.findViewById<Button>(R.id.create_sport_space_btn)?.text = getString(R.string.add_sport_space)
+        view?.findViewById<Button>(R.id.create_sport_space_btn)?.text = getString(R.string.create)
         recyclerView.adapter?.notifyDataSetChanged()
     }
 
@@ -87,7 +87,7 @@ class SportSpaceFragment : Fragment() {
                             createSportSpaceBtn.visibility = View.VISIBLE
                             createSportSpaceBtn.setOnClickListener {
                                 if (userSportSpaces.size >= maxSpaces) {
-                                    requireContext().showToast("Mejora tu plan para crear más espacios deportivos")
+                                    context?.showToast("Mejora tu plan para crear más espacios deportivos")
                                 } else {
                                     parentFragmentManager.beginTransaction()
                                         .replace(
@@ -104,12 +104,12 @@ class SportSpaceFragment : Fragment() {
                             "SportSpaceFragment",
                             "Error cargando espacios del usuario: ${e.message}"
                         )
-                        requireContext().showToast("Error al cargar tus espacios deportivos.")
+                        context?.showToast("Error al cargar tus espacios deportivos.")
                     }
                 }
             } catch (e: Exception) {
                 Log.e("SportSpaceFragment", "Error al obtener el rol del usuario: ${e.message}")
-                requireContext().showToast("Error al obtener tu rol de usuario.")
+                context?.showToast("Error al obtener tu rol de usuario.")
             }
         }
     }
@@ -134,7 +134,7 @@ class SportSpaceFragment : Fragment() {
                 Log.d("SportSpaceFragment", "User role: $role")
                 fetchSportSpaces(role)
             } catch (e: Exception) {
-                requireContext().showToast("Error: ${e.message}")
+                context?.showToast("Error: ${e.message}")
             }
         }
     }
@@ -158,7 +158,7 @@ class SportSpaceFragment : Fragment() {
 
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    requireContext().showToast("Error: ${e.message}")
+                    context?.showToast("Error: ${e.message}")
                 }
             }
         }
@@ -178,11 +178,11 @@ class SportSpaceFragment : Fragment() {
 
     private fun handleErrorResponse(responseCode: Int) {
         when (responseCode) {
-            403 -> requireContext().showToast("Acceso denegado: no tienes permiso para acceder a esta funcionalidad")
+            403 -> context?.showToast("Acceso denegado: no tienes permiso para acceder a esta funcionalidad")
             404 -> {
                 Log.i("SportSpaceFragment", "No hay espacios deportivos aún")
             }
-            else -> requireContext().showToast("Error al obtener los espacios deportivos")
+            else -> context?.showToast("Error al obtener los espacios deportivos")
         }
     }
 

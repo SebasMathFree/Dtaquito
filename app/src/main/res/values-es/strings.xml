@@ -10,9 +10,9 @@
     <string name="sign_in_message">Inicia sesión para continuar con nuestra aplicación</string>
     <string name="email">Correo Electrónico</string>
     <string name="password">Contraseña</string>
-    <string name="forgot_password">Olvidaste tu contraseña?</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="login">Ingresa</string>
-    <string name="new_user">Nuevo Usuario? !Regístrate!</string>
+    <string name="new_user">¿Nuevo Usuario? !Regístrate!</string>
     <string name="sign_up">Regístrate</string>
     <string name="sign_up_message">Por favor registrate con tu correo electrónico para continuar</string>
     <string name="name">Nombre</string>
@@ -23,10 +23,10 @@
     <string name="sent">Enviar</string>
     <string name="language">Idioma</string>
     <string name="sign_up_clickable">!Regístrate!</string>
-    <string name="forgot_password_clickable">Olvidaste tu contraseña?</string>
+    <string name="forgot_password_clickable">¿Olvidaste tu contraseña?</string>
     <string name="sign_in_clickable">Inicia sesión</string>
     <string name="sign_in_clickable_forgot">Inicia sesión</string>
-    <string name="current_subscription">Tu suscripcioón actual es: %1$s</string>
+    <string name="current_subscription">Tu suscripción actual es: %1$s</string>
     <string name="subscription_message">Consigue el plan perfecto como propietario de espacios deportivos</string>
     <string name="plan_bronze">Bronce</string>
     <string name="plan_silver">Plata</string>
@@ -46,12 +46,11 @@
     <string name="log_out">Salir</string>
     <string name="credits">Créditos</string>
     <string name="profile">Perfil</string>
-    <string name="add_credits">Compra Créditos</string>
-    <string name="gamerooms">Sala de Juegos</string>
+    <string name="add_credits">Más Créditos</string>
+    <string name="gamerooms">Salas de Juegos</string>
     <string name="sport_spaces">Espacios Deportivos</string>
     <string name="subscriptions">Suscripciones</string>
     <string name="tickets">Mis Tickets</string>
-    <string name="add_sport_space">Añadir</string>
     <string name="game_mode_label">Modo de juego: %1$s</string>
     <string name="price_label">Precio: S/. %1$d</string>
     <string name="ticket_number">Ticket #%1$s</string>
@@ -62,7 +61,6 @@
     <string name="amount_label">Monto: %1$d</string>
     <string name="created_label">Creado: %1$s</string>
     <string name="status_label">Estado: %1$s</string>
-    <string name="create_ticket">Crear</string>
     <string name="create_sport_space">Crear mi Espacio Deportivo</string>
     <string name="image">Imagen</string>
     <string name="price">Precio</string>
@@ -71,14 +69,15 @@
     <string name="closing_time">Hora de cierre</string>
     <string name="opening_time">Hora de apertura</string>
     <string name="create">Crear</string>
-    <string name="select_sport">Elige un deporte:</string>
-    <string name="select_format">Elige un formato:</string>
+    <string name="select_sport">Deporte:</string>
+    <string name="select_format">Modo de juego:</string>
     <string name="soccer_5">Fútbol 5</string>
     <string name="soccer_7">Fútbol 7</string>
+    <string name="soccer_8">Fútbol 8</string>
     <string name="soccer_11">Fútbol 11</string>
     <string name="pool_3">Billar 3</string>
     <string name="full_name">Nombre completo</string>
-    <string name="associated_banks">Banco Asociados</string>
+    <string name="associated_banks">Bancos Asociados</string>
     <string name="other_banks">Otros Bancos</string>
     <string name="bank_name">Banco</string>
     <string name="account_number">Número de cuenta</string>
@@ -87,4 +86,9 @@
     <string name="interbank">Interbank</string>
     <string name="bcp">BCP</string>
     <string name="bbva">BBVA</string>
+    <string name="spanish">Español</string>
+    <string name="english">Inglés</string>
+    <string name="my_reservations">Mis Reservas</string>
+    <string name="what_sport_do_you_want_to_play">¿Qué deporte deseas jugar?</string>
+    <string name="create_ticket">Crear Ticket</string>
 </resources>

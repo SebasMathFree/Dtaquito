@@ -3,6 +3,7 @@ package network
 import Beans.chat.ChatMessage
 import MyCookieJar
 import android.content.Context
+import com.example.dtaquito.auth.CookieInterceptor
 import com.example.dtaquito.auth.SaveCookieInterceptor
 import com.example.dtaquito.chat.ChatMessageDeserializer
 import com.google.gson.Gson
@@ -26,6 +27,7 @@ object RetrofitClient {
         val context = appContext ?: throw IllegalStateException("RetrofitClient not initialized.")
         OkHttpClient.Builder()
             .addInterceptor(SaveCookieInterceptor(context))
+            .addInterceptor(CookieInterceptor(context))
             .cookieJar(MyCookieJar())
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

@@ -139,11 +139,15 @@ class RegisterActivity : AppCompatActivity() {
         val registerBtn = findViewById<Button>(R.id.register_btn)
 
         registerBtn.setOnClickListener {
+            registerBtn.isEnabled = false // Deshabilitar el botón para evitar múltiples clics
             val name = nameInput.text.toString().trim()
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()
 
-            if (!validateInputs(name, email, password)) return@setOnClickListener
+            if (!validateInputs(name, email, password)) {
+                registerBtn.isEnabled = true // Rehabilitar el botón si hay un error
+                return@setOnClickListener
+            }
 
             val registerRequest = RegisterRequest(
                 name = name,
@@ -151,7 +155,7 @@ class RegisterActivity : AppCompatActivity() {
                 password = password,
                 role = selectedRole.uppercase()
             )
-            registerUser(registerRequest)
+            registerUser(registerRequest, registerBtn)
         }
     }
 
@@ -177,7 +181,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     // Registro del usuario
-    private fun registerUser(registerRequest: RegisterRequest) {
+    private fun registerUser(registerRequest: RegisterRequest, registerBtn: Button) {
         lifecycleScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) { service.createUser(registerRequest) }
@@ -186,9 +190,11 @@ class RegisterActivity : AppCompatActivity() {
                     navigateToLogin()
                 } else {
                     showToast("Error al registrar usuario.")
+                    registerBtn.isEnabled = true // Rehabilitar el botón en caso de error
                 }
             } catch (e: Exception) {
                 showToast("Error de red.")
+                registerBtn.isEnabled = true // Rehabilitar el botón en caso de error
             }
         }
     }

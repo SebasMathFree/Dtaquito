@@ -15,6 +15,8 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -33,6 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import network.RetrofitClient
 import java.util.Locale
+import androidx.core.content.edit
 
 class LoginActivity : AppCompatActivity() {
 
@@ -68,16 +71,40 @@ class LoginActivity : AppCompatActivity() {
         selectLanguageBtn.setOnClickListener { showLanguageDialog() }
 
     }
+
     private fun showLanguageDialog() {
-        val idiomas = arrayOf("Español", "Inglés")
+        val idiomas = arrayOf(
+            getString(R.string.spanish),
+            getString(R.string.english)
+        )
         val codigos = arrayOf("es", "en")
-        AlertDialog.Builder(this)
-            .setTitle("Selecciona idioma")
-            .setItems(idiomas) { _, which ->
+        val adapter = object : ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_list_item_1,
+            idiomas
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                (view as TextView).setTextColor(ContextCompat.getColor(context, R.color.white))
+                return view
+            }
+        }
+
+        AlertDialog.Builder(this, R.style.CustomAlertDialog)
+            .setTitle(getString(R.string.language))
+            .setAdapter(adapter) { _, which ->
                 setLocale(this, codigos[which])
                 recreate()
             }
             .show()
+    }
+
+    private fun hideKeyboard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     private fun setLocale(context: Context, language: String) {
@@ -87,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
         config.setLocale(locale)
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
         val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-        prefs.edit().putString("app_lang", language).apply()
+        prefs.edit { putString("app_lang", language) }
     }
 
     private fun initializeUI() {
@@ -100,10 +127,13 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         loginBtn.setOnClickListener {
+            hideKeyboard()
+            loginBtn.isEnabled = false
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()
             if (email.isEmpty() || password.isEmpty()) {
                 showToast("Por favor, ingresa tu email y contraseña.")
+                loginBtn.isEnabled = true
                 return@setOnClickListener
             }
             loginUser(email, password)
@@ -160,11 +190,14 @@ class LoginActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         response.body()?.let { user ->
                             userId = user.id
+                            val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                            prefs.edit { putInt("user_id", userId) }
                             getUserInfo()
                         }
                         showToast("Inicio de sesión exitoso.")
                     } else {
                         showToast("Usuario o contraseña incorrectos.")
+                        loginBtn.isEnabled = true
                         Log.e("LoginActivity", "Fallo login, código: ${response.code()}")
                     }
                 }
@@ -172,6 +205,7 @@ class LoginActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     Log.e("LoginActivity", "Error en login: ${e.message}", e)
                     showToast("Error de red: ${e.message}")
+                    loginBtn.isEnabled = true
                 }
             }
         }

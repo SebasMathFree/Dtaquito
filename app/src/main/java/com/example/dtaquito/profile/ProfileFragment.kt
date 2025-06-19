@@ -17,9 +17,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.webkit.CookieManager
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.dtaquito.R
@@ -36,6 +39,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
 import kotlin.apply
+import androidx.core.content.edit
+import androidx.core.net.toUri
 
 class ProfileFragment : Fragment() {
 
@@ -47,7 +52,7 @@ class ProfileFragment : Fragment() {
     private lateinit var updateBtn: Button
     private lateinit var addCreditBtn: Button
     private lateinit var logoutBtn: Button
-    private lateinit var selectLanguageBtn: Button
+    private lateinit var selectLanguageBtn: ImageButton
     private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
 
     private var initialCreditAmount: Double = 0.0
@@ -68,11 +73,12 @@ class ProfileFragment : Fragment() {
         setupListeners()
         fetchUserProfile()
         selectLanguageBtn.setOnClickListener { showLanguageDialog() }
-        view.setOnTouchListener { v, event ->
+        view.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
                 view.clearFocus()
+                view.performClick() // Añadido para accesibilidad
             }
             false
         }
@@ -80,11 +86,26 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showLanguageDialog() {
-        val idiomas = arrayOf("Español", "Inglés")
+        val idiomas = arrayOf(
+            getString(R.string.spanish),
+            getString(R.string.english)
+        )
         val codigos = arrayOf("es", "en")
-        AlertDialog.Builder(requireContext())
+        val adapter = object : ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            idiomas
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                (view as TextView).setTextColor(ContextCompat.getColor(context, R.color.white))
+                return view
+            }
+        }
+
+        AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog)
             .setTitle(getString(R.string.language))
-            .setItems(idiomas) { _, which ->
+            .setAdapter(adapter) { _, which ->
                 setLocale(requireContext(), codigos[which])
                 (activity as? com.example.dtaquito.MainActivity)?.updateAllFragmentsTexts()
             }
@@ -98,14 +119,13 @@ class ProfileFragment : Fragment() {
         config.setLocale(locale)
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
         val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-        prefs.edit().putString("app_lang", language).apply()
+        prefs.edit { putString("app_lang", language) }
     }
     fun updateTexts() {
         header.text = getString(R.string.profile)
         updateBtn.text = getString(R.string.edit_profile)
         addCreditBtn.text = getString(R.string.add_credits)
         logoutBtn.text = getString(R.string.log_out)
-        selectLanguageBtn.text = getString(R.string.language)
         nameInput.hint = getString(R.string.name)
         emailInput.hint = getString(R.string.email)
         passwordInput.hint = getString(R.string.password)
@@ -207,7 +227,7 @@ class ProfileFragment : Fragment() {
                         response.body()?.string()?.let { responseBody ->
                             val approvalUrl = extractApprovalUrl(responseBody)
                             if (approvalUrl != null) {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(approvalUrl))
+                                val intent = Intent(Intent.ACTION_VIEW, approvalUrl.toUri())
                                 startActivity(intent)
                             } else {
                                 requireContext().showToast("Approval URL not found.")
@@ -226,6 +246,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logout() {
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit {remove("user_id") }
         clearCookies()
         service.logOutUser().enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -274,7 +296,7 @@ class ProfileFragment : Fragment() {
         return try {
             val jsonObject = JSONObject(responseBody)
             jsonObject.getString("approval_url")
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

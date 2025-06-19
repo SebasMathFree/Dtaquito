@@ -26,7 +26,7 @@ android {
         buildConfigField(
             "String",
             "LOCATIONIQ_API_KEY",
-            "\"${localProperties["LOCATIONIQ_API_KEY"]}\""
+            "\"pk.57aac1a21ba1a192e5d1c1cc75e88d79\""
         )
     }
 
@@ -65,11 +65,11 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation("org.maplibre.gl:android-sdk:11.8.7")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-ktx:2.7.2")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

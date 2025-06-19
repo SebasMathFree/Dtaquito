@@ -11,8 +11,8 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
         android:orientation="horizontal"
+        android:layout_margin="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,16 +22,20 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="@font/righteous"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="@string/sport_spaces"
             android:textColor="#246505"
-            android:textSize="40sp"/>
+            android:textSize="28sp"/>
         <Button
             android:id="@+id/create_sport_space_btn"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:background="@drawable/button_rounded"
             android:fontFamily="@font/righteous"
-            android:text="@string/add_sport_space"
+            android:text="@string/create"
             android:textColor="@color/white"
             android:textSize="15sp" />
     </LinearLayout>
