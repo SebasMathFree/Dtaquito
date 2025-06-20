@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
 import com.example.dtaquito.utils.showToast
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.GsonBuilder
 import network.RetrofitClient
 import okhttp3.OkHttpClient
@@ -135,8 +134,6 @@ class ChatRoomFragment : Fragment() {
             }
             val rect = Rect()
             chatView.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = chatView.rootView.height
-            val keypadHeight = screenHeight - rect.bottom
         }
     }
 
@@ -224,7 +221,7 @@ class ChatRoomFragment : Fragment() {
         if (webSocket != null) return
         //fetchMessages(roomId)
         val request = Request.Builder()
-            .url(network.RetrofitClient.CHAT_URL)
+            .url(RetrofitClient.CHAT_URL)
             .build()
 
         val client = OkHttpClient()
