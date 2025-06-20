@@ -63,7 +63,7 @@ class ChatRoomFragment : Fragment() {
         prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         service = RetrofitClient.instance.create(PlaceHolder::class.java)
 
-        userId = prefs.getString("user_id", "-1")?.toIntOrNull() ?: -1
+        userId = prefs.getInt("user_id", -1)
         Log.d("ChatRoomFragment", "User ID: $userId")
     }
 
@@ -137,11 +137,6 @@ class ChatRoomFragment : Fragment() {
             chatView.getWindowVisibleDisplayFrame(rect)
             val screenHeight = chatView.rootView.height
             val keypadHeight = screenHeight - rect.bottom
-//            if (keypadHeight > screenHeight * 0.15) {
-//                bottomNavigationView.visibility = View.GONE
-//            } else {
-//                bottomNavigationView.visibility = View.VISIBLE
-//            }
         }
     }
 
@@ -256,7 +251,7 @@ class ChatRoomFragment : Fragment() {
                 Log.d("WebSocket", "Message received: $text")
                 try {
                     val chatMessage = gson.fromJson(text, ChatMessage::class.java)
-                    if (chatMessage.userId == userId) return
+                    //if (chatMessage.userId == userId) return
 
                     activity?.runOnUiThread {
                         if (isAdded) {
