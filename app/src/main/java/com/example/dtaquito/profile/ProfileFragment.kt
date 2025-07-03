@@ -244,8 +244,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logout() {
-        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit {remove("user_id") }
+        // Limpiar TODOS los datos de SharedPreferences
+        clearAllUserData()
         clearCookies()
         service.logOutUser().enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -260,6 +260,30 @@ class ProfileFragment : Fragment() {
                 requireContext().showToast("Error: ${t.message}")
             }
         })
+    }
+    
+    private fun clearAllUserData() {
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit().apply {
+            // Limpiar todos los datos de sesión
+            remove("user_id")
+            remove("user_name")
+            remove("user_email")
+            remove("role_type")
+            remove("credits")
+            remove("jwt_token")
+            
+            // Limpiar datos de "Remember me"
+            remove("remember_me")
+            remove("saved_email")
+            remove("saved_password")
+            
+            // Limpiar flags de sesión temporal
+            remove("is_temporary_session")
+            remove("app_was_closed")
+            
+            apply()
+        }
     }
 
     private fun clearCookies() {

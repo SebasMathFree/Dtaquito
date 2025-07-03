@@ -93,4 +93,42 @@
     <string name="create_ticket">Crear Ticket</string>
     <string name="image_profile">Image Profile</string>
     <string name="scan_qr">Escanear QR</string>
+    
+    <!-- Register Activity Strings -->
+    <string name="role_choose_text">Elige un rol: </string>
+    <string name="role_player">Jugador</string>
+    <string name="role_owner">Propietario</string>
+    
+    <!-- Error Messages -->
+    <string name="error_name_empty">Por favor, ingresa tu nombre.</string>
+    <string name="error_name_numbers">El nombre no puede contener números.</string>
+    <string name="error_name_too_short">El nombre debe tener al menos %1$d caracteres.</string>
+    <string name="error_name_invalid_chars">El nombre solo puede contener letras y espacios.</string>
+    <string name="error_email_empty">Por favor, ingresa tu email.</string>
+    <string name="error_email_invalid">Por favor, ingresa un email válido.</string>
+    <string name="error_password_empty">Por favor, ingresa tu contraseña.</string>
+    <string name="error_password_length">La contraseña debe tener al mínimo %1$d caracteres.</string>
+    <string name="error_password_uppercase">• Al menos 1 mayúscula</string>
+    <string name="error_password_special">• Al menos 1 carácter especial</string>
+    <string name="error_role_empty">Por favor, selecciona un rol válido.</string>
+    
+    <!-- Success/Error Network Messages -->
+    <string name="success_register">Usuario registrado correctamente.</string>
+    <string name="error_register">Error al registrar usuario.</string>
+    <string name="error_network">Error de red.</string>
+    
+    <!-- Loading Messages -->
+    <string name="loading_registering_user">Registrando usuario...</string>
+    
+    <!-- Login Activity Strings -->
+    <string name="error_login_empty_fields">Por favor, ingresa tu email y contraseña.</string>
+    <string name="error_login_invalid_credentials">Usuario o contraseña incorrectos.</string>
+    <string name="success_login">Inicio de sesión exitoso.</string>
+    <string name="error_network_timeout">Error de conexión. Inténtelo nuevamente.</string>
+    <string name="error_network_general">Error de red: %1$s</string>
+    <string name="loading_signing_in">Iniciando sesión...</string>
+    <string name="remember_me">Recordar sesión</string>
+    <string name="show_password">Mostrar contraseña</string>
+    <string name="hide_password">Ocultar contraseña</string>
+    <string name="error_password_too_short">La contraseña debe tener al menos 6 caracteres.</string>
 </resources>

@@ -66,5 +66,8 @@ coverage/
 # dotenv
 .env
 
+#VS Code
+.vscode/
+
 # Otros archivos personales
 nota.txt

@@ -18,6 +18,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -35,168 +36,421 @@ import network.RetrofitClient
 
 class RegisterActivity : AppCompatActivity() {
 
-    // Variables privadas
+    // Constantes
+    companion object {
+        // Validación
+        private const val MIN_PASSWORD_LENGTH = 16
+        private const val MIN_NAME_LENGTH = 2
+        private const val PLACEHOLDER_ROLE_POSITION = 0
+        
+        // UI
+        private const val PLACEHOLDER_COLOR = "#4D4D4D"
+    }
+    
+    // Data class para encapsular datos del usuario
+    data class UserInput(
+        val name: String,
+        val email: String,
+        val password: String,
+        val role: String
+    ) {
+        fun isValid(): Boolean = name.isNotEmpty() && email.isNotEmpty() && 
+                               password.isNotEmpty() && role.isNotEmpty()
+    }
+
+    // Variables de estado
     private var isRoleSelected = false
     private var selectedRolePosition = 0
     private lateinit var selectedRole: String
-    private lateinit var signIn: TextView
-    private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
+
+    // Referencias a vistas
+    private lateinit var signInTextView: TextView
+    private lateinit var nameInput: EditText
+    private lateinit var emailInput: EditText
+    private lateinit var passwordInput: EditText
+    private lateinit var roleSpinner: Spinner
+    private lateinit var registerButton: Button
+
+    // Referencias a TextViews de error
+    private lateinit var nameError: TextView
+    private lateinit var emailError: TextView
+    private lateinit var passwordError: TextView
+    private lateinit var roleError: TextView
+    
+    // Referencias a elementos de loading
+    private lateinit var loadingProgress: ProgressBar
+    private lateinit var loadingText: TextView
+
+    // Servicio de red
+    private val apiService by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
 
-        initializeUI()
-        setupSpinner()
+        initializeViews()
+        setupClickableSignInText()
+        setupRoleSpinner()
+        setupInputValidation()
         setupRegisterButton()
     }
 
-    private fun initializeUI() {
-        signIn = findViewById(R.id.signIn)
-        val signInText = signIn.text.toString()
-        val signInClickable = getString(R.string.sign_in_clickable)
-        val signInStart = signInText.indexOf(signInClickable)
-        val signInEnd = signInStart + signInClickable.length
+    private fun initializeViews() {
+        // Inicializar vistas principales
+        signInTextView = findViewById(R.id.signIn)
+        nameInput = findViewById(R.id.name_input)
+        emailInput = findViewById(R.id.email_input)
+        passwordInput = findViewById(R.id.password_input)
+        roleSpinner = findViewById(R.id.rol_input)
+        registerButton = findViewById(R.id.register_btn)
 
-        if (signInStart >= 0 && signInEnd <= signInText.length) {
-            val signInSpannable = SpannableString(signInText)
-            val signInClickableSpan = object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    navigateToLogin()
-                }
+        // Inicializar TextViews de error
+        nameError = findViewById(R.id.name_error)
+        emailError = findViewById(R.id.email_error)
+        passwordError = findViewById(R.id.password_error)
+        roleError = findViewById(R.id.role_error)
+        
+        // Inicializar elementos de loading
+        loadingProgress = findViewById(R.id.loading_progress)
+        loadingText = findViewById(R.id.loading_text)
+    }
+
+    private fun setupClickableSignInText() {
+        val signInText = signInTextView.text.toString()
+        val clickableText = getString(R.string.sign_in_clickable)
+        val startIndex = signInText.indexOf(clickableText)
+        val endIndex = startIndex + clickableText.length
+
+        if (startIndex < 0 || endIndex > signInText.length) return
+
+        val spannableString = SpannableString(signInText)
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                navigateToLogin()
             }
-            val colorSpan = ForegroundColorSpan(ContextCompat.getColor(this, R.color.green))
-            val underlineSpan = UnderlineSpan()
+        }
 
-            signInSpannable.setSpan(signInClickableSpan, signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            signInSpannable.setSpan(colorSpan, signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            signInSpannable.setSpan(underlineSpan, signInStart, signInEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.apply {
+            setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(this@RegisterActivity, R.color.green)),
+                startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            setSpan(UnderlineSpan(), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
 
-            signIn.text = signInSpannable
-            signIn.movementMethod = LinkMovementMethod.getInstance()
+        signInTextView.apply {
+            text = spannableString
+            movementMethod = LinkMovementMethod.getInstance()
         }
     }
 
+    private fun setupRoleSpinner() {
+        val roleItems = listOf(
+            getString(R.string.role_choose_text), 
+            getString(R.string.role_player), 
+            getString(R.string.role_owner)
+        )
+        val adapter = createSpinnerAdapter(roleItems)
+        
+        roleSpinner.adapter = adapter
+        roleSpinner.onItemSelectedListener = createSpinnerItemListener(roleItems)
+    }
 
-    // Configuración del Spinner
-    private fun setupSpinner() {
-        val spinner = findViewById<Spinner>(R.id.rol_input)
-        val items = listOf("Choose a role: ","Player", "Owner")
-        val adapter = object : ArrayAdapter<String>(this, R.layout.spinner_items, items) {
+    private fun createSpinnerAdapter(items: List<String>): ArrayAdapter<String> {
+        return object : ArrayAdapter<String>(this, R.layout.spinner_items, items) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent)
-                val textView = view.findViewById<TextView>(android.R.id.text1)
-                if (position == 0) {
-                    textView.setTextColor("#4D4D4D".toColorInt()) // Color para la primera opción
-                } else {
-                    textView.setTextColor(Color.WHITE) // Color para las demás opciones
+                return super.getView(position, convertView, parent).apply {
+                    setTextColor(position)
                 }
-                return view
             }
 
             override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getDropDownView(position, convertView, parent)
-                val textView = view.findViewById<TextView>(android.R.id.text1)
-                if (position == 0) {
-                    textView.setTextColor("#4D4D4D".toColorInt()) // Color para la primera opción
-                } else {
-                    textView.setTextColor(Color.WHITE) // Color para las demás opciones
+                return super.getDropDownView(position, convertView, parent).apply {
+                    setTextColor(position)
                 }
-                return view
+            }
+
+            private fun View.setTextColor(position: Int) {
+                findViewById<TextView>(android.R.id.text1).setTextColor(
+                    if (position == PLACEHOLDER_ROLE_POSITION) {
+                        PLACEHOLDER_COLOR.toColorInt()
+                    } else {
+                        Color.WHITE
+                    }
+                )
             }
         }
-        spinner.adapter = adapter
+    }
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+    private fun createSpinnerItemListener(items: List<String>): AdapterView.OnItemSelectedListener {
+        return object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == 0) {
-                    // No se seleccionó ninguna opción válida
-                    isRoleSelected = false
-                    selectedRole = ""
-
-                } else {
-                    // Se seleccionó una opción válida
-                    isRoleSelected = true
-                    selectedRole = items[position]
-                    selectedRolePosition = position
-                }
+                handlePasswordValidationBeforeSpinner()
+                updateRoleSelection(position, items)
+                validateRole()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // No se seleccionó nada
-                isRoleSelected = false
-                selectedRole = ""
+                resetRoleSelection()
+                validateRole()
             }
         }
     }
 
-    // Configuración del botón de registro
-    private fun setupRegisterButton() {
-        val nameInput = findViewById<EditText>(R.id.name_input)
-        val emailInput = findViewById<EditText>(R.id.email_input)
-        val passwordInput = findViewById<EditText>(R.id.password_input)
-        val registerBtn = findViewById<Button>(R.id.register_btn)
-
-        registerBtn.setOnClickListener {
-            registerBtn.isEnabled = false // Deshabilitar el botón para evitar múltiples clics
-            val name = nameInput.text.toString().trim()
-            val email = emailInput.text.toString().trim()
-            val password = passwordInput.text.toString().trim()
-
-            if (!validateInputs(name, email, password)) {
-                registerBtn.isEnabled = true // Rehabilitar el botón si hay un error
-                return@setOnClickListener
-            }
-
-            val registerRequest = RegisterRequest(
-                name = name,
-                email = email,
-                password = password,
-                role = selectedRole.uppercase()
-            )
-            registerUser(registerRequest, registerBtn)
+    private fun handlePasswordValidationBeforeSpinner() {
+        if (passwordInput.hasFocus()) {
+            passwordInput.clearFocus()
+            validatePassword(passwordInput.text.toString().trim())
         }
+    }
+
+    private fun updateRoleSelection(position: Int, items: List<String>) {
+        if (position == PLACEHOLDER_ROLE_POSITION) {
+            resetRoleSelection()
+        } else {
+            isRoleSelected = true
+            selectedRole = items[position]
+            selectedRolePosition = position
+        }
+    }
+
+    private fun resetRoleSelection() {
+        isRoleSelected = false
+        selectedRole = ""
+        selectedRolePosition = PLACEHOLDER_ROLE_POSITION
+    }
+
+    private fun setupRegisterButton() {
+        registerButton.setOnClickListener {
+            handleRegisterButtonClick()
+        }
+    }
+
+    private fun setupInputValidation() {
+        setupNameInputValidation()
+        setupEmailInputValidation()
+        setupPasswordInputValidation()
+    }
+
+    private fun setupNameInputValidation() {
+        nameInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                hideError(nameError)
+            } else {
+                validateName(nameInput.text.toString().trim())
+            }
+        }
+    }
+
+    private fun setupEmailInputValidation() {
+        emailInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                hideError(emailError)
+            } else {
+                validateEmail(emailInput.text.toString().trim())
+                validatePreviousFieldIfNotEmpty(nameInput) { validateName(it) }
+            }
+        }
+    }
+
+    private fun setupPasswordInputValidation() {
+        passwordInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                hideError(passwordError)
+            } else {
+                validatePassword(passwordInput.text.toString().trim())
+                validatePreviousFieldIfNotEmpty(emailInput) { validateEmail(it) }
+                validatePreviousFieldIfNotEmpty(nameInput) { validateName(it) }
+            }
+        }
+    }
+
+    private fun validatePreviousFieldIfNotEmpty(input: EditText, validator: (String) -> Boolean) {
+        if (input.text.isNotEmpty()) {
+            validator(input.text.toString().trim())
+        }
+    }
+
+    private fun handleRegisterButtonClick() {
+        val userData = getUserInputData()
+        if (!validateAllInputs(userData)) {
+            return
+        }
+
+        showLoadingState()
+        val registerRequest = createRegisterRequest(userData)
+        registerUser(registerRequest)
+    }
+
+    private fun getUserInputData(): UserInput {
+        return UserInput(
+            name = nameInput.text.toString().trim(),
+            email = emailInput.text.toString().trim(),
+            password = passwordInput.text.toString().trim(),
+            role = selectedRole
+        )
+    }
+
+    private fun createRegisterRequest(userData: UserInput): RegisterRequest {
+        return RegisterRequest(
+            name = userData.name,
+            email = userData.email,
+            password = userData.password,
+            role = userData.role.uppercase()
+        )
+    }
+
+    private fun disableRegisterButton() {
+        registerButton.isEnabled = false
+    }
+
+    private fun enableRegisterButton() {
+        registerButton.isEnabled = true
+    }
+    
+    // Métodos para manejar el estado de loading
+    private fun showLoadingState() {
+        disableRegisterButton()
+        loadingProgress.visibility = View.VISIBLE
+        loadingText.visibility = View.VISIBLE
+        loadingText.text = getString(R.string.loading_registering_user)
+    }
+    
+    private fun hideLoadingState() {
+        enableRegisterButton()
+        loadingProgress.visibility = View.GONE
+        loadingText.visibility = View.GONE
     }
 
     // Validación de entradas
-    private fun validateInputs(name: String, email: String, password: String): Boolean {
-        if (name.isEmpty()) {
-            showToast("Por favor, ingresa tu nombre.")
-            return false
+    private fun validateAllInputs(userData: UserInput): Boolean {
+        clearAllErrors()
+        
+        val validationResults = listOf(
+            validateName(userData.name),
+            validateEmail(userData.email),
+            validatePassword(userData.password),
+            validateRole()
+        )
+        
+        return validationResults.all { it }
+    }
+
+    // Validaciones individuales
+    private fun validateName(name: String): Boolean {
+        val errorMessage = when {
+            name.isEmpty() -> getString(R.string.error_name_empty)
+            name.any { it.isDigit() } -> getString(R.string.error_name_numbers)
+            name.length < MIN_NAME_LENGTH -> getString(R.string.error_name_too_short, MIN_NAME_LENGTH)
+            !name.all { it.isLetter() || it.isWhitespace() } -> getString(R.string.error_name_invalid_chars)
+            else -> return showValidField(nameError)
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            showToast("Por favor, ingresa un email válido.")
-            return false
+        return showErrorField(nameError, errorMessage)
+    }
+
+    private fun validateEmail(email: String): Boolean {
+        val errorMessage = when {
+            email.isEmpty() -> getString(R.string.error_email_empty)
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> getString(R.string.error_email_invalid)
+            else -> return showValidField(emailError)
         }
-        if (password.length < 16) {
-            showToast("La contraseña debe tener al menos 16 caracteres.")
-            return false
+        return showErrorField(emailError, errorMessage)
+    }
+
+    private fun validatePassword(password: String): Boolean {
+        if (password.isEmpty()) {
+            return showErrorField(passwordError, getString(R.string.error_password_empty))
         }
-        if (!isRoleSelected || selectedRolePosition == 0) {
-            showToast("Por favor, selecciona un rol válido.")
-            return false
+
+        val errors = mutableListOf<String>()
+        
+        if (password.length < MIN_PASSWORD_LENGTH) {
+            errors.add(getString(R.string.error_password_length, MIN_PASSWORD_LENGTH))
         }
+        
+        if (!password.any { it.isUpperCase() }) {
+            errors.add(getString(R.string.error_password_uppercase))
+        }
+        
+        if (!password.any { !it.isLetterOrDigit() }) {
+            errors.add(getString(R.string.error_password_special))
+        }
+        
+        return if (errors.isNotEmpty()) {
+            showErrorField(passwordError, errors.joinToString("\n"))
+        } else {
+            showValidField(passwordError)
+        }
+    }
+
+    private fun validateRole(): Boolean {
+        return if (!isRoleSelected || selectedRolePosition == PLACEHOLDER_ROLE_POSITION) {
+            showErrorField(roleError, getString(R.string.error_role_empty))
+        } else {
+            showValidField(roleError)
+        }
+    }
+
+    // Métodos de utilidad para mostrar errores
+    private fun showErrorField(errorTextView: TextView, message: String): Boolean {
+        showError(errorTextView, message)
+        return false
+    }
+
+    private fun showValidField(errorTextView: TextView): Boolean {
+        hideError(errorTextView)
         return true
     }
 
+    // Mostrar error en un TextView específico
+    private fun showError(errorTextView: TextView, message: String) {
+        errorTextView.text = message
+        errorTextView.visibility = View.VISIBLE
+    }
+
+    // Ocultar error de un TextView específico
+    private fun hideError(errorTextView: TextView) {
+        errorTextView.text = ""
+        errorTextView.visibility = View.GONE
+    }
+
+    // Limpiar todos los errores
+    private fun clearAllErrors() {
+        hideError(nameError)
+        hideError(emailError)
+        hideError(passwordError)
+        hideError(roleError)
+    }
+
     // Registro del usuario
-    private fun registerUser(registerRequest: RegisterRequest, registerBtn: Button) {
+    private fun registerUser(registerRequest: RegisterRequest) {
         lifecycleScope.launch {
             try {
-                val response = withContext(Dispatchers.IO) { service.createUser(registerRequest) }
-                if (response.isSuccessful) {
-                    showToast("Usuario registrado correctamente.")
-                    navigateToLogin()
-                } else {
-                    showToast("Error al registrar usuario.")
-                    registerBtn.isEnabled = true // Rehabilitar el botón en caso de error
+                val response = withContext(Dispatchers.IO) { 
+                    apiService.createUser(registerRequest) 
                 }
+                handleRegistrationResponse(response.isSuccessful)
             } catch (_: Exception) {
-                showToast("Error de red.")
-                registerBtn.isEnabled = true // Rehabilitar el botón en caso de error
+                handleRegistrationError(getString(R.string.error_network))
             }
         }
+    }
+    
+    private fun handleRegistrationResponse(isSuccessful: Boolean) {
+        hideLoadingState()
+        if (isSuccessful) {
+            showToast(getString(R.string.success_register))
+            navigateToLogin()
+        } else {
+            showToast(getString(R.string.error_register))
+        }
+    }
+    
+    private fun handleRegistrationError(message: String) {
+        hideLoadingState()
+        showToast(message)
     }
 
     // Navegación a la pantalla de inicio de sesión
@@ -205,5 +459,4 @@ class RegisterActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
 }

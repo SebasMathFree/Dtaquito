@@ -92,8 +92,12 @@ class MainActivity : AppCompatActivity() {
         return prefs.getString("role_type", "PLAYER") ?: "PLAYER"
     }
 
-    // --- Métodos para actualización instantánea de textos ---
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 
+    // --- Métodos para actualización instantánea de textos ---
+    
     fun updateAllFragmentsTexts() {
         // Actualiza los textos de todos los fragments visibles
         supportFragmentManager.fragments.forEach { fragment ->
