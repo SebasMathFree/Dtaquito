@@ -11,8 +11,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
     id("com.google.devtools.ksp")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.appdistribution")
+    //id("com.google.gms.google-services")
+    //id("com.google.firebase.appdistribution")
 }
 
 android {
@@ -78,16 +78,16 @@ java {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
-firebaseAppDistribution {
-    releaseNotesFile = "nota.txt"
-    testers = "sebaditas231@gmail.com, henrycenturion1204@gmail.com, johnatencio14@gmail.com, sebastianfrisancho1@gmail.com"
-    serviceCredentialsFile = "clave-servicio.json"
-}
+//firebaseAppDistribution {
+//    releaseNotesFile = "nota.txt"
+//    testers = "sebaditas231@gmail.com, henrycenturion1204@gmail.com, johnatencio14@gmail.com, sebastianfrisancho1@gmail.com"
+//    serviceCredentialsFile = "clave-servicio.json"
+//}
 
 dependencies {
     implementation(libs.kotlin.stdlib)
-    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
-    implementation("com.google.firebase:firebase-analytics")
+    //implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    //implementation("com.google.firebase:firebase-analytics")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")

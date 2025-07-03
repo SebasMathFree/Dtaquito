@@ -18,7 +18,6 @@ class GameRoomFragment : Fragment() {
 
     private lateinit var service: PlaceHolder
     private lateinit var recycler: RecyclerView
-    private lateinit var createRoomBtn: Button
     private var sportType: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,17 +40,10 @@ class GameRoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = view.findViewById(R.id.recyclerView)
-        createRoomBtn = view.findViewById(R.id.create_room_btn)
-
         recycler.layoutManager = LinearLayoutManager(requireContext())
         getAllRooms()
 
-        createRoomBtn.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, CreateRoomFragment())
-                .addToBackStack(null)
-                .commit()
-        }
+
     }
 
     private fun getAllRooms() {
