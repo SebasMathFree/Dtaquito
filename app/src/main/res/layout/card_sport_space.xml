@@ -54,5 +54,19 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
+
+        <!-- Botón de Reservar -->
+        <Button
+            android:id="@+id/btnReservar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Reservar"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:padding="10dp"
+            android:elevation="5dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

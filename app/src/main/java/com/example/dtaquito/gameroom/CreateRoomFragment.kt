@@ -50,6 +50,8 @@ class CreateRoomFragment : Fragment() {
         val timeInput = view.findViewById<EditText>(R.id.time_input)
         val endTimeInput = view.findViewById<EditText>(R.id.endTime_input)
         val createBtn = view.findViewById<Button>(R.id.create_btn)
+        val sportSpaceId = arguments?.getInt("sportSpaceId", -1) ?: -1
+        Log.d("sportSpaceId", "Received sportSpaceId: $sportSpaceId")
 
         dateInput.setOnClickListener { showDatePickerDialog(dateInput) }
         timeInput.setOnClickListener { showTimePickerDialog(timeInput) }
