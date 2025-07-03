@@ -7,9 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
 
-class ChatAdapter : RecyclerView.Adapter<ChatViewHolder>() {
+class ChatAdapter(private val myUserId: Int) : RecyclerView.Adapter<ChatViewHolder>() {
 
     private val messages = mutableListOf<ChatMessage>()
+
+    companion object {
+        private const val VIEW_TYPE_MY_MESSAGE = 1
+        private const val VIEW_TYPE_OTHER_MESSAGE = 2
+    }
 
     fun setMessages(newMessages: List<ChatMessage>) {
         messages.clear()
@@ -19,12 +24,21 @@ class ChatAdapter : RecyclerView.Adapter<ChatViewHolder>() {
 
     fun addMessage(message: ChatMessage) {
         messages.add(message)
-       notifyItemInserted(messages.size - 1)
+        notifyItemInserted(messages.size - 1)
         Log.d("ChatAdapter", "addMessage: $message")
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return if (messages[position].userId == myUserId) VIEW_TYPE_MY_MESSAGE else VIEW_TYPE_OTHER_MESSAGE
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_message, parent, false)
+        val layout = if (viewType == VIEW_TYPE_MY_MESSAGE) {
+            R.layout.item_chat_message_mine
+        } else {
+            R.layout.item_chat_message_other
+        }
+        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
         return ChatViewHolder(view)
     }
 

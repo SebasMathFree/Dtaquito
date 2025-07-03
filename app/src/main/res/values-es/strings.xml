@@ -131,4 +131,5 @@
     <string name="show_password">Mostrar contraseña</string>
     <string name="hide_password">Ocultar contraseña</string>
     <string name="error_password_too_short">La contraseña debe tener al menos 6 caracteres.</string>
+    <string name="user">Usuario</string>
 </resources>

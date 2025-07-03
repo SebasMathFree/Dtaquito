@@ -8,14 +8,13 @@ import com.example.dtaquito.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class  ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
     private val userNameTextView: TextView = itemView.findViewById(R.id.userNameTextView)
     private val timestampTextView: TextView = itemView.findViewById(R.id.timestampTextView)
 
     fun bind(message: ChatMessage) {
         val userName = message.userName?.uppercase() ?: "USUARIO"
-        android.util.Log.d("ChatViewHolder", "userName recibido: ${message.userName}")
         userNameTextView.text = "$userName:"
         messageTextView.text = message.content
         timestampTextView.text = formatDate(message.createdAt)

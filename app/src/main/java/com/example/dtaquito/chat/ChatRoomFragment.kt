@@ -6,7 +6,6 @@ import Beans.playerList.Player
 import Interface.PlaceHolder
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -14,8 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,10 +30,6 @@ import okhttp3.WebSocketListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 class ChatRoomFragment : Fragment() {
 
@@ -45,6 +40,7 @@ class ChatRoomFragment : Fragment() {
     private var webSocket: WebSocket? = null
     private var gameRoomId: Int = -1
     private lateinit var prefs: SharedPreferences
+    private var shouldAutoScroll = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,13 +73,28 @@ class ChatRoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chatView = view.findViewById(R.id.chatView)
-        chatAdapter = ChatAdapter()
-        chatView.layoutManager = LinearLayoutManager(requireContext())
+        chatAdapter = ChatAdapter(userId)
+
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.stackFromEnd = true
+        chatView.layoutManager = layoutManager
         chatView.adapter = chatAdapter
 
-        val sendButton = view.findViewById<Button>(R.id.sendButton)
+        // Detectar cuando el usuario hace scroll manual
+        chatView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                val totalItems = chatAdapter.itemCount
+
+                // Si el usuario no está al final, no hacer auto-scroll
+                shouldAutoScroll = lastVisibleItem >= totalItems - 1
+            }
+        })
+
+        val sendButton = view.findViewById<ImageButton>(R.id.sendButton)
         val messageInput = view.findViewById<EditText>(R.id.messageInput)
-        //bottomNavigationView = view.findViewById(R.id.bottom_navigation)
 
         if (gameRoomId != -1) {
             fetchMessages(gameRoomId)
@@ -95,23 +106,9 @@ class ChatRoomFragment : Fragment() {
         sendButton.setOnClickListener {
             val message = messageInput.text.toString()
             if (message.isNotEmpty()) {
-                val now = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-                    .apply { timeZone = TimeZone.getTimeZone("America/Lima") }
-                    .format(Date())
-                val localMsg = ChatMessage(
-                    content   = message,
-                    userId    = userId,
-                    userName  = prefs.getString("user_name", "USUARIO") ?: "USUARIO",
-                    createdAt = now,
-                    roomId = gameRoomId
-                )
-
-                //chatAdapter.addMessage(localMsg)
-                chatView.scrollToPosition(chatAdapter.itemCount - 1)
-
                 sendMessage(gameRoomId, userId, message)
-
                 messageInput.text.clear()
+                shouldAutoScroll = true // Permitir auto-scroll cuando el usuario envía mensaje
             }
         }
 
@@ -121,20 +118,12 @@ class ChatRoomFragment : Fragment() {
                 if (message.isNotEmpty()) {
                     sendMessage(gameRoomId, userId, message)
                     messageInput.text.clear()
-                    chatView.scrollToPosition(chatAdapter.itemCount - 1)
+                    shouldAutoScroll = true
                 }
                 return@OnEditorActionListener true
             }
             false
         })
-
-        chatView.viewTreeObserver.addOnGlobalLayoutListener {
-            if (chatAdapter.itemCount > 0) {
-                chatView.scrollToPosition(chatAdapter.itemCount - 1)
-            }
-            val rect = Rect()
-            chatView.getWindowVisibleDisplayFrame(rect)
-        }
     }
 
     override fun onStart() {
@@ -180,6 +169,10 @@ class ChatRoomFragment : Fragment() {
                     response.body()?.let { messages ->
                         Log.d("ChatRoomFragment", "Messages for room $roomId: $messages")
                         chatAdapter.setMessages(messages)
+                        // Solo hacer scroll al cargar mensajes iniciales
+                        if (messages.isNotEmpty()) {
+                            chatView.scrollToPosition(chatAdapter.itemCount - 1)
+                        }
                     } ?: run {
                         Log.e("ChatRoomFragment", "Response body is null")
                         context?.showToast("Failed to fetch messages")
@@ -219,7 +212,7 @@ class ChatRoomFragment : Fragment() {
     }
     private fun setupWebSocket(roomId: Int) {
         if (webSocket != null) return
-        //fetchMessages(roomId)
+
         val request = Request.Builder()
             .url(RetrofitClient.CHAT_URL)
             .build()
@@ -248,12 +241,14 @@ class ChatRoomFragment : Fragment() {
                 Log.d("WebSocket", "Message received: $text")
                 try {
                     val chatMessage = gson.fromJson(text, ChatMessage::class.java)
-                    //if (chatMessage.userId == userId) return
 
                     activity?.runOnUiThread {
                         if (isAdded) {
                             chatAdapter.addMessage(chatMessage)
-                            chatView.scrollToPosition(chatAdapter.itemCount - 1)
+                            // Solo hacer auto-scroll si el usuario está al final del chat
+                            if (shouldAutoScroll) {
+                                chatView.scrollToPosition(chatAdapter.itemCount - 1)
+                            }
                         }
                     }
                 } catch (e: Exception) {
