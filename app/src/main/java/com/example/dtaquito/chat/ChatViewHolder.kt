@@ -14,8 +14,8 @@ class  ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val timestampTextView: TextView = itemView.findViewById(R.id.timestampTextView)
 
     fun bind(message: ChatMessage) {
-        val userName = message.userName?.uppercase() ?: "USUARIO"
-        userNameTextView.text = "$userName:"
+        val userName = message.userName.uppercase()
+        userNameTextView.text = userName
         messageTextView.text = message.content
         timestampTextView.text = formatDate(message.createdAt)
     }

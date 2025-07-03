@@ -132,6 +132,8 @@
     <string name="hide_password">Hide password</string>
     <string name="error_password_too_short">Password must be at least 6 characters.</string>
     <string name="user">User</string>
+    <string name="date">Date</string>
+    <string name="message">Message</string>
 
 
 </resources>
