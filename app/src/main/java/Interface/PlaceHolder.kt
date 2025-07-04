@@ -67,6 +67,9 @@ interface PlaceHolder {
     @GET("api/v1/sport-spaces/my-space")
     fun getSportSpacesByUserId(): Call<List<SportSpace>>
 
+    @GET("api/v1/sport-spaces/{id}")
+    fun getSportSpaceById(@Path("id") id: Int): Call<SportSpace>
+
     @Multipart
     @POST("api/v1/sport-spaces/create")
     fun createSportSpace(
