@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#201E1E"
-    tools:context=".gameroom.CreateRoomFragment">
+    tools:context=".reservation.CreateReservationFragment">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/righteous"
-        android:text="Create Room"
+        android:text="Crear Reserva"
         android:textAlignment="center"
         android:textColor="#065B28"
         android:textSize="35sp" />

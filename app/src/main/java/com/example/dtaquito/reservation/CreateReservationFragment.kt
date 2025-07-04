@@ -1,4 +1,4 @@
-package com.example.dtaquito.gameroom
+package com.example.dtaquito.reservation
 
 import Beans.availability.AvailabilityResponse
 import Beans.reservations.ReservationRequest
@@ -9,19 +9,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.dtaquito.R
-import com.example.dtaquito.time.DatePickerFragment
-import com.example.dtaquito.time.TimePickerFragment
 import network.RetrofitClient
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.toString
 
-class CreateRoomFragment : Fragment() {
+class CreateReservationFragment : Fragment() {
 
     private lateinit var service: PlaceHolder
     private lateinit var roomNameInput: EditText
@@ -140,7 +141,8 @@ class CreateRoomFragment : Fragment() {
     }
 
     private fun loadAvailability(sportSpaceId: Int) {
-        service.getSportSpaceAvailability(sportSpaceId).enqueue(object : Callback<AvailabilityResponse> {
+        service.getSportSpaceAvailability(sportSpaceId).enqueue(object :
+            Callback<AvailabilityResponse> {
             override fun onResponse(call: Call<AvailabilityResponse>, response: Response<AvailabilityResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     val availability = response.body()!!

@@ -11,7 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
-import com.example.dtaquito.gameroom.CreateRoomFragment
+import com.example.dtaquito.reservation.CreateReservationFragment
 import com.example.dtaquito.utils.loadImageFromUrl
 
 class SportSpacesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -48,17 +48,17 @@ class SportSpacesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         if (role == "PLAYER") {
             btnReservar.visibility = View.VISIBLE
             btnReservar.setOnClickListener {
-                val createRoomFragment = CreateRoomFragment()
+                val createReservationFragment = CreateReservationFragment()
 
                 // Pasar el ID del espacio deportivo al fragmento de crear reserva
                 val bundle = Bundle()
                 bundle.putInt("sportSpaceId", sportSpace.id)
-                createRoomFragment.arguments = bundle
+                createReservationFragment.arguments = bundle
 
                 // Navegar al fragmento de crear reserva
                 val activity = context as FragmentActivity
                 activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, createRoomFragment)
+                    .replace(R.id.fragment_container, createReservationFragment)
                     .addToBackStack(null)
                     .commit()
             }
