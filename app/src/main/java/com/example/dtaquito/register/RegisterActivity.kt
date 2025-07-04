@@ -235,6 +235,20 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupNameInputValidation() {
+        // Validación en tiempo real
+        nameInput.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: android.text.Editable?) {
+                if (s != null && s.isNotEmpty()) {
+                    validateName(s.toString().trim())
+                } else {
+                    hideError(nameError)
+                }
+            }
+        })
+
+        // Mantener también el focus listener
         nameInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 hideError(nameError)
@@ -245,6 +259,20 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupEmailInputValidation() {
+        // Validación en tiempo real
+        emailInput.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: android.text.Editable?) {
+                if (s != null && s.isNotEmpty()) {
+                    validateEmail(s.toString().trim())
+                } else {
+                    hideError(emailError)
+                }
+            }
+        })
+
+        // Mantener también el focus listener
         emailInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 hideError(emailError)
@@ -256,6 +284,20 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupPasswordInputValidation() {
+        // Validación en tiempo real
+        passwordInput.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: android.text.Editable?) {
+                if (s != null && s.isNotEmpty()) {
+                    validatePassword(s.toString().trim())
+                } else {
+                    hideError(passwordError)
+                }
+            }
+        })
+
+        // Mantener también el focus listener
         passwordInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 hideError(passwordError)
