@@ -4,6 +4,7 @@ import Beans.auth.forgotPassword.ForgotPasswordRequest
 import Beans.auth.login.LoginRequest
 import Beans.auth.login.LoginResponse
 import Beans.auth.register.RegisterRequest
+import Beans.availability.AvailabilityResponse
 import Beans.chat.ChatMessage
 import Beans.chat.MessageRecieve
 import Beans.playerList.Player
@@ -37,15 +38,15 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PlaceHolder {
-
-    @POST("api/v1/users/sign-up")
-    suspend fun createUser(@Body registerRequest: RegisterRequest): Response<UserProfile>
-
+    // Authentication
     @POST("api/v1/authentication/sign-in")
     suspend fun loginUser(@Body loginRequest: LoginRequest): Response<LoginResponse>
 
     @POST("api/v1/authentication/log-out")
     fun logOutUser(): Call<Void>
+
+    @POST("api/v1/users/sign-up")
+    suspend fun createUser(@Body registerRequest: RegisterRequest): Response<UserProfile>
 
     @GET("api/v1/users/me")
     suspend fun getUserId(): Response<UserProfile>
@@ -59,11 +60,15 @@ interface PlaceHolder {
     @PUT("api/v1/users/name")
     fun updateName(@Body nameRequest: UpdateNameRequest): Call<ResponseBody>
 
+    // Sport Spaces
     @GET("api/v1/sport-spaces/all")
     fun getAllSportSpaces(): Call<List<SportSpace>>
 
     @GET("api/v1/sport-spaces/my-space")
     fun getSportSpacesByUserId(): Call<List<SportSpace>>
+
+    @GET("api/v1/sport-spaces/{id}")
+    fun getSportSpaceById(@Path("id") id: Int): Call<SportSpace>
 
     @Multipart
     @POST("api/v1/sport-spaces/create")
@@ -81,21 +86,15 @@ interface PlaceHolder {
         @Part("longitude") longitude: RequestBody
     ): Call<ResponseBody>
 
+    @GET("api/v1/sport-spaces/{id}/availability")
+    fun getSportSpaceAvailability(@Path("id") id: Int): Call<AvailabilityResponse>
+    
+    // Game Rooms
     @GET("api/v1/rooms/all")
     fun getAllRooms(): Call<List<GameRoom>>
 
     @GET("api/v1/rooms/{id}")
     fun getRoomById(@Path("id") id: Int): Call<GameRoom>
-
-    @FormUrlEncoded
-    @POST("api/v1/rooms/create")
-    fun createRoom(
-        @Field("creatorId") creatorId: Long,
-        @Field("sportSpaceId") sportSpaceId: Long,
-        @Field("day") day: String,
-        @Field("openingDate") openingDate: String,
-        @Field("roomName") roomName: String
-    ): Call<GameRoom>
 
     //Reservations
     @POST("/api/v1/reservations/create")
@@ -106,6 +105,7 @@ interface PlaceHolder {
     @GET("/api/v1/reservations/my-reservations")
     fun getMyReservations(): Call<List<Reservation>>
 
+    //player-list
     @POST("/api/v1/player-lists/join/{roomId}")
     fun joinRoom(
         @Path("roomId") roomId: Int
@@ -124,12 +124,14 @@ interface PlaceHolder {
         @Path("roomId") roomId: Int
     ): Call<Void>
 
+    //subscriptions
     @GET("api/v1/subscriptions")
     fun getCurrentSubscription(): Call<Suscriptions>
 
     @PUT("api/v1/subscriptions/upgrade")
     fun upgradeSubscription(@Query("newPlanType") newPlanType: String): Call<ResponseBody>
 
+    //chat
     @GET("/api/v1/chat/rooms/{chatRoomId}/messages")
     fun getMessages(@Path("chatRoomId") chatRoomId: Int): Call<List<ChatMessage>>
 
@@ -140,19 +142,23 @@ interface PlaceHolder {
         @Body chatMessage: MessageRecieve
     ): Call<Void>
 
+    //password recovery
     @POST("/api/v1/recover-password/forgot-password")
     suspend fun forgotPassword(@Body request: ForgotPasswordRequest): Response<ResponseBody>
 
+    //bank transfer
     @POST("/api/v1/bank-transfer/create")
     suspend fun createBankTransfer(@Body ticket: CreateTicketRequest): Response<Void>
 
     @GET("api/v1/bank-transfer/owner")
     suspend fun getBankTransfers(): List<Tickets>
+
     //deposits
     @POST("/api/v1/deposit/create-deposit")
     fun createDeposit(
         @Query("amount") amount: Int
     ): Call<ResponseBody>
+
     //qr
     @GET("api/v1/reservations/generate-qr-session")
     fun generateQrToken(@Query("reservationId") reservationId: Int): Call<Map<String, String>>

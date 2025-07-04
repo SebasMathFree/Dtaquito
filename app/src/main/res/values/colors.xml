@@ -6,8 +6,11 @@
     <color name="silver">#C0C0C0</color>
     <color name="gold">#ECBD00</color>
     <color name="green">#4CAF50</color>
-    <color name="titles">#246505</color>
+    <color name="titles">#B4FFD8</color>
+    <color name="subtitles">#B4FFD8</color>
     <color name="background">#201E1E</color>
     <color name="secondaryTextColor">#333333</color>
     <color name="tertiaryTextColor">#888888</color>
+    <color name="selected_tab_color">#269454</color>
+    <color name="unselected_tab_color">#043918</color>
 </resources>
