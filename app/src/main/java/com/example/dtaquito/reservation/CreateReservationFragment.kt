@@ -193,9 +193,9 @@ class CreateReservationFragment : Fragment() {
 
         // Por defecto, mostrar la pestaña de reserva
 // Por defecto, mostrar la pestaña de reserva
-        detailsContainer.visibility = View.GONE
-        reservationContainer.visibility = View.VISIBLE
-        view.findViewById<View>(R.id.icons_container).visibility = View.VISIBLE // Asegurar que los iconos estén visibles
+        detailsContainer.visibility = View.VISIBLE
+        reservationContainer.visibility = View.GONE
+        view.findViewById<View>(R.id.icons_container).visibility = View.GONE// Asegurar que los iconos estén visibles
 
         // Configurar spinner
         typeReservationSpinner = view.findViewById(R.id.typeReservation_spinner)
@@ -229,25 +229,23 @@ class CreateReservationFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     val sportSpace = response.body()!!
 
-                    // Obtener vista de forma segura
+                    // Cargar imagen
                     val imageView = view?.findViewById<ImageView>(R.id.imageSportSpace)
-
-                    // Llenar los campos de detalles
-                    view?.findViewById<TextView>(R.id.sport_space_name)?.text = sportSpace.name
-                    view?.findViewById<TextView>(R.id.sport_space_description)?.text = sportSpace.description
-                    view?.findViewById<TextView>(R.id.sport_space_price)?.text = "Precio: $${sportSpace.price}"
-                    view?.findViewById<TextView>(R.id.sport_space_address)?.text = "Dirección: ${sportSpace.address}"
-                    view?.findViewById<TextView>(R.id.sport_space_hours)?.text =
-                        "Horario: ${sportSpace.openTime} - ${sportSpace.closeTime}"
-                    view?.findViewById<TextView>(R.id.sport_space_gamemode)?.text =
-                        "Modo de juego: ${sportSpace.gamemodeType}"
-
-                    // Cargar imagen solo si imageView no es nulo
                     imageView?.let {
                         Glide.with(requireContext())
                             .load(sportSpace.imageUrl)
                             .into(it)
                     }
+
+                    // Actualizar información en la pestaña de detalles
+                    view?.findViewById<TextView>(R.id.sport_space_name)?.text = sportSpace.name
+                    view?.findViewById<TextView>(R.id.sport_space_description)?.text = sportSpace.description
+                    view?.findViewById<TextView>(R.id.sport_space_price_value)?.text = "S/${sportSpace.price}"
+                    view?.findViewById<TextView>(R.id.sport_space_address_value)?.text = sportSpace.address
+                    view?.findViewById<TextView>(R.id.sport_space_hours_value)?.text = "${sportSpace.openTime} - ${sportSpace.closeTime}"
+                    view?.findViewById<TextView>(R.id.sport_space_gamemode_value)?.text = sportSpace.gamemodeType
+
+                    // Inicializar mapa con ubicación
                     if (sportSpace.latitude != null && sportSpace.longitude != null) {
                         initializeLocationMap(sportSpace.latitude, sportSpace.longitude)
                     } else {

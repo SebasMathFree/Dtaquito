@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#201E1E"
+    android:background="#1D1B1B"
     tools:context=".reservation.CreateReservationFragment">
 
     <!-- Imagen y botones sin cambios -->
@@ -35,8 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Detalles"
-            android:textColor="@color/white"
-            android:background="@color/unselected_tab_color"
+            android:textColor="#FFFFFF"
+            android:background="@color/selected_tab_color"
             android:fontFamily="@font/righteous" />
 
         <Button
@@ -47,7 +47,7 @@
             android:text="Reserva"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:background="@color/selected_tab_color"
+            android:background="@color/unselected_tab_color"
             android:fontFamily="@font/righteous" />
     </LinearLayout>
 
@@ -171,8 +171,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="Selecciona hora de inicio y fin"
-            android:textColor="@color/white"
+            android:text="Selecciona hora de inicio y fin:"
+            android:textColor="@color/titles"
             android:fontFamily="@font/righteous"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/room_name_input"
@@ -185,7 +185,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
             android:contentDescription="Lista de horas disponibles"
+            app:layout_constraintHeight_percent="0.53"
             app:layout_constraintTop_toBottomOf="@id/hours_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -215,7 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Inicio: "
-                android:textColor="@color/white"
+                android:textColor="@color/titles"
                 android:fontFamily="@font/righteous"/>
 
             <TextView
@@ -230,7 +232,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fin: "
-                android:textColor="@color/white"
+                android:textColor="@color/titles"
                 android:fontFamily="@font/righteous"/>
 
             <TextView
@@ -302,7 +304,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/icons_container">
-        <!-- Aquí irá la información del SportSpace -->
+
         <TextView
             android:id="@+id/sport_space_name"
             android:layout_width="match_parent"
@@ -310,7 +312,7 @@
             android:text="Nombre del espacio deportivo"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/titles"
             android:textAlignment="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"/>
@@ -324,48 +326,103 @@
             android:textColor="#FFFFFF"
             android:layout_marginBottom="15dp"/>
 
-        <TextView
-            android:id="@+id/sport_space_price"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Precio: $000"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio: "
+                android:textSize="18sp"
+                android:textColor="@color/subtitles"
+                android:fontFamily="@font/righteous"/>
+
+            <TextView
+                android:id="@+id/sport_space_price_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S/000"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dirección: "
+                android:textSize="18sp"
+                android:textColor="@color/subtitles"
+                android:fontFamily="@font/righteous"/>
+
+            <TextView
+                android:id="@+id/sport_space_address_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Horario: "
+                android:textSize="18sp"
+                android:textColor="@color/subtitles"
+                android:fontFamily="@font/righteous"/>
+
+            <TextView
+                android:id="@+id/sport_space_hours_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modo de juego: "
+                android:textSize="18sp"
+                android:textColor="@color/subtitles"
+                android:fontFamily="@font/righteous"/>
+
+            <TextView
+                android:id="@+id/sport_space_gamemode_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ubicación:"
             android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="10dp"/>
-
-        <TextView
-            android:id="@+id/sport_space_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dirección: Ejemplo de dirección"
-            android:textSize="16sp"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="10dp"/>
-
-        <TextView
-            android:id="@+id/sport_space_hours"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Horario: 9:00 AM - 10:00 PM"
-            android:textSize="16sp"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="10dp"/>
-
-        <TextView
-            android:id="@+id/sport_space_gamemode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Modo de juego: Ejemplo"
-            android:textSize="16sp"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="10dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ubicación"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/subtitles"
+            android:fontFamily="@font/righteous"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"/>
 
