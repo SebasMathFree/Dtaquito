@@ -3,7 +3,6 @@ package com.example.dtaquito.reservation
 import Beans.reservations.Reservation
 import Interface.PlaceHolder
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
-import com.example.dtaquito.qr.QrFragment
 import network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback

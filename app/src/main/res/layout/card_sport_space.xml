@@ -69,28 +69,17 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:layout_marginBottom="8dp" />
-            <!-- Dirección con icono -->
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/txtAddress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/place"
-                    android:layout_marginEnd="8dp"
-                    app:tint="#B3FFFFFF" />
-                <TextView
-                    android:id="@+id/txtAddress"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/address"
-                    android:textSize="14sp"
-                    android:textColor="#B3FFFFFF"
-                    android:lineSpacingExtra="2dp" />
-            </LinearLayout>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/address"
+                android:textSize="14sp"
+                android:textColor="#B3FFFFFF"
+                android:lineSpacingExtra="2dp"
+                app:drawableStartCompat="@drawable/place" />
             <Button
                 android:id="@+id/btnReservar"
                 android:layout_width="match_parent"

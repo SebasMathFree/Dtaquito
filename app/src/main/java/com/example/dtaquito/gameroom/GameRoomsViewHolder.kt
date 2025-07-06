@@ -5,18 +5,16 @@ import Beans.rooms.GameRoom
 import Interface.PlaceHolder
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
-import androidx.fragment.app.FragmentActivity
-import com.example.dtaquito.utils.loadImageFromUrl
+import com.example.dtaquito.utils.showToast
 import network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.example.dtaquito.utils.showToast
 
 class GameRoomsViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val roomName: TextView = view.findViewById(R.id.txtName)

@@ -18,26 +18,25 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.example.dtaquito.BuildConfig
 import com.example.dtaquito.R
 import network.RetrofitClient
 import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import com.example.dtaquito.BuildConfig
-import androidx.core.content.ContextCompat
 import org.maplibre.android.MapLibre
 import org.maplibre.android.WellKnownTileServer
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapView
-import kotlin.text.get
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CreateReservationFragment : Fragment() {
 
