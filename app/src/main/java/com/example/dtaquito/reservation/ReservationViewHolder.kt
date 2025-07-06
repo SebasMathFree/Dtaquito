@@ -2,58 +2,98 @@ package com.example.dtaquito.reservation
 
 import Beans.reservations.Reservation
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dtaquito.R
-import android.graphics.BitmapFactory
-import android.util.Base64
-import android.util.Log
-import com.example.dtaquito.utils.loadImageFromUrl
 
 class ReservationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val imgSportSpace: ImageView = itemView.findViewById(R.id.imgSportSpace)
     val txtName: TextView = itemView.findViewById(R.id.txtName)
     val txtStatus: TextView = itemView.findViewById(R.id.txtStatus)
-    val txtType: TextView = itemView.findViewById(R.id.txtType)
-    val txtDate: TextView = itemView.findViewById(R.id.txtDate)
-    val txtSportSpaceName: TextView = itemView.findViewById(R.id.txtSportSpaceName)
-    val txtStartTime: TextView = itemView.findViewById(R.id.txtStartTime)
-    val txtEndTime: TextView = itemView.findViewById(R.id.txtEndTime)
-    val txtPrice: TextView = itemView.findViewById(R.id.txtPrice)
     val txtGameMode: TextView = itemView.findViewById(R.id.txtGameMode)
-    val qrBtn: Button = itemView.findViewById(R.id.qr_btn)
+    val txtDate: TextView = itemView.findViewById(R.id.txtDate)
+    val txtPrice: TextView = itemView.findViewById(R.id.txtPrice)
+    val txtSportSpaceName: TextView = itemView.findViewById(R.id.txtSportSpaceName)
+    val txtPlace: TextView = itemView.findViewById(R.id.txtPlace)
+    val qrBtn: ImageButton = itemView.findViewById(R.id.qr_btn)
 
     fun render(reservation: Reservation) {
-        // Usar operadores de navegación segura y valores por defecto
-        txtName.text = reservation.name ?: "Sin nombre"
-        txtStatus.text = "Estado: ${reservation.status ?: "Desconocido"}"
-        txtType.text = "Tipo: ${reservation.type ?: "Desconocido"}"
-        txtDate.text = "Fecha: ${reservation.gameDay ?: "No disponible"}"
-        txtStartTime.text = "Hora inicio: ${reservation.startTime ?: "No disponible"}"
-        txtEndTime.text = "Hora fin: ${reservation.endTime ?: "No disponible"}"
 
-        // Manejar sportSpaces
-        if (reservation.sportSpaces != null) {
-            txtSportSpaceName.text = "Espacio: ${reservation.sportSpaces.name ?: "Desconocido"}"
-            txtPrice.text = "Precio: S/.${reservation.sportSpaces.price ?: 0.0}"
-            txtGameMode.text = "Modo: ${reservation.sportSpaces.gamemode ?: "Desconocido"}"
 
-            // Cargar imagen
-            val image = reservation.sportSpaces.image
-            Log.d("ReservationViewHolder", "Image URL: $image")
-            if (image != null && image.isNotEmpty()) {
-                    loadImageFromUrl(image, imgSportSpace)
-            } else {
-                imgSportSpace.setImageResource(R.drawable.default_image)
-            }
-        } else {
-            txtSportSpaceName.text = "Espacio: No disponible"
-            txtPrice.text = "Precio: No disponible"
-            txtGameMode.text = "Modo: No disponible"
-            imgSportSpace.setImageResource(R.drawable.default_image)
+
+        // Título de la reservación
+        txtName.text = reservation.name ?: itemView.context.getString(R.string.no_name)
+
+        // Estado de la reservación con badge
+        val status = reservation.status ?: "Unknown"
+        txtStatus.text = when(status.uppercase()) {
+            "CONFIRMED" -> itemView.context.getString(R.string.confirmed)
+            "PENDING" -> itemView.context.getString(R.string.pending)
+            "CANCELLED" -> itemView.context.getString(R.string.cancelled)
+            else -> status
         }
+
+        // Game mode con formato "Game mode: Football 7"
+        val sportSpace = reservation.sportSpaces
+        val gameMode = when(sportSpace?.gamemode) {
+            "FUTBOL_5" -> itemView.context.getString(R.string.soccer_5)
+            "FUTBOL_7" -> itemView.context.getString(R.string.soccer_7)
+            "FUTBOL_8" -> itemView.context.getString(R.string.soccer_8)
+            "FUTBOL_11" -> itemView.context.getString(R.string.soccer_11)
+            "BILLAR_3" -> itemView.context.getString(R.string.pool_3)
+            else -> sportSpace?.gamemode ?: itemView.context.getString(R.string.not_specified)
+        }
+        txtGameMode.text = itemView.context.getString(
+            R.string.game_mode_format,
+            itemView.context.getString(R.string.game_mode_room),
+            gameMode
+        )
+
+        // Date combinando fecha y horarios "Date: Sun 06/07, 21:00 - 22:00"
+        val gameDay = reservation.gameDay ?: ""
+        val startTime = reservation.startTime ?: ""
+        val endTime = reservation.endTime ?: ""
+
+        // Formatear fecha a formato más legible
+        val formattedDate = try {
+            val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+            val outputFormat = java.text.SimpleDateFormat("EEE dd/MM", java.util.Locale.getDefault())
+            val date = inputFormat.parse(gameDay)
+            val dateString = date?.let { outputFormat.format(it) } ?: gameDay
+            // Capitalizar la primera letra del día de la semana
+            dateString.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+        } catch (e: Exception) {
+            gameDay
+        }
+
+        txtDate.text = itemView.context.getString(
+            R.string.date_format,
+            itemView.context.getString(R.string.date_label),
+            formattedDate,
+            startTime,
+            endTime
+        )
+
+        // Reservation price con formato "Reservation price: 50 créditos"
+        txtPrice.text = itemView.context.getString(
+            R.string.reservation_price_format,
+            itemView.context.getString(R.string.reservation_price_label),
+            sportSpace?.price ?: 0,
+            itemView.context.getString(R.string.credits_room)
+        )
+
+        txtSportSpaceName.text = itemView.context.getString(
+            R.string.sport_space_format,
+            itemView.context.getString(R.string.sport_space_label),
+            sportSpace?.name ?: itemView.context.getString(R.string.no_space)
+        )
+
+        // Place con formato "Place: [dirección completa]"
+        txtPlace.text = itemView.context.getString(
+            R.string.place_format,
+            itemView.context.getString(R.string.place_label),
+            sportSpace?.address ?: itemView.context.getString(R.string.no_address)
+        )
     }
 }

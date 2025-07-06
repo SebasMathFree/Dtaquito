@@ -10,7 +10,6 @@ import Beans.chat.MessageRecieve
 import Beans.playerList.Player
 import Beans.playerList.PlayerList
 import Beans.reservations.Reservation
-import Beans.reservations.ReservationRequest
 import Beans.rooms.GameRoom
 import Beans.sportspaces.SportSpace
 import Beans.suscription.Suscriptions
@@ -99,7 +98,7 @@ interface PlaceHolder {
     //Reservations
     @POST("/api/v1/reservations/create")
     fun createReservation(
-        @Body reservationRequest: ReservationRequest
+        @Body reservationRequest: Reservation
     ): Call<ResponseBody>
 
     @GET("/api/v1/reservations/my-reservations")

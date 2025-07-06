@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         val menu = bottomNav.menu
         when (userRoleType) {
             "PLAYER" -> {
-                menu.findItem(R.id.navigation_home)?.title = getString(R.string.gamerooms)
+                menu.findItem(R.id.navigation_home)?.title = getString(R.string.communityrooms)
                 menu.findItem(R.id.navigation_sportspaces)?.title = getString(R.string.sport_spaces)
                 menu.findItem(R.id.navigation_profile)?.title = getString(R.string.profile)
                 // Agrega aquí los demás ítems si los tienes

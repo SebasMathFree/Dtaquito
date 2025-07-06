@@ -47,12 +47,12 @@
     <string name="credits">Credits</string>
     <string name="profile">Profile</string>
     <string name="add_credits">Add Credits</string>
-    <string name="gamerooms">GameRooms</string>
+    <string name="communityrooms">Community Rooms</string>
     <string name="sport_spaces">Sport Spaces</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="tickets">My Tickets</string>
-    <string name="game_mode_label">Game mode: %1$s</string>
-    <string name="price_label">Price: S/. %1$d</string>
+    <string name="game_mode_label"> ⚽ %1$s</string>
+    <string name="price_label">%1$d credits</string>
     <string name="ticket_number">Ticket #%1$s</string>
     <string name="full_name_label">Full Name: %1$s</string>
     <string name="bank_name_label">Bank: %1$s</string>
@@ -134,6 +134,40 @@
     <string name="user">User</string>
     <string name="date">Date</string>
     <string name="message">Message</string>
+    <string name="view_details">View Details</string>
 
+    <!-- Room card strings -->
+    <string name="game_mode_room">Game mode:</string>
+    <string name="date_label">Date:</string>
+    <string name="advance_label">Advance:</string>
+    <string name="sport_space_label">Sport space:</string>
+    <string name="place_label">Place:</string>
+    <string name="credits_room">credits</string>
+    <string name="no_name">No name</string>
+    <string name="no_space">No space</string>
+    <string name="no_address">No address</string>
+    <string name="not_specified">Not specified</string>
+    <string name="go_to_room">Go to room</string>
+    <string name="delete">Delete</string>
 
+    <!-- Toast messages -->
+    <string name="joined_room">You have joined the room</string>
+    <string name="could_not_join">Could not join the room</string>
+    <string name="error">Error:</string>
+
+    <!-- Room card strings with placeholders -->
+    <string name="game_mode_format">%1$s %2$s</string>
+    <string name="date_format">%1$s %2$s, %3$s - %4$s</string>
+    <string name="advance_format">%1$s %2$d %3$s</string>
+    <string name="sport_space_format">%1$s %2$s</string>
+    <string name="place_format">%1$s %2$s</string>
+
+    <!-- Reservation card strings -->
+    <string name="confirmed">Confirmed</string>
+    <string name="pending">Pending</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="personal">Personal</string>
+    <string name="community">Community</string>
+    <string name="reservation_price_label">Reservation price:</string>
+    <string name="reservation_price_format">%1$s %2$d %3$s</string>
 </resources>

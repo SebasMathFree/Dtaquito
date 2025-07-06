@@ -16,10 +16,11 @@ import com.example.dtaquito.utils.loadImageFromUrl
 
 class SportSpacesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val sportSpaceName: TextView = view.findViewById(R.id.name)
+    private val sportSpaceName: TextView = view.findViewById(R.id.txtTitle)
     private val sportSpaceImage: ImageView = view.findViewById(R.id.imgSportSpace)
-    private val sportSpaceGameMode: TextView = view.findViewById(R.id.txtGameMode)
-    private val sportSpacePrice: TextView = view.findViewById(R.id.txtPrice)
+    private val sportSpaceGameMode: TextView = view.findViewById(R.id.txtTypeBadge)
+    private val sportSpacePrice: TextView = view.findViewById(R.id.txtPriceTag)
+    private val txtAddress: TextView = view.findViewById(R.id.txtAddress)
     private val btnReservar: Button = view.findViewById(R.id.btnReservar)
 
     fun render(sportSpace: SportSpace) {
@@ -29,11 +30,13 @@ class SportSpacesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         sportSpaceName.typeface = typeface
         sportSpaceGameMode.typeface = typeface
         sportSpacePrice.typeface = typeface
+        txtAddress.typeface = typeface
 
         sportSpaceName.text = sportSpace.name
+        txtAddress.text = sportSpace.address
         sportSpaceGameMode.text = context.getString(
             R.string.game_mode_label,
-            sportSpace.gamemodeType.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }
+            getLocalizedGameMode(context, sportSpace.gamemodeType)
         )
         sportSpacePrice.text = context.getString(
             R.string.price_label,
@@ -64,6 +67,17 @@ class SportSpacesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
         } else {
             btnReservar.visibility = View.GONE
+        }
+    }
+    private fun getLocalizedGameMode(context: Context, gamemodeType: String): String {
+        return when (gamemodeType) {
+            "FUTBOL_7" -> context.getString(R.string.soccer_7)
+            "FUTBOL_8" -> context.getString(R.string.soccer_8)
+            "FUTBOL_5" -> context.getString(R.string.soccer_5)
+            "FUTBOL_11" -> context.getString(R.string.soccer_11)
+            "POOL_3" -> context.getString(R.string.pool_3)
+            // Añade más modos según necesites
+            else -> gamemodeType.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }
         }
     }
 }

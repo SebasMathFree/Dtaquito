@@ -1,20 +1,19 @@
 package Beans.reservations
 
-import Beans.blockChain.BlockChain
-import Beans.sportspaces.SportSpaceView
+import Beans.sportspaces.SportSpace
 
 data class Reservation(
     val id: Int? = null,
+    val name: String? = null,
+    val reservationName: String? = null,
     val gameDay: String? = null,
     val startTime: String? = null,
     val endTime: String? = null,
-    val sportSpacesId: Int? = null,
-    val type: String? = null,
-    val reservationName: String? = null,
-    val sportSpace: SportSpaceView? = null,
+    val userId: Int? = null,
     val userName: String? = null,
-    val sportSpaces: SportSpaceView? = null,
-    val name: String? = null,
-    val status: String? = null,
-    val blockChain: BlockChain? = null,
+    val sportSpacesId: Int,
+    val sportSpaces: SportSpace? = null,
+    val sportSpace: SportSpace? = null,
+    val type: String? = null,
+    val status: String? = null
 )

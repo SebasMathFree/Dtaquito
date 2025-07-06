@@ -1,7 +1,7 @@
 package com.example.dtaquito.reservation
 
 import Beans.availability.AvailabilityResponse
-import Beans.reservations.ReservationRequest
+import Beans.reservations.Reservation
 import Beans.sportspaces.SportSpace
 import Interface.PlaceHolder
 import android.app.AlertDialog
@@ -325,7 +325,7 @@ class CreateReservationFragment : Fragment() {
         }
 
         // Crear objeto de solicitud
-        val reservationRequest = ReservationRequest(
+        val reservationRequest = Reservation(
             gameDay = gameDay,
             startTime = startTime,
             endTime = endTime,
