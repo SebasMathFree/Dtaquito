@@ -17,39 +17,58 @@
         android:fontFamily="@font/righteous"
         android:text="@string/what_sport_do_you_want_to_play"
         android:textAlignment="center"
-        android:textColor="#065B28"
-        android:textSize="28sp"
+        android:textColor="#246505"
+        android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
+    <!-- Áreas triangulares (no clickables) -->
+    <com.example.dtaquito.custom.TriangleTopLeftView
+        android:id="@+id/billar_area"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:clickable="false"
+        app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageButton
-            android:id="@+id/pool_img"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="20dp"
-            android:background="@mipmap/billar"
-            android:contentDescription="@string/pool" />
+    <com.example.dtaquito.custom.TriangleBottomRightView
+        android:id="@+id/futbol_area"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="false"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageButton
-            android:id="@+id/soccer_img"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@mipmap/futbol"
-            android:contentDescription="@string/soccer"/>
-    </LinearLayout>
+    <!-- Imágenes diagonales (clickables) -->
+    <com.example.dtaquito.custom.DiagonalBillarImageView
+        android:id="@+id/pool_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/billar"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="@string/pool"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.example.dtaquito.custom.DiagonalFutbolImageView
+        android:id="@+id/soccer_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/futbol"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="@string/soccer"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

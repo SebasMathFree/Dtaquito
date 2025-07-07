@@ -23,7 +23,7 @@
             android:fontFamily="@font/righteous"
             android:text="@string/my_reservations"
             android:textAlignment="center"
-            android:textColor="#065B28"
+            android:textColor="#246505"
             android:textSize="28sp" />
     </LinearLayout>
 

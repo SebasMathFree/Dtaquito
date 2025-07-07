@@ -242,7 +242,7 @@ class CreateReservationFragment : Fragment() {
                     view?.findViewById<TextView>(R.id.sport_space_price_value)?.text = "S/${sportSpace.price}"
                     view?.findViewById<TextView>(R.id.sport_space_address_value)?.text = sportSpace.address
                     view?.findViewById<TextView>(R.id.sport_space_hours_value)?.text = "${sportSpace.openTime} - ${sportSpace.closeTime}"
-                    view?.findViewById<TextView>(R.id.sport_space_gamemode_value)?.text = sportSpace.gamemodeType
+                    view?.findViewById<TextView>(R.id.sport_space_gamemode_value)?.text = formatGameMode(sportSpace.gamemodeType)
 
                     // Inicializar mapa con ubicación
                     if (sportSpace.latitude != null && sportSpace.longitude != null) {
@@ -562,6 +562,16 @@ class CreateReservationFragment : Fragment() {
             .show()
     }
 
+    private fun formatGameMode(gameMode: String): String {
+        return when (gameMode) {
+            "FUTBOL_11" -> "Futbol 11"
+            "FUTBOL_7" -> "Futbol 7"
+            "FUTBOL_8" -> "Futbol 8"
+            "FUTBOL_5" -> "Futbol 5"
+            "BILLAR_3" -> "Billar 3"
+            else -> gameMode // En caso de un valor no reconocido
+        }
+    }
     override fun onStart() {
         super.onStart()
         if (::detailMapView.isInitialized) detailMapView.onStart()
