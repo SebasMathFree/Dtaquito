@@ -1,4 +1,3 @@
-// TriangleTopLeftView.kt
 package com.example.dtaquito.custom
 
 import android.content.Context
@@ -13,10 +12,18 @@ class TriangleTopLeftView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private val paint = Paint().apply {
+    private val fillPaint = Paint().apply {
         color = Color.parseColor("#242424")
         style = Paint.Style.FILL
     }
+
+    private val strokePaint = Paint().apply {
+        color = Color.parseColor("#00FF00") // Verde brillante
+        style = Paint.Style.STROKE
+        strokeWidth = 10f
+        isAntiAlias = true
+    }
+
     private val path = Path()
 
     override fun onDraw(canvas: Canvas) {
@@ -26,6 +33,11 @@ class TriangleTopLeftView @JvmOverloads constructor(
         path.lineTo(width.toFloat(), 0f)
         path.lineTo(0f, height.toFloat())
         path.close()
-        canvas.drawPath(path, paint)
+
+        // Dibujar el relleno
+        canvas.drawPath(path, fillPaint)
+
+        // Dibujar el borde
+        canvas.drawPath(path, strokePaint)
     }
 }

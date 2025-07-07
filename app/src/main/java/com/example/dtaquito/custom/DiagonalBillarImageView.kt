@@ -10,6 +10,17 @@ class DiagonalBillarImageView @JvmOverloads constructor(
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     private val path = Path()
+    private val borderPaint = Paint().apply {
+        color = Color.BLACK
+        style = Paint.Style.STROKE
+        strokeWidth = 12f
+        isAntiAlias = true
+    }
+
+    private val alphaPaint = Paint().apply {
+        alpha = 180 // 70% de opacidad (255 * 0.7 ≈ 180)
+        isAntiAlias = true
+    }
 
     init {
         scaleType = ScaleType.CENTER_CROP
@@ -23,9 +34,21 @@ class DiagonalBillarImageView @JvmOverloads constructor(
         path.lineTo(0f, height.toFloat())
         path.close()
 
+        // Guardar el estado del canvas
         val saveCount = canvas.save()
+
+        // Recortar con la forma triangular
         canvas.clipPath(path)
+
+        // Aplicar opacidad a la imagen
+        canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), alphaPaint)
         super.onDraw(canvas)
+        canvas.restore()
+
+        // Restaurar el canvas original
         canvas.restoreToCount(saveCount)
+
+        // Dibujar el borde
+        canvas.drawPath(path, borderPaint)
     }
 }
