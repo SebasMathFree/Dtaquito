@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import com.example.dtaquito.gameroom.GameRoomFragment
 import com.example.dtaquito.profile.ProfileFragment
 import com.example.dtaquito.reservation.ReservationFragment
-import com.example.dtaquito.sports.SportFragment
 import com.example.dtaquito.sportspace.SportSpaceFragment
 import com.example.dtaquito.subscription.SubscriptionFragment
 import com.example.dtaquito.tickets.TicketFragment
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 prefs.edit { remove("go_to_profile") }
             } else if (savedInstanceState == null && supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
                 if (userRoleType == "PLAYER") {
-                    loadFragment(SportFragment())
+                    loadFragment(GameRoomFragment())
                 } else {
                     loadFragment(SubscriptionFragment())
                 }
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigation() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_home -> loadFragment(SportFragment())
+                R.id.navigation_home -> loadFragment(GameRoomFragment())
                 R.id.navigation_sportspaces -> loadFragment(SportSpaceFragment())
                 R.id.navigation_reservations -> loadFragment(ReservationFragment())
                 R.id.navigation_profile -> loadFragment(ProfileFragment())
