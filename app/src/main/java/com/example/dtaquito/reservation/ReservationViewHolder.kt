@@ -34,6 +34,13 @@ class ReservationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             else -> status
         }
 
+        when(status.uppercase()) {
+            "PENDING" -> txtStatus.setBackgroundResource(R.drawable.status_pending_background)
+            "CONFIRMED" -> txtStatus.setBackgroundResource(R.drawable.status_confirmed_background)
+            "CANCELLED" -> txtStatus.setBackgroundResource(R.drawable.status_cancelled_background)
+            else -> txtStatus.setBackgroundResource(R.drawable.status_confirmed_background)
+        }
+
         // Game mode con formato "Game mode: Football 7"
         val sportSpace = reservation.sportSpaces
         val gameMode = when(sportSpace?.gamemode) {
