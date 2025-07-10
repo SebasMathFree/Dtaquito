@@ -32,6 +32,7 @@ class GameRoomsViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
 
     init {
+        // El listener existente para joinButton
         joinButton.setOnClickListener {
             val context = itemView.context
             val activity = context as? FragmentActivity
@@ -39,6 +40,52 @@ class GameRoomsViewHolder(view: View): RecyclerView.ViewHolder(view) {
                 checkUserRoomStatusAndJoinOrNavigate(currentGameRoom.id, activity)
             }
         }
+
+        // Nuevo listener para el botón de eliminar
+        deleteButton.setOnClickListener {
+            // Obtener el ID de la reservación
+            currentGameRoom.reservation?.id?.let { reservationId ->
+                confirmarYEliminarReservacion(reservationId)
+            } ?: run {
+                itemView.context.showToast("No se puede identificar la reservación")
+            }
+        }
+    }
+
+    private fun confirmarYEliminarReservacion(reservationId: Int) {
+        // Mostrar diálogo de confirmación
+        val builder = android.app.AlertDialog.Builder(itemView.context)
+        builder.setTitle("Confirmar eliminación")
+            .setMessage("¿Estás seguro que deseas eliminar esta reservación? Esta acción no se puede deshacer.")
+            .setPositiveButton("Eliminar") { _, _ ->
+                eliminarReservacion(reservationId)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun eliminarReservacion(reservationId: Int) {
+        service.deleteReservation(reservationId).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    itemView.context.showToast("Reservación eliminada con éxito")
+
+                    // Notificar al fragmento usando otro enfoque
+                    val activity = itemView.context as? FragmentActivity
+                    activity?.supportFragmentManager?.findFragmentById(R.id.fragment_container)?.let { fragment ->
+                        if (fragment is GameRoomFragment) {
+                            fragment.refreshRooms() // Llamar al nuevo método público
+                        }
+                    }
+                } else {
+                    itemView.context.showToast("No se pudo eliminar la reservación: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                itemView.context.showToast("Error: ${t.message}")
+            }
+        })
     }
 
     private fun checkUserRoomStatusAndJoinOrNavigate(roomId: Int, activity: FragmentActivity) {

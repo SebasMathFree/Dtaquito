@@ -187,4 +187,7 @@ class GameRoomFragment : Fragment() {
             }
         })
     }
+    fun refreshRooms() {
+        getAllRooms()
+    }
 }
