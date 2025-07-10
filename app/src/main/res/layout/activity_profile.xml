@@ -107,20 +107,19 @@
             android:textColor="@color/input_text_color"
             android:textColorHint="#4D4D4D" />
 
-        <EditText
+        <TextView
             android:id="@+id/credit_input"
             android:layout_width="300dp"
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/input_text"
-            android:ems="10"
-            android:enabled="false"
-            android:fontFamily="@font/righteous"
-            android:hint="@string/credits"
+            android:text="@string/credits"
+            android:textSize="18sp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
+            android:fontFamily="@font/righteous"
             android:textColor="@color/input_text_color"
-            android:textColorHint="#4D4D4D" />
+            android:gravity="center_vertical" />
 
         <LinearLayout
             android:id="@+id/greenBtns"

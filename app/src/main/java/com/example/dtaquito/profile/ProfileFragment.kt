@@ -48,7 +48,7 @@ class ProfileFragment : Fragment() {
     private lateinit var nameInput: EditText
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
-    private lateinit var creditInput: EditText
+    private lateinit var creditView: TextView
     private lateinit var updateBtn: Button
     private lateinit var addCreditBtn: Button
     private lateinit var logoutBtn: Button
@@ -130,7 +130,7 @@ class ProfileFragment : Fragment() {
         nameInput.hint = getString(R.string.name)
         emailInput.hint = getString(R.string.email)
         passwordInput.hint = getString(R.string.password)
-        creditInput.hint = getString(R.string.credits)
+        creditView.hint = getString(R.string.credits)
     }
 
     private fun initializeViews(view: View) {
@@ -138,7 +138,7 @@ class ProfileFragment : Fragment() {
         nameInput = view.findViewById(R.id.name_input)
         emailInput = view.findViewById(R.id.email_input)
         passwordInput = view.findViewById(R.id.password_input)
-        creditInput = view.findViewById(R.id.credit_input)
+        creditView = view.findViewById(R.id.credit_input)
         updateBtn = view.findViewById(R.id.update_btn)
         addCreditBtn = view.findViewById(R.id.add_credit)
         logoutBtn = view.findViewById(R.id.logout_btn)
@@ -202,8 +202,7 @@ class ProfileFragment : Fragment() {
         emailInput.setText(user.email)
         passwordInput.setText("")
         initialCreditAmount = user.credits
-        creditInput.setText(String.format(Locale.getDefault(), "%.2f", user.credits))
-        creditInput.visibility = View.VISIBLE
+        creditView.text = user.credits.toString()
         addCreditBtn.visibility = if (user.roleType == "PLAYER") View.VISIBLE else View.GONE
     }
 
@@ -237,38 +236,59 @@ class ProfileFragment : Fragment() {
     }
 
     private fun addCredit() {
-        val creditAmount = creditInput.text.toString().toDoubleOrNull()
+        // Crear un EditText para el input del usuario con estilo mejorado
+        val editText = EditText(requireContext())
+        editText.hint = getString(R.string.enter_credit_amount)
+        editText.inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
 
-        if (creditAmount == null || creditAmount <= 0.0) {
-            requireContext().showToast("Please enter a valid credit amount")
-        } else if (creditAmount == initialCreditAmount) {
-            requireContext().showToast("No changes detected in the credit amount")
-        } else {
-            service.createDeposit(creditAmount.toInt()).enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    if (response.isSuccessful) {
-                        response.body()?.string()?.let { responseBody ->
-                            val approvalUrl = extractApprovalUrl(responseBody)
-                            if (approvalUrl != null) {
-                                val intent = Intent(Intent.ACTION_VIEW, approvalUrl.toUri())
-                                startActivity(intent)
-                            } else {
-                                requireContext().showToast("Approval URL not found.")
-                            }
-                        } ?: requireContext().showToast("Response body is null.")
-                    } else {
-                        requireContext().showToast("Failed to add credit")
-                    }
-                }
+        // Aplicar estilo al EditText
+        editText.background = ContextCompat.getDrawable(requireContext(), R.drawable.input_text)
+        editText.setPadding(40, 24, 40, 24)
+        editText.setTextColor(ContextCompat.getColor(requireContext(), R.color.input_text_color))
+        editText.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.input_text_color))
 
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    requireContext().showToast("Error: ${t.message}")
+        AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog)
+            .setTitle(getString(R.string.add_credits))
+            .setMessage(getString(R.string.enter_amount_to_add))
+            .setView(editText)
+            .setPositiveButton(getString(R.string.add)) { _, _ ->
+                val creditAmount = editText.text.toString().toDoubleOrNull()
+
+                if (creditAmount == null || creditAmount <= 0.0) {
+                    requireContext().showToast(getString(R.string.enter_valid_amount))
+                } else {
+                    processDeposit(creditAmount)
                 }
-            })
-        }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+
+    private fun processDeposit(creditAmount: Double) {
+        service.createDeposit(creditAmount.toInt()).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.string()?.let { responseBody ->
+                        val approvalUrl = extractApprovalUrl(responseBody)
+                        if (approvalUrl != null) {
+                            val intent = Intent(Intent.ACTION_VIEW, approvalUrl.toUri())
+                            startActivity(intent)
+                        } else {
+                            requireContext().showToast("Approval URL not found.")
+                        }
+                    } ?: requireContext().showToast("Response body is null.")
+                } else {
+                    requireContext().showToast("Failed to add credit")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                requireContext().showToast("Error: ${t.message}")
+            }
+        })
     }
 
     private fun logout() {

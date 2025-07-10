@@ -47,6 +47,7 @@
     <string name="credits">Credits</string>
     <string name="profile">Profile</string>
     <string name="add_credits">Add Credits</string>
+    <string name="enter_credit_amount">Enter credit amount</string>
     <string name="communityrooms">Community Rooms</string>
     <string name="sport_spaces">Sport Spaces</string>
     <string name="subscriptions">Subscriptions</string>
@@ -171,4 +172,10 @@
     <string name="reservation_price_label">Reservation price:</string>
     <string name="reservation_price_format">%1$s %2$d %3$s</string>
     <string name="chat">CHAT</string>
+
+    <!-- Add Credits Dialog Strings -->
+    <string name="enter_amount_to_add">Enter the amount you want to add:</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_valid_amount">Please enter a valid amount</string>
 </resources>

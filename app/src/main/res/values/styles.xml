@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@color/background</item>
-        <item name="android:textColorPrimary">@color/titles</item>
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:textColorPrimary">@color/green</item>
+        <item name="android:textColorSecondary">@color/input_text_color</item>
+        <item name="android:fontFamily">@font/righteous</item>
+        <item name="colorAccent">@color/green</item>
+        <item name="colorPrimary">@color/green</item>
+    </style>
 
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/button_rounded</item>
+        <item name="android:fontFamily">@font/righteous</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:minWidth">80dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/green</item>
+        <item name="android:background">@drawable/button_outline</item>
+        <item name="android:fontFamily">@font/righteous</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:minWidth">80dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/input_text</item>
+        <item name="android:padding">24dp</item>
+        <item name="android:textColor">@color/input_text_color</item>
+        <item name="android:fontFamily">@font/righteous</item>
     </style>
 </resources>
