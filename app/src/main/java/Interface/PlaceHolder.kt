@@ -102,6 +102,9 @@ interface PlaceHolder {
     @GET("/api/v1/reservations/my-reservations")
     fun getMyReservations(): Call<List<Reservation>>
 
+    @DELETE("/api/v1/reservations/{id}")
+    fun deleteReservation(@Path("id") id: Int): Call<Void>
+
     //player-list
     @POST("/api/v1/player-lists/join/{roomId}")
     fun joinRoom(
