@@ -10,11 +10,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
+        <!-- Título - altura fija -->
         <TextView
             android:id="@+id/roomName"
             android:layout_width="match_parent"
@@ -26,125 +26,209 @@
             android:textColor="#065B28"
             android:textSize="50sp"
             android:textStyle="bold" />
+        <LinearLayout
+            android:id="@+id/buttonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Detalles"
+                android:textColor="#FFFFFF"
+                android:background="@color/selected_tab_color"
+                android:fontFamily="@font/righteous" />
+
+            <Button
+                android:id="@+id/btnPlayers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Jugadores"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:background="@color/unselected_tab_color"
+                android:fontFamily="@font/righteous" />
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="8dp"
-            android:background="#8ACC8A"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:orientation="vertical"
-            android:padding="10dp"
-            tools:ignore="MissingConstraints">
+            android:padding="10dp">
 
-            <TextView
-                android:id="@+id/address"
+            <!-- Dirección -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/righteous"
-                android:text="Dirección: "
-                app:layout_constraintTop_toBottomOf="@+id/roomName"
-                tools:layout_editor_absoluteX="-16dp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/date"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:text="Dirección: "
+                    android:textColor="@color/subtitles"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!-- Fecha -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/righteous"
-                android:text="Fecha: "
-                app:layout_constraintTop_toBottomOf="@+id/roomName"
-                tools:layout_editor_absoluteX="-16dp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/time"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:text="Fecha: "
+                    android:textColor="@color/subtitles"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!-- Hora de inicio -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/righteous"
-                android:text="Hora de inicio: "
-                app:layout_constraintTop_toBottomOf="@+id/roomName"
-                tools:layout_editor_absoluteX="-16dp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/endTime"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:text="Hora de inicio: "
+                    android:textColor="@color/subtitles"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!-- Hora de fin -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/righteous"
-                android:text="Hora de fin: "
-                app:layout_constraintTop_toBottomOf="@+id/roomName"
-                tools:layout_editor_absoluteX="-16dp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/format"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:text="Hora de fin: "
+                    android:textColor="@color/subtitles"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/endTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!-- Formato -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/righteous"
-                android:text="Formato: "
-                app:layout_constraintTop_toBottomOf="@+id/roomName"
-                tools:layout_editor_absoluteX="-16dp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:text="Formato: "
+                    android:textColor="@color/subtitles"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/format"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/righteous"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+            </LinearLayout>
         </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="#CFF0D0"
-            android:orientation="vertical"
-            android:padding="10dp"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/righteous"
-                android:text="JUGADORES"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteX="10dp"
-                tools:layout_editor_absoluteY="10dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/playerList"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/righteous"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+                android:scrollbars="vertical"
+                android:scrollbarThumbVertical="@color/subtitles"
+                android:fadeScrollbars="false"
+                android:visibility="gone" />
+        </FrameLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:gravity="center"
+            android:layout_marginBottom="30dp"
+            android:layout_gravity="center"
             android:orientation="horizontal">
             <Button
                 android:id="@+id/leaveButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/button_rounded"
-                android:text="Dejar sala"
+                android:background="@drawable/logout"
+                android:drawableStart="@drawable/ic_exit"
+                android:paddingStart="12dp"
+                android:paddingEnd="16dp"
+                android:text="Salir"
                 android:textColor="@color/white"
                 android:visibility="gone"/>
             <Button
                 android:id="@+id/openChatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="@drawable/button_rounded"
-                android:text="Chat"
-                android:textColor="@color/white"/>
+                android:drawableStart="@drawable/ic_chat"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:contentDescription="Abrir chat"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

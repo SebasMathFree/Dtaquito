@@ -5,13 +5,16 @@ import Beans.rooms.GameRoom
 import Beans.playerList.PlayerList
 import Interface.PlaceHolder
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,6 +62,40 @@ class MainGameRoomFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeViews(view)
 
+        // Configurar los botones de pestañas
+        val btnDetails = view.findViewById<Button>(R.id.btnDetails)
+        val btnPlayers = view.findViewById<Button>(R.id.btnPlayers)
+        val detailsContainer = view.findViewById<LinearLayout>(R.id.linearLayout)
+        val playerList = view.findViewById<RecyclerView>(R.id.playerList)
+
+        // Por defecto, mostrar detalles
+        detailsContainer.visibility = View.VISIBLE
+        playerList.visibility = View.GONE
+
+        btnDetails.setOnClickListener {
+            // Cambiar estilos de botones
+            btnDetails.setBackgroundResource(R.color.selected_tab_color)
+            btnPlayers.setBackgroundResource(R.color.unselected_tab_color)
+            btnDetails.setTypeface(null, Typeface.NORMAL)
+            btnPlayers.setTypeface(null, Typeface.BOLD)
+
+            // Mostrar/ocultar contenedores
+            detailsContainer.visibility = View.VISIBLE
+            playerList.visibility = View.GONE
+        }
+
+        btnPlayers.setOnClickListener {
+            // Cambiar estilos de botones
+            btnPlayers.setBackgroundResource(R.color.selected_tab_color)
+            btnDetails.setBackgroundResource(R.color.unselected_tab_color)
+            btnPlayers.setTypeface(null, Typeface.NORMAL)
+            btnDetails.setTypeface(null, Typeface.BOLD)
+
+            // Mostrar/ocultar contenedores
+            detailsContainer.visibility = View.GONE
+            playerList.visibility = View.VISIBLE
+        }
+
         if (gameRoomId != -1) {
             fetchGameRoomDetails(gameRoomId)
             fetchPlayerListByRoomId(gameRoomId)
@@ -105,11 +142,11 @@ class MainGameRoomFragment : Fragment() {
                         val sportSpace = reservation?.sportSpace
 
                         roomNameTextView.text = reservation?.reservationName ?: "Sin nombre"
-                        addressTextView.text = "Dirección: ${sportSpace?.address ?: "Desconocida"}"
-                        dateTextView.text = "Fecha: ${reservation?.gameDay ?: ""}"
-                        timeTextView.text = "Hora de inicio: ${reservation?.startTime ?: ""}"
-                        endTimeTextView.text = "Hora de fin: ${reservation?.endTime ?: ""}"
-                        formatTextView.text = "Formato: ${sportSpace?.gamemode ?: "N/A"}"
+                        addressTextView.text = sportSpace?.address ?: "Desconocida"
+                        dateTextView.text = reservation?.gameDay ?: ""
+                        timeTextView.text = reservation?.startTime ?: ""
+                        endTimeTextView.text = reservation?.endTime ?: ""
+                        formatTextView.text = sportSpace?.gamemode ?: "N/A"
                     } ?: run {
                         logAndShowError("No se encontró la sala")
                     }

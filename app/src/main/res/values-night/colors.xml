@@ -9,7 +9,7 @@
     <color name="titles">#B4FFD8</color>
     <color name="subtitles">#B4FFD8</color>
     <color name="background">#201E1E</color>
-    <color name="card_background">#23272F</color>
+    <color name="card_background">#F223272F</color>
     <color name="input_text_color">#FFFFFF</color>
     <color name="secondaryTextColor">#333333</color>
     <color name="tertiaryTextColor">#888888</color>
