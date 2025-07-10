@@ -37,6 +37,8 @@ import com.example.dtaquito.R
 import com.example.dtaquito.forgotPassword.ForgotPasswordActivity
 import com.example.dtaquito.register.RegisterActivity
 import com.example.dtaquito.utils.showToast
+import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.switchmaterial.SwitchMaterial
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.Locale
@@ -45,6 +47,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import network.RetrofitClient
+import androidx.core.view.isVisible
 
 class LoginActivity : AppCompatActivity() {
 
@@ -62,12 +65,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // Data class para encapsular credenciales
-    data class LoginCredentials(val email: String, val password: String) {
-        fun isValid(): Boolean =
-                email.isNotEmpty() &&
-                        password.isNotEmpty() &&
-                        Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
+    data class LoginCredentials(val email: String, val password: String)
 
     // Referencias a vistas principales
     private lateinit var emailInput: EditText
@@ -78,6 +76,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var signUpBtn: TextView
     private lateinit var forgotPass: TextView
     private lateinit var selectLanguageBtn: Button
+    private lateinit var darkModeBtn: SwitchMaterial
 
     // Referencias a elementos de error y loading
     private lateinit var loginError: TextView
@@ -88,6 +87,9 @@ class LoginActivity : AppCompatActivity() {
     private var userId: Int = -1
     private var isPasswordVisible = false
 
+    // Bandera para prevenir múltiples cambios del switch
+    private var isThemeChanging = false
+
     // Servicio de red
     private val apiService = RetrofitClient.instance.create(PlaceHolder::class.java)
 
@@ -95,9 +97,14 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // Aplicar tema solo si no se está recreando la actividad
+        if (savedInstanceState == null) {
+            applyStoredTheme()
+        }
+
         // Verificar y limpiar sesiones temporales al inicio
         checkAndClearTemporarySession()
-        
+
         initializeLanguage()
         setContentView(R.layout.activity_login)
 
@@ -112,7 +119,23 @@ class LoginActivity : AppCompatActivity() {
         // Verificar si hay una sesión activa válida
         checkExistingSession()
     }
-    
+
+    private fun applyStoredTheme() {
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val isDarkMode = prefs.getBoolean("dark_mode", false)
+        val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+
+        val expectedMode = if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+
+        if (currentNightMode != expectedMode) {
+            if (isDarkMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+    }
+
     private fun checkAndClearTemporarySession() {
         val prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
         val isTemporarySession = prefs.getBoolean("is_temporary_session", false)
@@ -215,12 +238,60 @@ class LoginActivity : AppCompatActivity() {
         loginBtn = findViewById(R.id.login_btn)
         signUpBtn = findViewById(R.id.newUser)
         forgotPass = findViewById(R.id.forgotPassword)
+        darkModeBtn = findViewById(R.id.dark_mode_switch)
         selectLanguageBtn = findViewById(R.id.btn_select_language)
 
         // Elementos de error y loading
         loginError = findViewById(R.id.login_error)
         loadingProgress = findViewById(R.id.loading_progress)
         loadingText = findViewById(R.id.loading_text)
+        // Configurar el switch de modo oscuro
+        setupDarkModeSwitch()
+    }
+
+    private fun setupDarkModeSwitch() {
+        // Configurar el estado inicial del switch basado en las preferencias guardadas
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val isDarkMode = prefs.getBoolean("dark_mode", false)
+
+        // Establecer el estado inicial SIN disparar el listener
+        darkModeBtn.setOnCheckedChangeListener(null)
+        darkModeBtn.isChecked = isDarkMode
+
+        // Usar un post para configurar el listener después de que el layout esté completamente inicializado
+        darkModeBtn.post {
+            // Configurar el listener para cambios en el switch
+            darkModeBtn.setOnCheckedChangeListener { _, isChecked ->
+                // Evitar que el cambio de tema dispare múltiples veces el listener
+                if (isThemeChanging) {
+                    return@setOnCheckedChangeListener
+                }
+
+                // Verificar si el cambio es realmente necesario
+                val currentDarkMode = prefs.getBoolean("dark_mode", false)
+                if (currentDarkMode == isChecked) {
+                    return@setOnCheckedChangeListener
+                }
+
+                // Guardar la preferencia usando KTX
+                prefs.edit {
+                    putBoolean("dark_mode", isChecked)
+                }
+
+                val currentMode = AppCompatDelegate.getDefaultNightMode()
+                val newMode = if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+
+                // Aplicar el tema inmediatamente solo si es diferente
+                if (currentMode != newMode) {
+                    isThemeChanging = true // Activar bandera
+                    if (isChecked) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                }
+            }
+        }
     }
 
     private fun setupInputValidation() {
@@ -333,9 +404,7 @@ class LoginActivity : AppCompatActivity() {
         }
         // Mantener el cursor al final del texto
         passwordInput.setSelection(passwordInput.text.length)
-        
-        // Aplicar el estilo de fuente nuevamente para mantener consistencia
-        passwordInput.typeface = resources.getFont(R.font.righteous)
+
     }
     
     private fun checkRememberedCredentials() {
@@ -364,21 +433,21 @@ class LoginActivity : AppCompatActivity() {
 
     private fun saveCredentialsIfNeeded(credentials: LoginCredentials) {
         val prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
-        val editor = prefs.edit()
+        prefs.edit {
 
-        if (rememberMeCheckbox.isChecked) {
-            editor.putBoolean(REMEMBER_ME_KEY, true)
-            editor.putString(SAVED_EMAIL_KEY, credentials.email)
-            editor.putString(SAVED_PASSWORD_KEY, credentials.password)
-        } else {
-            editor.putBoolean(REMEMBER_ME_KEY, false)
-            editor.remove(SAVED_EMAIL_KEY)
-            editor.remove(SAVED_PASSWORD_KEY)
-            
-            // También limpiar cualquier sesión previa si no se quiere recordar
-            clearPreviousSession()
+            if (rememberMeCheckbox.isChecked) {
+                putBoolean(REMEMBER_ME_KEY, true)
+                putString(SAVED_EMAIL_KEY, credentials.email)
+                putString(SAVED_PASSWORD_KEY, credentials.password)
+            } else {
+                putBoolean(REMEMBER_ME_KEY, false)
+                remove(SAVED_EMAIL_KEY)
+                remove(SAVED_PASSWORD_KEY)
+
+                // También limpiar cualquier sesión previa si no se quiere recordar
+                clearPreviousSession()
+            }
         }
-        editor.apply()
     }
     
     private fun clearPreviousSession() {
@@ -483,7 +552,7 @@ class LoginActivity : AppCompatActivity() {
     }
     
     private fun hideLoginError() {
-        if (loginError.visibility == View.VISIBLE) {
+        if (loginError.isVisible) {
             loginError.animate()
                 .alpha(0f)
                 .setDuration(200)
@@ -719,5 +788,31 @@ class LoginActivity : AppCompatActivity() {
     private fun navigateToRegister() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Restablecer la bandera cuando la actividad se reanuda después de una recreación
+        isThemeChanging = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
     }
 }

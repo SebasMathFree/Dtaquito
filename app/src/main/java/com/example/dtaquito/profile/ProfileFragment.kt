@@ -21,6 +21,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -29,6 +30,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.dtaquito.R
 import com.example.dtaquito.login.LoginActivity
 import com.example.dtaquito.utils.showToast
+import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,6 +53,7 @@ class ProfileFragment : Fragment() {
     private lateinit var addCreditBtn: Button
     private lateinit var logoutBtn: Button
     private lateinit var selectLanguageBtn: ImageButton
+    private lateinit var darkModeBtn: SwitchMaterial
     private val service by lazy { RetrofitClient.instance.create(PlaceHolder::class.java) }
 
     private var initialCreditAmount: Double = 0.0
@@ -76,7 +79,7 @@ class ProfileFragment : Fragment() {
                 val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
                 view.clearFocus()
-                view.performClick() // Añadido para accesibilidad
+                view.performClick()
             }
             false
         }
@@ -140,12 +143,37 @@ class ProfileFragment : Fragment() {
         addCreditBtn = view.findViewById(R.id.add_credit)
         logoutBtn = view.findViewById(R.id.logout_btn)
         selectLanguageBtn = view.findViewById(R.id.btn_select_language)
+        darkModeBtn = view.findViewById(R.id.dark_mode_switch)
+
+        // Configurar el switch de modo oscuro
+        setupDarkModeSwitch()
     }
 
-    private fun setupListeners() {
-        updateBtn.setOnClickListener { handleProfileUpdate() }
-        addCreditBtn.setOnClickListener { addCredit() }
-        logoutBtn.setOnClickListener { logout() }
+    private fun setupDarkModeSwitch() {
+        // Obtener el estado actual del tema
+        val prefs = requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val isDarkMode = prefs.getBoolean("dark_mode", false)
+
+        // Configurar estado inicial sin activar el listener
+        darkModeBtn.setOnCheckedChangeListener(null)
+        darkModeBtn.isChecked = isDarkMode
+
+        // Usar post para configurar el listener después de que la vista esté completamente inicializada
+        darkModeBtn.post {
+            darkModeBtn.setOnCheckedChangeListener { _, isChecked ->
+                // Guardar preferencia inmediatamente
+                prefs.edit {
+                    putBoolean("dark_mode", isChecked)
+                }
+
+                // Guardar el estado actual del fragment en MainActivity
+                (activity as? com.example.dtaquito.MainActivity)?.saveCurrentFragmentState()
+
+                // Aplicar el tema inmediatamente
+                val newMode = if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                AppCompatDelegate.setDefaultNightMode(newMode)
+            }
+        }
     }
 
     private fun fetchUserProfile() {
@@ -321,5 +349,11 @@ class ProfileFragment : Fragment() {
         } catch (_: Exception) {
             null
         }
+    }
+
+    private fun setupListeners() {
+        updateBtn.setOnClickListener { handleProfileUpdate() }
+        addCreditBtn.setOnClickListener { addCredit() }
+        logoutBtn.setOnClickListener { logout() }
     }
 }

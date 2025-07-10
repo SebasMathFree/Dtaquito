@@ -14,9 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/righteous"
-        android:text="CHAT"
+        android:text="@string/chat"
         android:textAlignment="center"
-        android:textColor="@color/titles"
+        android:textColor="@color/green"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
             android:layout_weight="1"
             android:layout_margin="8dp"
             android:background="@drawable/bg_other_message"
-            android:textColor="@color/white"
+            android:textColor="@color/input_text_color"
             android:hint="Escribe un mensaje"
             android:textColorHint="@color/tertiaryTextColor"/>
 

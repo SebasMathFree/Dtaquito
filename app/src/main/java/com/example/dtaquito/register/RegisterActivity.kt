@@ -23,6 +23,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
@@ -53,10 +54,7 @@ class RegisterActivity : AppCompatActivity() {
         val email: String,
         val password: String,
         val role: String
-    ) {
-        fun isValid(): Boolean = name.isNotEmpty() && email.isNotEmpty() && 
-                               password.isNotEmpty() && role.isNotEmpty()
-    }
+    )
 
     // Variables de estado
     private var isRoleSelected = false
@@ -87,6 +85,12 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Aplicar tema solo si no se está recreando la actividad
+        if (savedInstanceState == null) {
+            applyStoredTheme()
+        }
+
         setContentView(R.layout.activity_register)
 
         initializeViews()
@@ -94,6 +98,22 @@ class RegisterActivity : AppCompatActivity() {
         setupRoleSpinner()
         setupInputValidation()
         setupRegisterButton()
+    }
+
+    private fun applyStoredTheme() {
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val isDarkMode = prefs.getBoolean("dark_mode", false)
+        val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+
+        val expectedMode = if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+
+        if (currentNightMode != expectedMode) {
+            if (isDarkMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
     }
 
     private fun initializeViews() {

@@ -6,11 +6,11 @@
     <color name="silver">#C0C0C0</color>
     <color name="gold">#ECBD00</color>
     <color name="green">#4CAF50</color>
-    <color name="titles">#90F8C9</color>
+    <color name="titles">#B4FFD8</color>
     <color name="subtitles">#B4FFD8</color>
-    <color name="background">#FFFFFF</color>
-    <color name="card_background">#FFFFFF</color>
-    <color name="input_text_color">#000000</color>
+    <color name="background">#201E1E</color>
+    <color name="card_background">#23272F</color>
+    <color name="input_text_color">#FFFFFF</color>
     <color name="secondaryTextColor">#333333</color>
     <color name="tertiaryTextColor">#888888</color>
     <color name="selected_tab_color">#269454</color>

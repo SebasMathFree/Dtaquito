@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#201E1E"
+    android:background="@color/background"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".tickets.CreateTicketFragment">
@@ -44,7 +44,7 @@
             android:hint="@string/full_name"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/input_text_color"
             android:textColorHint="#4D4D4D" />
 
         <RadioGroup
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="@string/associated_banks"
-                android:textColor="@color/white" />
+                android:textColor="@color/input_text_color" />
 
             <RadioButton
                 android:id="@+id/option2"
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:text="@string/other_banks"
-                android:textColor="@color/white" />
+                android:textColor="@color/input_text_color" />
         </RadioGroup>
 
         <Spinner
@@ -111,7 +111,7 @@
             android:maxLength="18"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/input_text_color"
             android:textColorHint="#4D4D4D" />
 
         <TextView
@@ -126,7 +126,7 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:text="@string/amount"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/input_text_color"
             android:textSize="20sp" />
         <Button
             android:id="@+id/submit_button"

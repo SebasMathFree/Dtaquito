@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#201E1E"
+    android:background="@color/background"
     tools:context=".login.LoginActivity">
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/righteous"
         android:text="@string/sign_in"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/input_text_color"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:paddingStart="20dp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/input_text_color"
         android:textColorHint="#4D4D4D"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,7 @@
             android:inputType="textPassword"
             android:paddingStart="20dp"
             android:paddingEnd="8dp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/input_text_color"
             android:textColorHint="#4D4D4D" />
 
         <ImageView
@@ -108,7 +108,7 @@
             android:layout_marginEnd="12dp"
             android:contentDescription="@string/show_password"
             android:src="@android:drawable/ic_menu_view"
-            android:tint="#7F7F7F" />
+            app:tint="#7F7F7F" />
 
     </RelativeLayout>
 
@@ -218,5 +218,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newUser" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_select_language">
+
+        <ImageView
+            android:id="@+id/sun_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_sun"
+            android:contentDescription="Modo claro" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/dark_mode_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/righteous" />
+
+        <ImageView
+            android:id="@+id/moon_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_moon"
+            android:contentDescription="Modo oscuro" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,9 +5,9 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="#FFFFFF"
-    android:textSize="20sp"
-    android:background="#201E1E"
+    android:textColor="@color/input_text_color"
+    android:ems="10"
+    android:background="@color/background"
     android:fontFamily="@font/righteous"
     android:padding="8dp">
 </TextView>

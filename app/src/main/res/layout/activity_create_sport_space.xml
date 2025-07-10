@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#201E1E"
+    android:background="@color/background"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".sportspace.CreateSportSpaceFragment">
@@ -54,7 +54,7 @@
                 android:hint="@string/name"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="#4D4D4D" />
             <Spinner
                 android:id="@+id/sport_input"
@@ -87,7 +87,7 @@
                 android:inputType="textEmailAddress"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="#4D4D4D" />
             <EditText
                 android:id="@+id/start_time_input"
@@ -102,7 +102,7 @@
                 android:hint="@string/opening_time"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="#4D4D4D" />
             <EditText
                 android:id="@+id/end_time_input"
@@ -117,7 +117,7 @@
                 android:hint="@string/closing_time"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="#4D4D4D" />
             <EditText
                 android:id="@+id/description_input"
@@ -130,7 +130,7 @@
                 android:hint="@string/description"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="#4D4D4D" />
             <EditText
                 android:id="@+id/address_input"
@@ -145,7 +145,7 @@
                 android:hint="@string/address"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="#4D4D4D" />
             <FrameLayout
                 android:layout_width="match_parent"
@@ -189,7 +189,7 @@
                 android:paddingEnd="20dp"
                 app:endIconDrawable="@android:drawable/ic_dialog_map"
                 app:endIconMode="custom"
-                app:endIconTint="@color/white"
+                android:textColor="@color/input_text_color"
                 app:hintEnabled="false">
                 <EditText
                     android:id="@+id/img_url"
@@ -201,7 +201,7 @@
                     android:focusable="false"
                     android:fontFamily="@font/righteous"
                     android:hint="@string/image"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/input_text_color"
                     android:textColorHint="#4D4D4D" />
             </com.google.android.material.textfield.TextInputLayout>
             <ImageView

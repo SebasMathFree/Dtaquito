@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="#353945"
+    app:cardBackgroundColor="@color/card_background"
     app:cardCornerRadius="12dp"
     app:cardElevation="8dp">
     <LinearLayout
@@ -33,7 +33,7 @@
                     android:text="Title"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/input_text_color" />
                 <!-- Botón QR -->
                 <ImageButton
                     android:id="@+id/qr_btn"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/status_confirmed_background"
                 android:text="Status"
-                android:textColor="@android:color/white"
+                android:textColor="@color/input_text_color"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:padding="8dp" />
@@ -62,11 +62,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
-            <!-- Detalles de la reservation -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
                 <!-- Game mode -->
                 <TextView
                     android:id="@+id/txtGameMode"
@@ -74,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/input_text_color" />
                 <!-- Date -->
                 <TextView
                     android:id="@+id/txtDate"
@@ -82,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/input_text_color" />
                 <!-- Reservation price -->
                 <TextView
                     android:id="@+id/txtPrice"
@@ -90,22 +85,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/input_text_color" />
                 <TextView
                     android:id="@+id/txtSportSpaceName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/input_text_color" />
                 <!-- Place -->
                 <TextView
                     android:id="@+id/txtPlace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
-            </LinearLayout>
+                    android:textColor="@color/input_text_color" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

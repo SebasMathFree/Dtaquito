@@ -1,6 +1,7 @@
 package com.example.dtaquito
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
@@ -20,6 +21,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     var userRoleType: String = "PLAYER"
+
+    // Variable para guardar el estado del fragment actual
+    private var savedFragmentTag: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Aplica el idioma guardado antes de setContentView
@@ -43,12 +47,15 @@ class MainActivity : AppCompatActivity() {
                 else -> R.id.navigation_subscriptions
             }
             setupNavigation()
+
+            // Manejar la restauración del fragment después del cambio de tema
             val goToProfile = prefs.getBoolean("go_to_profile", false)
             if (goToProfile) {
                 bottomNav.selectedItemId = R.id.navigation_profile
                 loadFragment(ProfileFragment())
                 prefs.edit { remove("go_to_profile") }
             } else if (savedInstanceState == null && supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
+                // Solo cargar fragment por defecto si no hay savedInstanceState y no hay fragment cargado
                 if (userRoleType == "PLAYER") {
                     loadFragment(GameRoomFragment())
                 } else {
@@ -124,6 +131,85 @@ class MainActivity : AppCompatActivity() {
                 menu.findItem(R.id.navigation_profile)?.title = getString(R.string.profile)
                 // Agrega aquí los demás ítems si los tienes
             }
+        }
+    }
+
+    fun saveCurrentFragmentState() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        when (currentFragment) {
+            is ProfileFragment -> {
+                savedFragmentTag = "PROFILE"
+                val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+                prefs.edit { putBoolean("go_to_profile", true) }
+            }
+            is GameRoomFragment -> savedFragmentTag = "GAMEROOM"
+            is SportSpaceFragment -> savedFragmentTag = "SPORTSPACE"
+            is ReservationFragment -> savedFragmentTag = "RESERVATION"
+            is SubscriptionFragment -> savedFragmentTag = "SUBSCRIPTION"
+            is TicketFragment -> savedFragmentTag = "TICKET"
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveCurrentFragmentState()
+        savedFragmentTag?.let { tag ->
+            outState.putString("CURRENT_FRAGMENT", tag)
+        }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val fragmentTag = savedInstanceState.getString("CURRENT_FRAGMENT")
+        if (fragmentTag != null) {
+            // Usar un handler para ejecutar después de que onCreate() termine completamente
+            findViewById<View>(android.R.id.content).post {
+                if (::bottomNav.isInitialized) {
+                    restoreFragmentFromTag(fragmentTag)
+                }
+            }
+        }
+    }
+
+    private fun restoreFragmentFromTag(tag: String) {
+        // Verificar que bottomNav esté inicializado antes de usarlo
+        if (!::bottomNav.isInitialized) {
+            return
+        }
+
+        val fragment = when (tag) {
+            "PROFILE" -> {
+                bottomNav.selectedItemId = R.id.navigation_profile
+                ProfileFragment()
+            }
+            "GAMEROOM" -> {
+                bottomNav.selectedItemId = R.id.navigation_home
+                GameRoomFragment()
+            }
+            "SPORTSPACE" -> {
+                bottomNav.selectedItemId = if (userRoleType == "PLAYER") R.id.navigation_sportspaces else R.id.navigation_sportspaces_prop
+                SportSpaceFragment()
+            }
+            "RESERVATION" -> {
+                bottomNav.selectedItemId = R.id.navigation_reservations
+                ReservationFragment()
+            }
+            "SUBSCRIPTION" -> {
+                bottomNav.selectedItemId = R.id.navigation_subscriptions
+                SubscriptionFragment()
+            }
+            "TICKET" -> {
+                bottomNav.selectedItemId = R.id.navigation_tickets
+                TicketFragment()
+            }
+            else -> null
+        }
+
+        fragment?.let {
+            // Forzar la carga del fragment
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, it)
+                .commitNow() // Usar commitNow para asegurar que se ejecute inmediatamente
         }
     }
 }
